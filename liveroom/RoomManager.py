@@ -26,7 +26,8 @@ class RoomManager():
         liveroom = self.live_rooms.get(room_id)
         if liveroom == None:
             return
-        asyncio.get_event_loop().run_until_complete(room_starter(liveroom)())
+        asyncio.gather(room_starter(liveroom)())
+
 
     def stopRoom(self,room_id):
         return self.live_rooms.get(room_id) and self.live_rooms.get(room_id).stop()
@@ -37,6 +38,6 @@ class RoomManager():
         return liveroom
 
 print("Initialize global room manager")
-GlobalRoomManager = RoomManager()
+Global_Room_Manager = RoomManager()
 # if __name__ == '__main__':
 #     GlobalRoomManager.startRoom("3819533")

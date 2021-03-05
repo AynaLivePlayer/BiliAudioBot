@@ -29,6 +29,7 @@ import re
 import traceback
 
 if os.name == 'nt':
+    os.add_dll_directory(os.getcwd())
     dll = ctypes.util.find_library('mpv-1.dll')
     if dll is None:
         raise OSError('Cannot find mpv-1.dll in your system %PATH%. One way to deal with this is to ship mpv-1.dll '
@@ -1268,7 +1269,7 @@ class MPV(object):
         """Mapped mpv discnav command, see man mpv(1)."""
         self.command('discnav', command)
 
-    def mouse(x, y, button=None, mode='single'):
+    def mouse(self,x, y, button=None, mode='single'):
         """Mapped mpv mouse command, see man mpv(1)."""
         if button is None:
             self.command('mouse', x, y, mode)

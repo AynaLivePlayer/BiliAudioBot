@@ -41,6 +41,9 @@ class CommonSource():
     def applicable(cls, url):
         return False
 
+    def isValid(self):
+        return False
+
 class BaseSource():
     __source_name__ = None
 

@@ -1,9 +1,10 @@
 
 from sources.base import BaseSource
+from sources.base.interface import WatchableSource
 from utils import formats,file
 import os
 
-class MediaSource(BaseSource):
+class MediaSource(BaseSource,WatchableSource):
     __source_name__ = "media"
 
     def __init__(self,url,headers,filename):

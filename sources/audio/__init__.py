@@ -11,7 +11,3 @@ class AudioSource(CommonSource):
     @property
     def audio(self):
         return None
-
-
-    def isValid(self):
-        return False

@@ -1,6 +1,6 @@
 from typing import List
 
-from sources.base import BaseSource
+from sources.base import BaseSource, CommonSource
 
 
 class SearchResult(BaseSource):
@@ -10,7 +10,7 @@ class SearchResult(BaseSource):
         self.url = url
         self.headers = headers
         self.filename = filename
-        self.source = source
+        self.source:CommonSource = source
         self.source_name = source_name
         self.base_source_name = base_source_name
 
@@ -37,4 +37,4 @@ class SearchResults(BaseSource):
                 rs = filter(lambda x:x.base_source_name in base_source_name,rs)
             elif isinstance(base_source_name,str):
                 rs = filter(lambda x:x.base_source_name == base_source_name,rs)
-        return rs
+        return list(rs)
