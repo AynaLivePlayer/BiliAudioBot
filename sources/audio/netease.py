@@ -3,14 +3,15 @@ import re
 from config import Config
 from sources.base import SearchResults, MediaSource, SearchResult, CommonSourceWrapper
 from sources.audio import AudioSource
-from sources.base.interface import SearchableSource
+from sources.base.interface import SearchableSource, AudioBotInfoSource
 from pyncm.apis import track,cloudsearch
 
 from utils import file
 
 
 class NeteaseMusicSource(AudioSource,
-                         SearchableSource):
+                         SearchableSource,
+                         AudioBotInfoSource):
     name = "netease-audio"
 
     base_url = "https://music.163.com/"
@@ -43,9 +44,15 @@ class NeteaseMusicSource(AudioSource,
     def __init__(self,sid):
         self.sid = sid
         self.cover_url = ""
-        self.artists = ""
+        self.artists = []
         self.title = ""
         self.vip = False
+
+    def getTitle(self):
+        return self.title
+
+    def getAuthor(self):
+        return ",".join(self.artists)
 
     @property
     def audio(self):

@@ -1,30 +1,31 @@
 from typing import List
 
-from gui import MPVGUI
+from audiobot.Playlist import Playlist
 from liveroom.LiveRoom import LiveRoom
 from player.mpv import MPVPlayer, MPVProperty
 from plugins.blivedm import DanmakuMessage
 from sources.audio.netease import NeteaseMusicSource
-from sources.base import MediaSource, CommonSource, BaseSource
+from sources.base import CommonSource, BaseSource
 from sources.base.interface import WatchableSource
 
 
 class AudioBot():
     def __init__(self):
-        self.user_playlist: List[CommonSource] = []
-        self.system_playlist: List[CommonSource] = []
-        self.system_playlist_index = 0
+        self.user_playlist = Playlist()
+        self.system_playlist = Playlist()
         self.current:CommonSource = None
         self.mpv_player: MPVPlayer = None
         self.live_room:LiveRoom = None
 
-    def setPlayer(self,mpv_player):
+    def setPlayer(self,mpv_player: MPVPlayer):
         self.mpv_player = mpv_player
         self.mpv_player.registerPropertyHandler("audiobot.idleplaynext",
                                                 MPVProperty.IDLE,
                                                 self.__idle_play_next)
 
     def setLiveRoom(self,live_room:LiveRoom):
+        if self.live_room != None:
+            self.live_room.clearMsgHandler()
         self.live_room = live_room
         self.live_room.registerMsgHandler("audiobot.msg",
                                           self.__danmu_add_playlist)
@@ -37,17 +38,15 @@ class AudioBot():
         return None
 
     def __chooseNext(self):
-        if self.system_playlist_index >= len(self.system_playlist):
-            self.system_playlist_index = 0
-        self.system_playlist_index +=1
-        return self.system_playlist[self.system_playlist_index-1]
-
+        if self.system_playlist.size() == 0:
+            return
+        return self.system_playlist.getNext()
 
     def playNext(self):
         if len(self.user_playlist) == 0 and len(self.system_playlist) == 0:
             return
         if len(self.user_playlist) != 0:
-            self.__play(self.user_playlist.pop(0))
+            self.__play(self.user_playlist.popFirst())
             return
         if len(self.user_playlist) != 0:
             self.__play(self.__chooseNext())

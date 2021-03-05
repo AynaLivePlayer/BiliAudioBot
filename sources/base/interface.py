@@ -27,3 +27,12 @@ class SearchableSource(BaseInterface):
 
 class WatchableSource(BaseInterface):
     pass
+
+class AudioBotInfoSource():
+    @abstractmethod
+    def getTitle(self):
+        return None
+
+    @abstractmethod
+    def getArtist(self):
+        return None

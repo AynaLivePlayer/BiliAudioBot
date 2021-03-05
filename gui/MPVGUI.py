@@ -1,6 +1,7 @@
 from tkinter import ttk
 import tkinter as tk
 
+from audiobot.AudioBot import Global_Audio_Bot
 from liveroom.RoomManager import Global_Room_Manager
 from player.mpv import MPVPlayer, MPVProperty, MPVEvent
 import gui
@@ -39,12 +40,7 @@ class MPVGUI():
         self.mpv_player.registerPropertyHandler("mpvgui.syncprogress",
                                                 MPVProperty.PERCENT_POS,
                                                 self._syncProgress)
-        # from audiobot.AudioBot import Global_Audio_Bot
-        #
-        # Global_Audio_Bot.setPlayer(self.mpv_player)
-        # lv = Global_Room_Manager.addLiveRoom("3819533")
-        # Global_Audio_Bot.setLiveRoom(lv)
-        # Global_Room_Manager.startRoom("3819533")
+        Global_Audio_Bot.setPlayer(self.mpv_player)
         self.volume.set(64)
         self._setScaleVolume()
         self._pause()

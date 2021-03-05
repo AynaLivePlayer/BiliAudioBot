@@ -44,6 +44,9 @@ class LiveRoom(blivedm.BLiveClient):
     def registerMsgHandler(self, handler_id, handler):
         self.msg_handler[handler_id] = handler
 
+    def clearMsgHandler(self):
+        self.msg_handler.clear()
+
 
 
 # async def main():

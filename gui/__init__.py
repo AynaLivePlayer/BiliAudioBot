@@ -6,6 +6,8 @@ from tkinter import Menu
 from tkinter.ttk import Notebook
 
 from gui.MPVGUI import MPVGUI
+from gui.RoomGUI import RoomGUI
+
 
 class MainWindow():
     def __init__(self,interval=1/20):
@@ -35,9 +37,13 @@ class MainWindow():
 
     def createWidgets(self):
         mpv = MPVGUI(self)
+
+        room = RoomGUI(self)
+        room.createWidgets()
         mpv.createWidgets()
 
         mpv.initialize()
+        room.initialize()
 
 
 

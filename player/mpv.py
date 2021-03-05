@@ -93,6 +93,10 @@ class MPVPlayer:
             self.mpv_core.unobserve_property(currrent[0],currrent[1])
             self.property_handlers.pop(id)
 
+    def clearPropertyHandler(self):
+        for key in self.property_handlers.keys():
+            self.unregisterPropertyHandler(key)
+
     def registerEventHandler(self,id,property:MPVEvent,func):
         self.unregisterEventHandler(id)
         self.event_handlers[id] = self.mpv_core.event_callback(property.value)(func)
@@ -102,3 +106,6 @@ class MPVPlayer:
         if currrent != None:
             self.mpv_core.unregister_event_callback(currrent)
             self.event_handlers.pop(id)
+
+    def clearEventHandler(self):
+        self.mpv_core._event_callbacks.clear()
