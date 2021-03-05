@@ -1,4 +1,4 @@
-import glob,json,os
+import json
 
 from utils import vwrappers
 
@@ -10,35 +10,48 @@ class ConfigFile:
 
     commonCookies = {}
 
-    cookiePath = "cookies"
+    config_path = "config.json"
+
+    cookie_path = "cookies.json"
 
     def __init__(self):
         print("Loading config")
         self._loadConfig()
         print("Cookie initialized")
+        # structure: {"site":{"identifier":{"cookie1":"value1"}}}
         self.cookies = {}
         self.loadCookie()
 
-    def loadCookie(self):
-        for path in glob.glob(os.path.join(os.path.dirname(__file__), self.cookiePath, "*.txt")):
-            key = os.path.basename(path)[:-4:]
-            with open(path, "r", encoding="utf-8") as f:
-                data = f.read().replace(" ", "")
-                self.cookies[key] = dict(x.split("=") for x in data.split(";") if x != "")
+    def loadCookie(self,path="cookies.json"):
+        with open(path,"r") as f:
+            jdata = json.loads(f.read().replace(" ", ""))
+            for key,val in jdata.items():
+                for id, content in val.items():
+                    cookie = self.getCookie(key,id)
+                    cookie.update(dict(x.split("=") for x in content.split(";") if x != ""))
 
-    def saveCookie(self):
-        for key, cookie in self.cookies.items():
-            path = os.path.join(os.path.dirname(__file__), self.cookiePath, "{}.txt".format(key))
-            with open(path, "w", encoding="utf-8") as f:
-                f.write(";".join(map(lambda x: "=".join(x), cookie.items())))
+    def saveCookie(self,path="cookies.json"):
+        tmp = self.cookies.copy()
+        for host, val in self.cookies.items():
+            for id,content in val.items():
+                tmp[host][id] = ";".join("{}={}".format(key,val) for key,val in self.cookies[host][id].items())
+        with open(path,"w",encoding="utf-8") as f:
+            f.write(json.dump(tmp,indent=2))
 
-    def getCookie(self, host):
+    def getCookiesByHost(self, host):
         if host == "":
             return self.commonCookies
         if self.cookies.get(host) == None:
             self.cookies[host] = {}
             return self.cookies[host]
         return self.cookies.get(host)
+
+    def getCookie(self, host,identifier):
+        cookies = self.getCookiesByHost(host)
+        if cookies.get(identifier) == None:
+            cookies[identifier] = {}
+            return self.cookies[host]
+        return cookies[host]
 
     @vwrappers.TryExceptRetNone
     def _loadConfig(self,path="config.json"):

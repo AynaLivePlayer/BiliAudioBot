@@ -83,7 +83,6 @@ class JsonResponseContainer():
 
     def __process(self):
         jdata = json.loads(self.content)
-        print(jdata)
         for key,val in self.kwargs.items():
             if isinstance(val,tuple):
                 self.data[key] = val[1](self.__tryFind(jdata,val[0].split(self.path_sep),0))
