@@ -12,7 +12,7 @@ from utils import file
 class NeteaseMusicSource(AudioSource,
                          SearchableSource,
                          AudioBotInfoSource):
-    name = "netease-audio"
+    __source_name__ = "netease-audio"
 
     base_url = "https://music.163.com/"
 
@@ -20,6 +20,7 @@ class NeteaseMusicSource(AudioSource,
 
     pattern = r"music\.163\.com/\#/song\?id=[0-9]+"
     patternB = r"163audio[0-9]+"
+    patternC = r"wy[0-9]+"
 
     @classmethod
     def search(cls, keyword, pagesize=10,*args, **kwargs) -> SearchResults:
@@ -74,8 +75,12 @@ class NeteaseMusicSource(AudioSource,
         if (url.isdigit()):
             return cls(url)
         id = re.search(r"id=[0-9]+",url)
-        if id == None: return cls("")
-        return cls(id.group()[3::])
+        if id != None: return cls(id.group()[3::])
+        id = re.search(cls.patternB, url)
+        if id != None: return cls(id.group()[8::])
+        id = re.search(cls.patternC, url)
+        if id != None: return cls(id.group()[2::])
+        return None
 
     @property
     def info(self):
@@ -97,7 +102,9 @@ class NeteaseMusicSource(AudioSource,
 
     @classmethod
     def applicable(cls, url):
-        return re.search(cls.pattern,url) != None or re.search(cls.patternB,url) != None
+        return re.search(cls.pattern,url) != None or \
+               re.search(cls.patternB,url) != None or \
+               re.search(cls.patternC,url) != None
 
     def _getParsedTitle(self):
         return "{title} - {artists}".format(title = self.title,

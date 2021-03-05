@@ -1,15 +1,18 @@
-from typing import List
+from typing import List, Type
 
 from audiobot.Playlist import Playlist
 from liveroom.LiveRoom import LiveRoom
 from player.mpv import MPVPlayer, MPVProperty
 from plugins.blivedm import DanmakuMessage
-from sources.audio.netease import NeteaseMusicSource
-from sources.base import CommonSource, BaseSource
-from sources.base.interface import WatchableSource
+from sources.audio import NeteaseMusicSource,BiliAudioSource
+from sources.base import CommonSource, BaseSource, SourceSelector
+from sources.base.interface import WatchableSource, SearchableSource
 
 
 class AudioBot():
+    selector = SourceSelector(NeteaseMusicSource,
+                              BiliAudioSource)
+
     def __init__(self):
         self.user_playlist = Playlist()
         self.system_playlist = Playlist()
@@ -58,19 +61,40 @@ class AudioBot():
         self.current = source
         self.mpv_player.playByUrl(bs.url, headers=bs.headers)
 
-    def __danmu_add_playlist(self,dmkMsg:DanmakuMessage,*args, **kwargs):
-        msg:str = dmkMsg.msg
-        if (msg.startswith("点歌")):
-            vals = " ".join(msg.split(" ")[1::])
-            rs = NeteaseMusicSource.search(vals)
-            if rs.isEmpty():
+    def addAudioByUrl(self,url,source:Type[CommonSource]=None):
+        source:CommonSource = source if source else self.selector.select(url)
+        if source != None:
+            cm: CommonSource = source.initFromUrl(url)
+            if cm == None and isinstance(source,SearchableSource):
+                srs = source.search(url)
+                if srs.isEmpty():
+                    return
+                cm = srs.results[0].source
+        else:
+            srs = NeteaseMusicSource.search(url)
+            if srs.isEmpty():
                 return
-            cm = rs.results[0].source
-            cm.load()
-            if cm.isValid():
-                self.user_playlist.append(cm)
-            if self.mpv_player.getProperty(MPVProperty.IDLE):
-                self.playNext()
+            cm = srs.results[0].source
+        if cm == None:
+            return
+        cm.load()
+        if cm.isValid():
+            self.user_playlist.append(cm)
+        if self.mpv_player.getProperty(MPVProperty.IDLE):
+            self.playNext()
+
+    def __danmu_add_playlist(self,dmkMsg:DanmakuMessage,*args, **kwargs):
+        msg:str = dmkMsg.msg.split(" ")
+        if len(msg) < 2:
+            return
+        hintword,val = msg[0]," ".join(msg[1::])
+        if (hintword == "点歌"):
+            self.addAudioByUrl(val)
+        elif hintword == "点b歌":
+            self.addAudioByUrl(val,source=BiliAudioSource)
+        elif hintword == "点w歌":
+            self.addAudioByUrl(val,source=NeteaseMusicSource)
+
 
     def __idle_play_next(self,prop,value, *args, **kwargs):
         if value:

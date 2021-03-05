@@ -41,7 +41,7 @@ class MPVGUI():
                                                 MPVProperty.PERCENT_POS,
                                                 self._syncProgress)
         Global_Audio_Bot.setPlayer(self.mpv_player)
-        self.volume.set(64)
+        self.volume.set(32)
         self._setScaleVolume()
         self._pause()
 

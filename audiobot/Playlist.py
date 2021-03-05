@@ -7,7 +7,7 @@ def executeHandler(func):
     @wraps(func)
     def wrapper(self,*args,**kwargs):
         retval = func(self,*args,**kwargs)
-        self.__callHandlers()
+        self._callHandlers()
         return retval
     return wrapper
 
