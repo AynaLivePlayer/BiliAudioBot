@@ -139,7 +139,9 @@ class NeteasePlaylistSource(AudioSource):
         return re.search(cls.pattern, url) != None
 
     @classmethod
-    def initFromUrl(cls, url):
+    def initFromUrl(cls, url:str):
+        if url.isdigit():
+            return cls(url)
         rs = re.search(cls.pattern, url)
         return cls(rs.group()[4::]) if rs != None else None
 

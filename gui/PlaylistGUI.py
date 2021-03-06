@@ -47,7 +47,7 @@ class PlaylistGUI():
         self.playlist_tree.delete(*self.playlist_tree.get_children())
         for index,item in enumerate(user_playlist.playlist):
             source = item.source
-            self.playlist_tree.insert("",index,text = index,values  = (source.getTitle(),
+            self.playlist_tree.insert("",index,text = index,values = (source.getTitle(),
                                                                        source.getArtist(),
                                                                        source.getSourceName(),
                                                                        item.username))
