@@ -15,9 +15,10 @@ def executeHandler(func):
     return wrapper
 
 class PlaylistItem():
-    def __init__(self,source:Type[Union[CommonSource,AudioBotInfoSource]],username):
+    def __init__(self,source:Type[Union[CommonSource,AudioBotInfoSource]],username,keyword):
         self.source = source
         self.username = username
+        self.keyword = keyword
 
 class Playlist():
     def __init__(self):
@@ -32,8 +33,8 @@ class Playlist():
         return len(self.playlist)
 
     @executeHandler
-    def append(self,cm,username="system"):
-        self.playlist.append(PlaylistItem(cm,username))
+    def append(self,cm,username="system",keyword=""):
+        self.playlist.append(PlaylistItem(cm,username,keyword))
 
     @executeHandler
     def popFirst(self):

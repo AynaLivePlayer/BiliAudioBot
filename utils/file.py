@@ -12,7 +12,6 @@ def writeToFile(content,route,name,binary=False):
     if not os.path.exists(route):
         os.mkdir(route)
     if binary:
-        print(path)
         with open(path, "wb+") as f:
             f.write(content)
     else:

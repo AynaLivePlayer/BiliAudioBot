@@ -149,8 +149,8 @@ class BiliAudioSource(AudioSource, SearchableSource,AudioBotInfoSource):
     def isValid(self):
         return self.sid != "" and self.title != ""
 
-class biliAudioList(AudioSource):
-    __source_name__ = "audiolist"
+class BiliAudioListSource(AudioSource):
+    __source_name__ = "bilibili-list"
 
     pattern = r"am[0-9]+"
 
@@ -175,7 +175,7 @@ class biliAudioList(AudioSource):
     @classmethod
     def initFromUrl(cls, url):
         pattern = "am[0-9]+"
-        return cls(re.search(pattern, url).group()[2::]) if re.search(pattern, url) != None else cls("")
+        return cls(re.search(pattern, url).group()[2::]) if re.search(pattern, url) != None else None
 
     @CommonSource.wrapper.handleException
     def load(self,maxNum=1000,**kwargs):

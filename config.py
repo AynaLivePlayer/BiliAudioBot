@@ -10,6 +10,13 @@ class ConfigFile:
 
     commonCookies = {}
 
+    system_playlist = {
+        "playlist":{"netease":[],
+                    "bilibili":[]},
+        "song":{"netease":[],
+                    "bilibili":[]}
+    }
+
     config_path = "config.json"
 
     cookie_path = "cookies.json"

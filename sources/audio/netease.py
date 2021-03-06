@@ -1,10 +1,11 @@
+import json
 import re
 
 from config import Config
 from sources.base import SearchResults, MediaSource, SearchResult, CommonSourceWrapper
 from sources.audio import AudioSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource
-from pyncm.apis import track,cloudsearch
+from pyncm.apis import track,cloudsearch,playlist
 
 from utils import file
 
@@ -47,6 +48,7 @@ class NeteaseMusicSource(AudioSource,
         self.artists = []
         self.title = ""
         self.vip = False
+        self.available = False
 
     def getTitle(self):
         return self.title
@@ -62,6 +64,8 @@ class NeteaseMusicSource(AudioSource,
     def getAudio(self):
         data = track.GetTrackAudio(self.sid)
         url = data["data"][0]["url"]
+        if url == None:
+            return None
         return MediaSource(data["data"][0]["url"],
                            Config.commonHeaders,
                            "{}.{}".format(self._getParsedTitle(),file.getSuffixByUrl(url)))
@@ -96,7 +100,9 @@ class NeteaseMusicSource(AudioSource,
         data = track.GetTrackDetail(self.sid)
         self.artists = [ar["name"] for ar in data["songs"][0]["ar"]]
         self.cover_url = data["songs"][0]["al"]["picUrl"]
-        self.vip = bool(data["songs"][0]["fee"])
+        audiodata = track.GetTrackAudio(self.sid)["data"][0]
+        self.vip = audiodata["freeTrialInfo"] != None
+        self.available = audiodata["url"] != None
         self.title = data["songs"][0]["name"]
 
     @classmethod
@@ -108,3 +114,47 @@ class NeteaseMusicSource(AudioSource,
     def _getParsedTitle(self):
         return "{title} - {artists}".format(title = self.title,
                                             artists = ",".join(self.artists))
+
+
+class NeteasePlaylistSource(AudioSource):
+    __source_name__ = "netease-list"
+
+    pattern = r"wypl[0-9]+"
+
+    def __init__(self, pid):
+        self.playlist_id = pid
+        self.audios = []
+
+    @property
+    def id(self):
+        return self.playlist_id
+
+    @property
+    def info(self):
+        return {"Type": self.getSourceName(),
+                "Audio number": len(self.audios)}
+
+    @classmethod
+    def applicable(cls, url):
+        return re.search(cls.pattern, url) != None
+
+    @classmethod
+    def initFromUrl(cls, url):
+        rs = re.search(cls.pattern, url)
+        return cls(rs.group()[4::]) if rs != None else None
+
+    @CommonSourceWrapper.handleException
+    def load(self,*args,**kwargs):
+        self.audios.clear()
+        trackids = playlist.GetPlaylistInfo(self.playlist_id)["playlist"]["trackIds"]
+        for track in trackids:
+            self.audios.append(NeteaseMusicSource(str(track["id"])))
+
+    def getBaseSources(self,**kwargs):
+        if not self.isValid(): return {}
+        audio: NeteaseMusicSource
+        return {"audio":[audio.getBaseSources(**kwargs) for audio in self.audios]}
+
+    def isValid(self):
+        return True if len(self.audios) > 0 else False
+
