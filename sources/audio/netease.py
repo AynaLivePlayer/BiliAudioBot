@@ -8,7 +8,6 @@ from pyncm.apis import track,cloudsearch
 
 from utils import file
 
-
 class NeteaseMusicSource(AudioSource,
                          SearchableSource,
                          AudioBotInfoSource):

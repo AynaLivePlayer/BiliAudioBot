@@ -7,11 +7,13 @@ from plugins.blivedm import DanmakuMessage
 from sources.audio import NeteaseMusicSource,BiliAudioSource
 from sources.base import CommonSource, BaseSource, SourceSelector
 from sources.base.interface import WatchableSource, SearchableSource
+from sources.video.bilibili import BiliVideoSource
 
 
 class AudioBot():
     selector = SourceSelector(NeteaseMusicSource,
-                              BiliAudioSource)
+                              BiliAudioSource,
+                              BiliVideoSource)
 
     def __init__(self):
         self.user_playlist = Playlist()

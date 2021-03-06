@@ -46,12 +46,12 @@ class ConfigFile:
             return self.cookies[host]
         return self.cookies.get(host)
 
-    def getCookie(self, host,identifier):
+    def getCookie(self,host,identifier):
         cookies = self.getCookiesByHost(host)
         if cookies.get(identifier) == None:
             cookies[identifier] = {}
-            return self.cookies[host]
-        return cookies[host]
+            return self.cookies[host][identifier]
+        return cookies[identifier]
 
     @vwrappers.TryExceptRetNone
     def _loadConfig(self,path="config.json"):

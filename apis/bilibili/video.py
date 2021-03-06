@@ -35,7 +35,7 @@ class QUALITY:
 
 
 class API:
-    cookies = Config.getCookie("bilibili")
+    cookies = Config.getCookie("bilibili","default")
 
     @staticmethod
     def headers():
