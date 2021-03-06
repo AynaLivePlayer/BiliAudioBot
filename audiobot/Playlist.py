@@ -1,7 +1,10 @@
-from typing import List
+from typing import List, Type, Union
 
 from sources.base import CommonSource
 from functools import wraps
+
+from sources.base.interface import AudioBotInfoSource
+
 
 def executeHandler(func):
     @wraps(func)
@@ -11,9 +14,14 @@ def executeHandler(func):
         return retval
     return wrapper
 
+class PlaylistItem():
+    def __init__(self,source:Type[Union[CommonSource,AudioBotInfoSource]],username):
+        self.source = source
+        self.username = username
+
 class Playlist():
     def __init__(self):
-        self.playlist:List[CommonSource] = []
+        self.playlist:List[PlaylistItem] = []
         self.current_index = 0
         self.handlers = {}
 
@@ -24,8 +32,8 @@ class Playlist():
         return len(self.playlist)
 
     @executeHandler
-    def append(self,cm):
-        self.playlist.append(cm)
+    def append(self,cm,username="system"):
+        self.playlist.append(PlaylistItem(cm,username))
 
     @executeHandler
     def popFirst(self):
@@ -44,6 +52,7 @@ class Playlist():
 
     def _callHandlers(self):
         for val in self.handlers.values():
+
             val(self)
 
     def registerHandler(self,id,func):

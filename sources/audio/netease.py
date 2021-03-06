@@ -52,7 +52,7 @@ class NeteaseMusicSource(AudioSource,
     def getTitle(self):
         return self.title
 
-    def getAuthor(self):
+    def getArtist(self):
         return ",".join(self.artists)
 
     @property

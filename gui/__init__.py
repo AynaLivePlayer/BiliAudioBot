@@ -5,8 +5,10 @@ from tkinter import ttk
 from tkinter import Menu
 from tkinter.ttk import Notebook
 
+from gui.PlaylistGUI import PlaylistGUI
 from gui.MPVGUI import MPVGUI
 from gui.RoomGUI import RoomGUI
+
 
 
 class MainWindow():
@@ -37,13 +39,16 @@ class MainWindow():
 
     def createWidgets(self):
         mpv = MPVGUI(self)
-
         room = RoomGUI(self)
+        playlist = PlaylistGUI(self)
         room.createWidgets()
+        playlist.createWidgets()
         mpv.createWidgets()
+
 
         mpv.initialize()
         room.initialize()
+        playlist.initialize()
 
 
 

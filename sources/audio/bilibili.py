@@ -1,12 +1,12 @@
 from apis import JsonResponseContainer
 from sources.audio import AudioSource
 from sources.base import MediaSource, PictureSource, TextSource, CommonSource,SearchResult,SearchResults
-from sources.base.interface import SearchableSource
+from sources.base.interface import SearchableSource, AudioBotInfoSource
 import apis.bilibili.audio as baudioApi
 import apis.bilibili.audiolist as balApi
 import re,random
 
-class BiliAudioSource(AudioSource, SearchableSource):
+class BiliAudioSource(AudioSource, SearchableSource,AudioBotInfoSource):
     __source_name__ = "bilibili"
 
     pattern = r"au[0-9]+"
@@ -88,6 +88,12 @@ class BiliAudioSource(AudioSource, SearchableSource):
                 "Title":self.title,
                 "Uploader":self.uploader,
                 "Available Qualities":qs}
+
+    def getTitle(self):
+        return self.title
+
+    def getArtist(self):
+        return self.author
 
     @classmethod
     def applicable(cls,url):

@@ -49,10 +49,10 @@ class AudioBot():
         if len(self.user_playlist) == 0 and len(self.system_playlist) == 0:
             return
         if len(self.user_playlist) != 0:
-            self.__play(self.user_playlist.popFirst())
+            self.__play(self.user_playlist.popFirst().source)
             return
         if len(self.user_playlist) != 0:
-            self.__play(self.__chooseNext())
+            self.__play(self.__chooseNext().source)
 
     def __play(self,source:CommonSource):
         bs:BaseSource = self.__getPlayableSource(source.getBaseSources())
@@ -61,11 +61,11 @@ class AudioBot():
         self.current = source
         self.mpv_player.playByUrl(bs.url, headers=bs.headers)
 
-    def addAudioByUrl(self,url,source:Type[CommonSource]=None):
-        source:CommonSource = source if source else self.selector.select(url)
+    def addAudioByUrl(self,url,username="system",source:Type[CommonSource.__class__]=None):
+        source:CommonSource.__class__ = source if source else self.selector.select(url)
         if source != None:
             cm: CommonSource = source.initFromUrl(url)
-            if cm == None and isinstance(source,SearchableSource):
+            if cm == None and issubclass(source, SearchableSource):
                 srs = source.search(url)
                 if srs.isEmpty():
                     return
@@ -79,7 +79,7 @@ class AudioBot():
             return
         cm.load()
         if cm.isValid():
-            self.user_playlist.append(cm)
+            self.user_playlist.append(cm,username=username)
         if self.mpv_player.getProperty(MPVProperty.IDLE):
             self.playNext()
 
@@ -89,12 +89,11 @@ class AudioBot():
             return
         hintword,val = msg[0]," ".join(msg[1::])
         if (hintword == "点歌"):
-            self.addAudioByUrl(val)
+            self.addAudioByUrl(val,username=dmkMsg.uname)
         elif hintword == "点b歌":
-            self.addAudioByUrl(val,source=BiliAudioSource)
+            self.addAudioByUrl(val,username=dmkMsg.uname,source=BiliAudioSource)
         elif hintword == "点w歌":
-            self.addAudioByUrl(val,source=NeteaseMusicSource)
-
+            self.addAudioByUrl(val,username=dmkMsg.uname,source=NeteaseMusicSource)
 
     def __idle_play_next(self,prop,value, *args, **kwargs):
         if value:
