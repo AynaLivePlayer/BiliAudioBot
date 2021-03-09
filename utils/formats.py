@@ -35,7 +35,7 @@ def htmlGetCharset(bin_content:bytes):
 def htmlAutoDecode(bin_content:bytes):
     codec = ["utf-8","gbk","gb2312"]
     c = htmlGetCharset(bin_content)
-    if c != None:
+    if c != None and c in codec:
         return bin_content.decode(c,"ignore")
     for c in codec:
         try:

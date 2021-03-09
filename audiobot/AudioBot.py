@@ -1,5 +1,6 @@
 from typing import List, Type
 
+from audiobot.Command import DiangeCommand, QiegeCommand
 from audiobot.Playlist import Playlist, PlaylistItem
 from config import Config
 from liveroom.LiveRoom import LiveRoom
@@ -13,6 +14,7 @@ from sources.base.interface import WatchableSource
 from sources.video.bilibili import BiliVideoSource
 
 from audiobot import MatchEngine
+from audiobot import Command
 
 
 # 祖传代码，难以阅读
@@ -28,6 +30,7 @@ class AudioBot():
         self.current: PlaylistItem = None
         self.mpv_player: MPVPlayer = None
         self.live_room: LiveRoom = None
+        self._command_executors:List[Command.CommandExecutor] = []
 
     def setPlayer(self, mpv_player: MPVPlayer):
         self.mpv_player = mpv_player
@@ -40,7 +43,11 @@ class AudioBot():
             self.live_room.clearMsgHandler()
         self.live_room = live_room
         self.live_room.registerMsgHandler("audiobot.msg",
-                                          self.__danmu_add_playlist)
+                                          self.__process_command)
+
+    def registerCommandExecutor(self,cmd:Type[Command.CommandExecutor.__class__]):
+        self._command_executors.append(cmd(self))
+
 
     def _loadSystemPlaylist(self, config):
         playlists = config["playlist"]
@@ -119,17 +126,24 @@ class AudioBot():
         if self.current.username == "system":
             self.playNext()
 
-    def __danmu_add_playlist(self, dmkMsg: DanmakuMessage, *args, **kwargs):
-        msg: str = dmkMsg.msg.split(" ")
-        if len(msg) < 2:
-            return
-        hintword, val = msg[0], " ".join(msg[1::])
-        if (hintword == "点歌"):
-            self.addAudioByUrl(val, username=dmkMsg.uname)
-        elif hintword == "点b歌":
-            self.addAudioByUrl(val, username=dmkMsg.uname, source_class=BiliAudioSource)
-        elif hintword == "点w歌":
-            self.addAudioByUrl(val, username=dmkMsg.uname, source_class=NeteaseMusicSource)
+    def __process_command(self, dmkMsg: DanmakuMessage, *args, **kwargs):
+        command: str = dmkMsg.msg.split(" ")[0]
+        for cmd in self._command_executors:
+            if cmd.applicable(command):
+                cmd.process(command,dmkMsg)
+
+
+    # def __danmu_add_playlist(self, dmkMsg: DanmakuMessage, *args, **kwargs):
+    #     msg: str = dmkMsg.msg.split(" ")
+    #     if len(msg) < 2:
+    #         return
+    #     hintword, val = msg[0], " ".join(msg[1::])
+    #     if (hintword == "点歌"):
+    #         self.addAudioByUrl(val, username=dmkMsg.uname)
+    #     elif hintword == "点b歌":
+    #         self.addAudioByUrl(val, username=dmkMsg.uname, source_class=BiliAudioSource)
+    #     elif hintword == "点w歌":
+    #         self.addAudioByUrl(val, username=dmkMsg.uname, source_class=NeteaseMusicSource)
 
     def __idle_play_next(self, prop, value, *args, **kwargs):
         if value:
@@ -140,3 +154,5 @@ class AudioBot():
 print("Initialize global audio bot")
 Global_Audio_Bot = AudioBot()
 Global_Audio_Bot._loadSystemPlaylist(Config.system_playlist)
+Global_Audio_Bot.registerCommandExecutor(DiangeCommand)
+Global_Audio_Bot.registerCommandExecutor(QiegeCommand)

@@ -1,5 +1,4 @@
-import requests
-
+import requests,traceback
 
 
 def httpGet(url, maxReconn=5, **kwargs):
@@ -31,16 +30,18 @@ class HttpClient:
         trial = 0
         while trial < self.maxTrial:
             try:
-                return requests.get(url, timeout=5, **kwargs).content
+                return requests.get(url, timeout=5, **kwargs)
             except:
+                traceback.print_exc()
                 trial += 1
-        return b''
+        return None
 
     def post(self,url,**kwargs):
         trial = 0
         while trial < self.maxTrial:
             try:
-                return requests.post(url, timeout=5, **kwargs).content
+                return requests.post(url, timeout=5, **kwargs)
             except:
+                traceback.print_exc()
                 trial += 1
-        return b''
+        return None

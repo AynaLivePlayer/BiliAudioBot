@@ -25,18 +25,19 @@ def BaseApiWrapper(api_wrapper):
             method, url = retval[0], retval[1]
             req_kwargs = retval[2] if len(retval) >= 3 else {}
             return api_wrapper(method, url, **req_kwargs)
-
         return process
     return ApiWrapper
 
 
 @BaseApiWrapper
 def CommonRequestWrapper(method, url, **request_kwargs) -> bytes:
-    if method == RequestMethod.GET:
-        return HTTP_CLIENT.get(url, **request_kwargs)
-    elif method == RequestMethod.POST:
-        return HTTP_CLIENT.post(url, **request_kwargs)
-    return b''
+    try:
+        if method == RequestMethod.GET:
+            return HTTP_CLIENT.get(url, **request_kwargs).content
+        elif method == RequestMethod.POST:
+            return HTTP_CLIENT.post(url, **request_kwargs).content
+    except:
+        return b''
 
 class RegExpResponseContainer():
     def __init__(self, content:bytes, strip:[str,List]=None, **kwargs):
