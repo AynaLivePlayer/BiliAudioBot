@@ -26,7 +26,7 @@ class RoomManager():
         liveroom = self.live_rooms.get(room_id)
         if liveroom == None:
             return
-        asyncio.gather(room_starter(liveroom)())
+        asyncio.ensure_future(room_starter(liveroom)())
 
     def getRunningRoomIds(self):
         running = []

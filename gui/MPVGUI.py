@@ -1,11 +1,10 @@
+import asyncio
 from tkinter import ttk
 import tkinter as tk
 
 from audiobot.AudioBot import Global_Audio_Bot
-from liveroom.RoomManager import Global_Room_Manager
-from player.mpv import MPVPlayer, MPVProperty, MPVEvent
+from player.mpv import MPVPlayer, MPVProperty
 import gui
-from sources.audio.netease import NeteaseMusicSource
 
 
 class MPVGUI():
@@ -65,19 +64,6 @@ class MPVGUI():
         frame_player.grid(column=0, row=0, sticky="news")
 
         self.mpv_window_id = str(int(frame_player.winfo_id()))
-        #
-        #
-        # self.mpv_player.registerPropertyHandler("mpvgui.idle",
-        #                                         MPVProperty.IDLE,
-        #                                         lambda *args:print(args))
-        #
-        # self.mpv_player.registerEventHandler("mpvgui.fileloaded",
-        #                                         MPVEvent.FILE_LOADED,
-        #                                         lambda *args:print(args))
-        # a = NeteaseMusicSource.initFromUrl("https://music.163.com/#/song?id=433107530")
-        # a.load()
-        # self.mpv_player.playByUrl(a.audio.url, headers=a.audio.headers)
-
 
         # ==== Row 2 ====
         frame_row_2 = ttk.Frame(frame_main)
@@ -111,8 +97,8 @@ class MPVGUI():
         play_button.grid(column=1, row=0)
 
         # Adding stop Button
-        play_button = ttk.Button(frame_row_3, width=8, text="stop", command=self._stop)
-        play_button.grid(column=0, row=0)
+        stop_button = ttk.Button(frame_row_3, width=8, text="stop", command=self._stop)
+        stop_button.grid(column=0, row=0)
 
         # add volume scale
         ttk.Label(frame_row_3, text="Volume: ") \

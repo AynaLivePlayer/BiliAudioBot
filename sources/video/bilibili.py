@@ -9,7 +9,7 @@ import re, json
 
 
 class BiliVideoSource(VideoSource,
-                          AudioBotInfoSource):
+                      AudioBotInfoSource):
     __source_name__ = "bilibili"
 
     patternAv = r"av[0-9]+"
@@ -76,7 +76,7 @@ class BiliVideoSource(VideoSource,
         suffix = url.split("?")[0].split(".")[-1]
         return MediaSource(url,
                            {"origin": "www.bilibili.com", "referer": self.base_url + self.bid,
-                                         "user-agent": Config.commonHeaders["user-agent"]}
+                            "user-agent": Config.commonHeaders["user-agent"]}
                            ,
                            self._parseTitle("video", page, suffix))
 
@@ -100,7 +100,7 @@ class BiliVideoSource(VideoSource,
 
     @property
     def info(self):
-        qs = ["%s: %s(%s)" % (key, value[1], value[0])for key, value in self._getQualities().items()]
+        qs = ["%s: %s(%s)" % (key, value[1], value[0]) for key, value in self._getQualities().items()]
         return {"Type": self.getSourceName(),
                 "Title": self.title,
                 "Bid": self.bid,
@@ -109,7 +109,7 @@ class BiliVideoSource(VideoSource,
                 "Current Page": self._getPageName(self.currentPage),
                 "Available Qualities": qs,
                 "Total page": str(len(self.pages)),
-                "Page List":["P%s - %s" % (x["page"], x["pagename"]) for x in self.pages]
+                "Page List": ["P%s - %s" % (x["page"], x["pagename"]) for x in self.pages]
                 }
 
     def getTitle(self):
@@ -117,6 +117,9 @@ class BiliVideoSource(VideoSource,
 
     def getArtist(self):
         return self.uploader
+
+    def getCover(self) -> PictureSource:
+        return self.cover
 
     @classmethod
     def applicable(cls, url):
@@ -130,9 +133,9 @@ class BiliVideoSource(VideoSource,
     @CommonSource.wrapper.handleException
     def load(self, **kwargs):
         container = JsonResponseContainer(videoApi.getVideoInfo(self.bid),
-                                          title = "data.View.title",
-                                          uploader = "data.View.owner.name",
-                                          cover = "data.View.pic")
+                                          title="data.View.title",
+                                          uploader="data.View.owner.name",
+                                          cover="data.View.pic")
         self.title = container.data["title"]
         self.uploader = container.data["uploader"]
         self.cover_url = container.data["cover"]
@@ -161,21 +164,21 @@ class BiliVideoSource(VideoSource,
             return quality
         container = JsonResponseContainer(videoApi.getPlayUrl(self.bid, cid, quality=32),
                                           formats=("data.accept_format",
-                                                   lambda x:x.split(",")),
-                                          quality = "data.accept_quality",
-                                          desc = "data.accept_description")
+                                                   lambda x: x.split(",")),
+                                          quality="data.accept_quality",
+                                          desc="data.accept_description")
         for index, qn in enumerate(container.data["quality"]):
             quality[qn] = (container.data["formats"][index], container.data["desc"][index])
         return quality
 
-    def getBaseSources(self, page=0, qn=116,all=False,**kwargs):
+    def getBaseSources(self, page=0, qn=116, all=False, **kwargs):
         if not self.isValid(): return {}
         if all:
-            return {"video": [self.getVideo(page=p,qn=qn)
-                               for p in range(1,len(self.pages)+1)],
-                "danmu": self.getDanmu(page=page),
-                "cover": self.cover}
-        return {"video": self.getVideo(page=page,qn=qn),
+            return {"video": [self.getVideo(page=p, qn=qn)
+                              for p in range(1, len(self.pages) + 1)],
+                    "danmu": self.getDanmu(page=page),
+                    "cover": self.cover}
+        return {"video": self.getVideo(page=page, qn=qn),
                 "danmu": self.getDanmu(page=page),
                 "cover": self.cover}
 
@@ -184,14 +187,13 @@ class BiliVideoSource(VideoSource,
         cid = self._getPageCid(page)
         if cid == 0:
             return []
-        container = JsonResponseContainer(videoApi.getPlayUrl(self.bid,cid,quality=qn),
-                                          durl = "data.durl")
+        container = JsonResponseContainer(videoApi.getPlayUrl(self.bid, cid, quality=qn),
+                                          durl="data.durl")
         for u in container.data["durl"]:
             urls.append(u["url"])
             if u["backup_url"] != None:
                 urls.append(u["backup_url"])
         return urls
-
 
     def _parseTitle(self, type, page, suffix):
         if (type == "video"):
@@ -204,7 +206,8 @@ class BiliVideoSource(VideoSource,
             return ".".join([self.title, suffix])
         if (type == "danmu"):
             if (len(self.pages) > 1):
-                return ".".join(["%s (P%s %s) - %s" % (self.title, page, self._getPageName(page), self.uploader), "xml"])
+                return ".".join(
+                    ["%s (P%s %s) - %s" % (self.title, page, self._getPageName(page), self.uploader), "xml"])
             else:
                 return ".".join([self.title + " - " + self.uploader, "xml"])
 
@@ -233,7 +236,7 @@ class biliBangumi(BiliVideoSource):
                 "Current Episode": self._getPageName(self.currentPage),
                 "Available Qualities": qs,
                 "Total page": str(len(self.pages)),
-                "Page List":[x["pagename"] for x in self.pages]
+                "Page List": [x["pagename"] for x in self.pages]
                 }
 
     @classmethod
@@ -247,10 +250,9 @@ class biliBangumi(BiliVideoSource):
     def initFromUrl(cls, url):
         if cls.applicable(url):
             for p in cls.patterns:
-                if re.search(p,url) != None:
-                    return biliBangumi(re.search(p,url).group())
+                if re.search(p, url) != None:
+                    return biliBangumi(re.search(p, url).group())
         return biliBangumi("")
-
 
     def _getQualities(self, page=1):
 
@@ -286,8 +288,8 @@ class biliBangumi(BiliVideoSource):
         if self.ep_id == "":
             return
         container = RegExpResponseContainer(videoApi.getBangumiInfo(self.ep_id),
-                                            state = (r"__INITIAL_STATE__={(.*?)]};",
-                                                     lambda x:x[18:-1:]))
+                                            state=(r"__INITIAL_STATE__={(.*?)]};",
+                                                   lambda x: x[18:-1:]))
         initial_state = json.loads(container.data["state"])
         self.title = initial_state["mediaInfo"]["title"]
         self.cover_url = "https:" + initial_state["mediaInfo"]["cover"]
@@ -312,7 +314,6 @@ class biliBangumi(BiliVideoSource):
             return ".".join([self.title, suffix])
         if (type == "danmu"):
             return ".".join(["%s: %s" % (self.title, self._getPageName(page)), suffix])
-
 
 # class biliVideoList():
 #     name = "videolist"

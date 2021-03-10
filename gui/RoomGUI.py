@@ -2,7 +2,6 @@ from tkinter import ttk, scrolledtext
 from audiobot.AudioBot import Global_Audio_Bot
 import tkinter as tk
 import gui
-from config import Config
 from liveroom.RoomManager import Global_Room_Manager
 
 
@@ -19,7 +18,7 @@ class RoomGUI():
     def createWidgets(self):
         self.main_window.getTabController().add(self.widget, text="AudioBot")
 
-        frame_main = ttk.LabelFrame(self.widget, text="AudioBot Test Main")
+        frame_main = ttk.LabelFrame(self.widget, text="AudioBot Test")
         frame_main.grid(column=0, row=0, padx=8, pady=4)
 
         # ========== input frame ================

@@ -1,4 +1,6 @@
-from typing import List, Type
+import asyncio
+from enum import Enum
+from typing import List, Type, Union
 
 from audiobot.Command import DiangeCommand, QiegeCommand
 from audiobot.Playlist import Playlist, PlaylistItem
@@ -8,6 +10,7 @@ from player.mpv import MPVPlayer, MPVProperty
 from plugins.blivedm import DanmakuMessage
 from sources.audio import NeteaseMusicSource, BiliAudioSource
 from sources.audio.bilibili import BiliAudioListSource
+from sources.audio.kuwo import KuwoMusicSource
 from sources.audio.netease import NeteasePlaylistSource
 from sources.base import CommonSource, BaseSource, SourceSelector
 from sources.base.interface import WatchableSource
@@ -15,22 +18,36 @@ from sources.video.bilibili import BiliVideoSource
 
 from audiobot import MatchEngine
 from audiobot import Command
+from functools import wraps
 
+def asyncwrapper(func):
+    @wraps(func)
+    async def wrapper(*args,**kwargs):
+        func(*args,**kwargs)
+    return wrapper
+
+class AudioBotEvent(Enum):
+    PLAY = "play"
+
+    values = [PLAY]
 
 # 祖传代码，难以阅读
 
 class AudioBot():
     selector = SourceSelector(NeteaseMusicSource,
                               BiliAudioSource,
-                              BiliVideoSource)
+                              BiliVideoSource,
+                              KuwoMusicSource)
 
-    def __init__(self):
-        self.user_playlist = Playlist()
-        self.system_playlist = Playlist()
+    def __init__(self,loop=None):
+        self.user_playlist = Playlist(self)
+        self.system_playlist = Playlist(self)
         self.current: PlaylistItem = None
         self.mpv_player: MPVPlayer = None
         self.live_room: LiveRoom = None
+        self._loop = asyncio.get_event_loop() if loop == None else loop
         self._command_executors:List[Command.CommandExecutor] = []
+        self._event_handlers = {}
 
     def setPlayer(self, mpv_player: MPVPlayer):
         self.mpv_player = mpv_player
@@ -99,6 +116,11 @@ class AudioBot():
             next_item.source.load()
             self.__play(next_item)
 
+    def playByIndex(self,index):
+        if index<0 or index>=len(self.user_playlist):
+            return
+        self.__play(self.user_playlist.remove(index))
+
     def __play(self, item: PlaylistItem):
         item = MatchEngine.check(item)
         source = item.source
@@ -107,9 +129,11 @@ class AudioBot():
             return
         bs: BaseSource = self.__getPlayableSource(source.getBaseSources())
         if bs == None:
-            self.playNext()
+            if  self.current == None:
+                self.playNext()
             return
         self.current = item
+        self.__call_handlers(AudioBotEvent.PLAY,item)
         self.mpv_player.playByUrl(bs.url, headers=bs.headers)
 
     def addAudioByUrl(self, url, username="system", source_class: CommonSource.__class__ = None):
@@ -126,29 +150,41 @@ class AudioBot():
         if self.current.username == "system":
             self.playNext()
 
+    def registerEventHanlder(self,event:Union[AudioBotEvent,str],id,func):
+        eventkey:str = event.value if isinstance(event,AudioBotEvent) else event
+        if self._event_handlers.get(eventkey) == None:
+            self._event_handlers[eventkey] = {}
+        self._event_handlers[eventkey][id] = func
+
+    def unregisterEventHanlder(self,event:Union[AudioBotEvent,str],id):
+        eventkey: str = event.value if isinstance(event,AudioBotEvent) else event
+        try:
+         self._event_handlers.get(eventkey).pop(id)
+        except:
+            pass
+
+    def __call_handlers(self,event:Union[AudioBotEvent,str],*args,**kwargs):
+        eventkey: str = event.value if isinstance(event,AudioBotEvent) else event
+        if self._event_handlers.get(eventkey) == None:
+            return
+        for func in self._event_handlers.get(eventkey).values():
+            self._async_call(func,*args,**kwargs,)
+
+    def _async_call(self,fun,*args,**kwargs):
+        asyncio.ensure_future(asyncwrapper(fun)(*args,**kwargs),loop=self._loop)
+
+
     def __process_command(self, dmkMsg: DanmakuMessage, *args, **kwargs):
         command: str = dmkMsg.msg.split(" ")[0]
         for cmd in self._command_executors:
             if cmd.applicable(command):
                 cmd.process(command,dmkMsg)
 
-
-    # def __danmu_add_playlist(self, dmkMsg: DanmakuMessage, *args, **kwargs):
-    #     msg: str = dmkMsg.msg.split(" ")
-    #     if len(msg) < 2:
-    #         return
-    #     hintword, val = msg[0], " ".join(msg[1::])
-    #     if (hintword == "点歌"):
-    #         self.addAudioByUrl(val, username=dmkMsg.uname)
-    #     elif hintword == "点b歌":
-    #         self.addAudioByUrl(val, username=dmkMsg.uname, source_class=BiliAudioSource)
-    #     elif hintword == "点w歌":
-    #         self.addAudioByUrl(val, username=dmkMsg.uname, source_class=NeteaseMusicSource)
-
     def __idle_play_next(self, prop, value, *args, **kwargs):
         if value:
             self.current = None
             self.playNext()
+
 
 
 print("Initialize global audio bot")

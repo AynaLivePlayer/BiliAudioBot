@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
+from sources.base.Picture import PictureSource
 from sources.base.SearchResult import SearchResults
 
 
@@ -35,4 +36,8 @@ class AudioBotInfoSource():
 
     @abstractmethod
     def getArtist(self):
+        return None
+
+    @abstractmethod
+    def getCover(self) -> PictureSource:
         return None

@@ -81,6 +81,7 @@ class BiliAudioSource(AudioSource, SearchableSource,AudioBotInfoSource):
             suffix = self.cover_url.split("?")[0].split(".")[-1]
             return PictureSource(self.cover_url, {}, ".".join([self.title, suffix]), "")
 
+
     @property
     def info(self):
         qs = ["%s: %s(%s %s)" % (key,value[2],value[0],value[1]) for key,value in self._getQualities().items()]
@@ -94,6 +95,9 @@ class BiliAudioSource(AudioSource, SearchableSource,AudioBotInfoSource):
 
     def getArtist(self):
         return self.author
+
+    def getCover(self):
+        return self.cover
 
     @classmethod
     def applicable(cls,url):

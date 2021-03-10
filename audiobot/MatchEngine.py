@@ -2,10 +2,11 @@ from typing import List, Type
 
 from audiobot.Playlist import PlaylistItem
 from sources.audio import BiliAudioSource, NeteaseMusicSource
+from sources.audio.kuwo import KuwoMusicSource
 from sources.base import CommonSource
 from sources.base.interface import SearchableSource
 
-SEARCH_ENGINE_LIST:List[SearchableSource.__class__] = [BiliAudioSource,NeteaseMusicSource]
+SEARCH_ENGINE_LIST:List[SearchableSource.__class__] = [BiliAudioSource,KuwoMusicSource,NeteaseMusicSource]
 DEFAULT_SEARCH_ENGINE = NeteaseMusicSource
 
 def check(item:PlaylistItem):
@@ -46,10 +47,12 @@ def matchNetease(netease:NeteaseMusicSource,keyword=""):
                 if result != None:
                     result.getTitle = netease.getTitle
                     result.getArtist = netease.getArtist
+                    result.getCover = netease.getCover
                     return result
             result = searchFirst(" ".join([netease.title] + netease.artists), engine=engine)
             if result != None:
                 result.getTitle = netease.getTitle
                 result.getArtist = netease.getArtist
+                result.getCover = netease.getCover
                 return result
     return netease

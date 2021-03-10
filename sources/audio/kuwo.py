@@ -2,7 +2,7 @@ import re
 
 from apis import RegExpResponseContainer, JsonResponseContainer
 from sources.audio import AudioSource
-from sources.base import SearchResults, CommonSourceWrapper, MediaSource, SearchResult
+from sources.base import SearchResults, CommonSourceWrapper, MediaSource, SearchResult, PictureSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource
 from apis import kuwo as kuwoApi
 from utils import file
@@ -15,8 +15,8 @@ class KuwoMusicSource(AudioSource,
     __source_name__ = "kuwo"
     pattern = "kuwo[0-9]+"
 
-    def __init__(self):
-        self.id = ""
+    def __init__(self,id):
+        self.id = id
         self.artist = ""
         self.title = ""
 
@@ -31,8 +31,7 @@ class KuwoMusicSource(AudioSource,
             rs = []
             for song in container.data["songlist"]:
                 id = song["musicrid"].replace("MUSIC_", "")
-                source = cls()
-                source.id = id
+                source = cls(id)
                 source.title = song["name"]
                 source.artist = song["artist"]
                 rs.append(SearchResult(kuwoApi.API.info_url(id),
@@ -53,9 +52,9 @@ class KuwoMusicSource(AudioSource,
 
     @CommonSourceWrapper.handleException
     def getAudio(self):
-        url = kuwoApi.API.file_headers.decode()
-        return MediaSource(kuwoApi.getMusicFile(self.id),
-                           url,
+        url = kuwoApi.getMusicFile(self.id).decode()
+        return MediaSource(url,
+                           kuwoApi.API.file_headers,
                            "{} - {}.{}".format(self.title,
                                                self.artist,
                                                file.getSuffixByUrl(url)))
@@ -66,10 +65,15 @@ class KuwoMusicSource(AudioSource,
     def getArtist(self):
         return self.artist
 
+    def getCover(self) -> PictureSource:
+        return None
+
     @classmethod
-    def initFromUrl(cls, url):
-        r = re.search(cls.pattern)
-        return r.group()[4::] if r != None else None
+    def initFromUrl(cls, url:str):
+        if url.isdigit():
+            return cls(url)
+        r = re.search(cls.pattern,url)
+        return cls(r.group()[4::]) if r != None else None
 
     @property
     def info(self):
@@ -93,7 +97,7 @@ class KuwoMusicSource(AudioSource,
 
     @classmethod
     def applicable(cls, url):
-        return re.search(cls.pattern) != None
+        return re.search(cls.pattern,url) != None
 
     def isValid(self):
         return self.artist != "" and self.title != ""

@@ -1,7 +1,5 @@
 import base64
 
-from sources.base.interface import DownloadableSource
-from utils import file
 from sources.base import BaseSource
 
 

@@ -2,6 +2,8 @@ from typing import Union, List
 
 from plugins.blivedm import DanmakuMessage
 from sources.audio import BiliAudioSource, NeteaseMusicSource
+from sources.audio.kuwo import KuwoMusicSource
+
 
 class CommandExecutor():
     def __init__(self, audiobot, commands:Union[str, List[str]]):
@@ -32,6 +34,8 @@ class DiangeCommand(CommandExecutor):
             self.audiobot.addAudioByUrl(val, username=dmkMsg.uname, source_class=BiliAudioSource)
         elif command == "点w歌":
             self.audiobot.addAudioByUrl(val, username=dmkMsg.uname, source_class=NeteaseMusicSource)
+        elif command == "点k歌":
+            self.audiobot.addAudioByUrl(val, username=dmkMsg.uname, source_class=KuwoMusicSource)
 
 class QiegeCommand(CommandExecutor):
     def __init__(self,audiobot):

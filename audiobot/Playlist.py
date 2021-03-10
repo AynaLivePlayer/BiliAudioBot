@@ -21,7 +21,8 @@ class PlaylistItem():
         self.keyword = keyword
 
 class Playlist():
-    def __init__(self):
+    def __init__(self,audio_bot):
+        self.audio_bot =audio_bot
         self.playlist:List[PlaylistItem] = []
         self.current_index = 0
         self.handlers = {}
@@ -43,6 +44,28 @@ class Playlist():
         return self.playlist.pop(0)
 
     @executeHandler
+    def remove(self,index):
+        if index >= len(self.playlist) or index < 0:
+            return
+        return self.playlist.pop(index)
+
+    @executeHandler
+    def move(self, index,target_index):
+        if index >= len(self.playlist) or index < 0:
+            return
+        if target_index < 0:
+            target_index = 0
+        if target_index >= len(self.playlist):
+            target_index = len(self.playlist) - 1
+        if index == target_index:
+            return
+        step = int((target_index - index) / abs(target_index-index))
+        tmp = self.playlist[index]
+        for i in range(index,target_index,step):
+            self.playlist[i] = self.playlist[i+step]
+        self.playlist[target_index] = tmp
+
+    @executeHandler
     def getNext(self):
         if len(self.playlist) == 0:
             return None
@@ -53,8 +76,7 @@ class Playlist():
 
     def _callHandlers(self):
         for val in self.handlers.values():
-
-            val(self)
+            self.audio_bot._async_call(val,self)
 
     def registerHandler(self,id,func):
         self.handlers[id] = func

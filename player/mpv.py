@@ -1,3 +1,4 @@
+import asyncio
 from enum import Enum
 
 from plugins import mpv_lib
@@ -42,6 +43,9 @@ class MPVPlayer:
 
     def toggle(self):
         self.mpv_core._set_property("pause",not self.isPaused())
+
+    def goto(self,time):
+        self.mpv_core.seek(time,reference="absolute")
 
     def stop(self):
         self.mpv_core.stop()

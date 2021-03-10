@@ -2,7 +2,7 @@ import json
 import re
 
 from config import Config
-from sources.base import SearchResults, MediaSource, SearchResult, CommonSourceWrapper
+from sources.base import SearchResults, MediaSource, SearchResult, CommonSourceWrapper, PictureSource
 from sources.audio import AudioSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource
 from pyncm.apis import track,cloudsearch,playlist
@@ -55,6 +55,12 @@ class NeteaseMusicSource(AudioSource,
 
     def getArtist(self):
         return ",".join(self.artists)
+
+    def getCover(self) -> PictureSource:
+        if self.cover_url != "":
+            suffix = file.getSuffixByUrl(self.cover_url)
+            return PictureSource(self.cover_url, {}, ".".join([self.title, suffix]), "")
+        return None
 
     @property
     def audio(self):
