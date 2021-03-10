@@ -41,7 +41,7 @@ class AudioBot():
 
     def __init__(self,loop=None):
         self.user_playlist = Playlist(self)
-        self.system_playlist = Playlist(self)
+        self.system_playlist = Playlist(self,random_next=True)
         self.current: PlaylistItem = None
         self.mpv_player: MPVPlayer = None
         self.live_room: LiveRoom = None

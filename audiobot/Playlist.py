@@ -1,10 +1,11 @@
+
 from typing import List, Type, Union
 
 from sources.base import CommonSource
 from functools import wraps
 
 from sources.base.interface import AudioBotInfoSource
-
+import random
 
 def executeHandler(func):
     @wraps(func)
@@ -21,11 +22,12 @@ class PlaylistItem():
         self.keyword = keyword
 
 class Playlist():
-    def __init__(self,audio_bot):
+    def __init__(self,audio_bot,random_next = False):
         self.audio_bot =audio_bot
         self.playlist:List[PlaylistItem] = []
         self.current_index = 0
         self.handlers = {}
+        self.random_next = random_next
 
     def __len__(self):
         return len(self.playlist)
@@ -73,6 +75,8 @@ class Playlist():
     def getNext(self):
         if len(self.playlist) == 0:
             return None
+        if self.random_next:
+            return self.playlist[random.randint(0,len(self.playlist)-1)]
         if self.current_index >= len(self.playlist):
             self.current_index = 0
         self.current_index +=1
