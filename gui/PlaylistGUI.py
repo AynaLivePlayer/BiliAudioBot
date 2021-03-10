@@ -123,7 +123,6 @@ class PlaylistGUI():
     @vwrappers.TryExceptRetNone
     def __loadCover(self, ps: PictureSource):
         if ps == None:
-            print("123")
             self.playing_cover.configure(image=self.empty_image)
             self.playing_cover.image = self.empty_image
             return
