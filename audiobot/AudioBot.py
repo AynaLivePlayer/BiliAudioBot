@@ -121,6 +121,8 @@ class AudioBot():
             return
         self.__play(self.user_playlist.remove(index))
 
+    def play(self,item:PlaylistItem):
+        self.__play(item)
     def __play(self, item: PlaylistItem):
         item = MatchEngine.check(item)
         source = item.source

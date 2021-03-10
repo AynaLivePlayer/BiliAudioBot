@@ -27,7 +27,6 @@ class PlaylistGUI():
         self.audio_bot.registerEventHanlder("play", "playinginfo.update",
                                             self.__updatePlayingInfo)
 
-
     def createWidgets(self):
         self.main_window.getTabController().add(self.widget, text="Playlist")
 
@@ -48,13 +47,13 @@ class PlaylistGUI():
 
         self.playlist_tree = ttk.Treeview(frame_display, height="13", selectmode="browse")
         self.playlist_tree["columns"] = ("title", "artist", "source", "user")
-        self.playlist_tree.column("#0", width=64, minwidth=64)
+        self.playlist_tree.column("#0", width=32, minwidth=32)
         self.playlist_tree.column("title", width=256, minwidth=256)
         self.playlist_tree.column("artist", width=128, minwidth=128)
         self.playlist_tree.column("source", width=128, minwidth=128)
-        self.playlist_tree.column("user", width=64, minwidth=64)
+        self.playlist_tree.column("user", width=64+32, minwidth=64+32)
 
-        self.playlist_tree.heading("#0", text="index", anchor=tk.W)
+        self.playlist_tree.heading("#0", text="#", anchor=tk.W)
         self.playlist_tree.heading("title", text="title", anchor=tk.W)
         self.playlist_tree.heading("artist", text="artist", anchor=tk.W)
         self.playlist_tree.heading("source", text="source", anchor=tk.W)
