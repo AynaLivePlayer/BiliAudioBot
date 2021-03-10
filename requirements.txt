@@ -14,6 +14,7 @@ m3u8==0.8.0
 mttkinter==0.6.1
 multidict==5.1.0
 mutagen==1.45.1
+nest-asyncio==1.5.1
 Pillow==8.1.0
 pyaria2==0.1.1
 pycryptodome==3.10.1
