@@ -136,7 +136,7 @@ class SearchGUI():
             return
         keyword = self.keyword.get()
         search_results = self.__getSearchResults(keyword)
-        self.current_results = [PlaylistItem(item.source,"system-add",keyword) for item in search_results]
+        self.current_results = [PlaylistItem(item.source,"system-add","") for item in search_results]
         for index, item in enumerate(search_results):
             source:Type[AudioBotInfoSource,CommonSource] = item.source
             self.search_result_tree.insert("", index, text=index, values=(source.getTitle(),

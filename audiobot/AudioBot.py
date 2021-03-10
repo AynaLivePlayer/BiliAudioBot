@@ -123,13 +123,13 @@ class AudioBot():
 
     def play(self,item:PlaylistItem):
         self.__play(item)
+
     def __play(self, item: PlaylistItem):
-        item = MatchEngine.check(item)
-        source = item.source
-        source.load()
-        if not source.isValid():
+        item.source.load()
+        if not item.source.isValid():
             return
-        bs: BaseSource = self.__getPlayableSource(source.getBaseSources())
+        item = MatchEngine.check(item)
+        bs: BaseSource = self.__getPlayableSource(item.source.getBaseSources())
         if bs == None:
             if  self.current == None:
                 self.playNext()

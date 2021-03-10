@@ -41,17 +41,17 @@ class MainWindow():
 
     async def _update(self):
         while True:
-            self.window.update()
-            await asyncio.sleep(self.interval)
+            try:
+                self.window.update()
+                await asyncio.sleep(self.interval)
+            except:
+                break
 
     def start(self):
         self.createWidgets()
         return self._update()
 
     def createWidgets(self):
-        # room = RoomGUI(self)
-        # room.createWidgets()
-        # room.initialize()
         mpv = MPVGUI(self)
         room = RoomGUI(self)
         playlist = PlaylistGUI(self)
