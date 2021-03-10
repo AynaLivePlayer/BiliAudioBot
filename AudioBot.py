@@ -1,9 +1,10 @@
-import asyncio
+import os
+os.environ["PATH"] = os.getcwd() + os.pathsep + os.environ["PATH"]
 
 from gui import MainWindow
+import asyncio
 import nest_asyncio
 nest_asyncio.apply()
-
 async def mainloop(loop):
     a = MainWindow(loop=loop)
     await asyncio.gather(a.start())

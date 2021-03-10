@@ -58,6 +58,14 @@ bilibili `点b歌 关键字/au2159832`
 匹配顺序是 bilibili -> 酷我 -> 网易云
 
 
+# build
+
+`pyi-makespec --onefile --windowed --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+
+`pyinstaller --onefile --windowed --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+
 # change log
+
+2021-03-11-demo0.5.5: build executable
 
 2021-03-10-demo0.5.0: finish demo version
