@@ -1,5 +1,4 @@
-import asyncio
-from tkinter import ttk, scrolledtext
+from tkinter import ttk
 from audiobot.AudioBot import Global_Audio_Bot
 import tkinter as tk
 import gui
@@ -19,6 +18,7 @@ class PlaylistGUI():
         self.playing_cover: ttk.Label = None
         self.playing_title: tk.StringVar = tk.StringVar()
         self.playing_source: tk.StringVar = tk.StringVar()
+        self.empty_image = ImageTk.PhotoImage(Image.new("RGB",(100,100),(255,255,255)))
 
     def initialize(self):
         self.audio_bot.user_playlist.registerHandler("playlist.update",
@@ -123,6 +123,9 @@ class PlaylistGUI():
     @vwrappers.TryExceptRetNone
     def __loadCover(self, ps: PictureSource):
         if ps == None:
+            print("123")
+            self.playing_cover.configure(image=self.empty_image)
+            self.playing_cover.image = self.empty_image
             return
         data = vhttp.httpGet(ps.url, headers=ps.headers).content
         img = ImageTk.PhotoImage(Image.open(io.BytesIO(data)).resize((100, 100)))
