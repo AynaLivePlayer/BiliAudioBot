@@ -60,9 +60,9 @@ bilibili `点b歌 关键字/au2159832`
 
 # build
 
-`pyi-makespec --onefile --windowed --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+`pyi-makespec --onefile --windowed --icon=resource/favicon.ico --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
 
-`pyinstaller --onefile --windowed --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+`pyinstaller --onefile --windowed --icon=resource/favicon.ico --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
 
 # change log
 

@@ -2,7 +2,7 @@ import asyncio
 from functools import wraps
 
 from mttkinter import mtTkinter as tk
-from tkinter import ttk
+from tkinter import ttk, PhotoImage
 from tkinter import Menu
 from tkinter.ttk import Notebook
 
@@ -29,6 +29,7 @@ class MainWindow():
         self._initialize()
 
     def _initialize(self):
+        self.window.iconphoto(True,PhotoImage(file='resource/favicon.png'))
         self.window.resizable(False, False)
         self.window.geometry("720x480")
         self.tab_controller.pack(expand=1, fill="both")
