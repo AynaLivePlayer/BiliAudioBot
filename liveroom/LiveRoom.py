@@ -4,6 +4,8 @@ import aiohttp
 
 from plugins import blivedm
 from plugins.blivedm import DanmakuMessage
+from sources.base import MediaSource
+from utils import file, vasyncio
 
 
 class LiveRoom(blivedm.BLiveClient):
@@ -27,7 +29,10 @@ class LiveRoom(blivedm.BLiveClient):
     @property
     def cover(self):
         # todo media source
-        return None
+        suffix = file.getSuffixByUrl(self._cover)
+        return MediaSource(self._cover,
+                           {},
+                           "cover.{}".format(suffix))
 
     def _parse_room_init(self, data):
         super()._parse_room_init(data)
@@ -39,7 +44,7 @@ class LiveRoom(blivedm.BLiveClient):
 
     async def _on_receive_danmaku(self, danmaku: DanmakuMessage):
         for handler in self.msg_handler.values():
-            handler(danmaku)
+            asyncio.ensure_future(vasyncio.asyncwrapper(handler)(danmaku),loop=self._loop)
 
     def registerMsgHandler(self, handler_id, handler):
         self.msg_handler[handler_id] = handler
