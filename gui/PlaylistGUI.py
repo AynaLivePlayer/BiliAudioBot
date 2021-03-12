@@ -138,7 +138,9 @@ class PlaylistGUI():
                                 "({user:.16})").format(title=item.source.getTitle(),
                                                                 artist=item.source.getArtist(),
                                                                 user=item.username))
-        self.__loadCover(item.source.getCover())
+        self.main_window.threading_update(self.__loadCover,item.source.getCover())
+        # self.main_window.threading_update(self.__loadCover,item.source.getCover())
+
 
 
     def __disableTreeSeperator(self, event):

@@ -5,7 +5,7 @@ from audiobot.AudioBot import Global_Audio_Bot
 import tkinter as tk
 import gui
 from audiobot.Playlist import PlaylistItem
-from sources.base import PictureSource, SearchResults, SearchResult, CommonSource
+from sources.base import CommonSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource
 
 
@@ -113,7 +113,7 @@ class SearchGUI():
         return results
 
     def __search(self):
-        self.main_window.async_update(self.__updateTree)
+        self.main_window.threading_update(self.__updateTree)
 
     def __add(self):
         self.audio_bot.addAudioByUrl(self.keyword.get(),username="system-add")

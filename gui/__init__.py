@@ -1,5 +1,7 @@
 import asyncio
+import time
 from functools import wraps
+from threading import Thread
 
 from mttkinter import mtTkinter as tk
 from tkinter import ttk, PhotoImage
@@ -10,12 +12,7 @@ from gui.PlaylistGUI import PlaylistGUI
 from gui.MPVGUI import MPVGUI
 from gui.RoomGUI import RoomGUI
 from gui.SearchGUI import SearchGUI
-
-def asyncwrapper(func):
-    @wraps(func)
-    async def wrapper(*args,**kwargs):
-        func(*args,**kwargs)
-    return wrapper
+from utils import vasyncio
 
 
 class MainWindow():
@@ -26,6 +23,7 @@ class MainWindow():
         self.tab_controller: Notebook = ttk.Notebook(self.window)
         self.menu_controller = Menu(self.window)
         self._loop = asyncio.get_event_loop() if loop == None else loop
+        self._running = True
         self._initialize()
 
     def _initialize(self):
@@ -38,10 +36,14 @@ class MainWindow():
         return self.tab_controller
 
     def async_update(self, func, *args, **kwargs):
-        asyncio.ensure_future(asyncwrapper(func)(*args, **kwargs), loop=self._loop)
+        asyncio.ensure_future(vasyncio.asyncwrapper(func)(*args, **kwargs), loop=self._loop)
 
-    async def _update(self):
-        while True:
+    def threading_update(self, func, *args, **kwargs):
+        thread = Thread(target=func,args=args,kwargs=kwargs)
+        thread.start()
+
+    async def _async_update(self):
+        while self._running:
             try:
                 self.window.update()
                 await asyncio.sleep(self.interval)
@@ -50,7 +52,8 @@ class MainWindow():
 
     def start(self):
         self.createWidgets()
-        return self._update()
+        self.window.quit()
+        return self._async_update()
 
     def createWidgets(self):
         mpv = MPVGUI(self)

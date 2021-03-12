@@ -23,6 +23,12 @@ class NeteaseMusicSource(AudioSource,
     patternC = r"wy[0-9]+"
 
     @classmethod
+    def addXRealIP(cls,header):
+        h = header.copy()
+        h["X-Real-IP"] = "118.88.88.88"
+        return h
+
+    @classmethod
     def search(cls, keyword, pagesize=10,*args, **kwargs) -> SearchResults:
         data = cloudsearch.GetSearchResult(keyword,limit=pagesize,offset=0)
         if data["result"]["songCount"] == 0:
@@ -73,7 +79,7 @@ class NeteaseMusicSource(AudioSource,
         if url == None:
             return None
         return MediaSource(data["data"][0]["url"],
-                           Config.commonHeaders,
+                           self.addXRealIP(Config.commonHeaders),
                            "{}.{}".format(self._getParsedTitle(),file.getSuffixByUrl(url)))
 
     def isValid(self):

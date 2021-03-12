@@ -20,11 +20,8 @@ from audiobot import MatchEngine
 from audiobot import Command
 from functools import wraps
 
-def asyncwrapper(func):
-    @wraps(func)
-    async def wrapper(*args,**kwargs):
-        func(*args,**kwargs)
-    return wrapper
+from utils import vasyncio
+
 
 class AudioBotEvent(Enum):
     PLAY = "play"
@@ -173,7 +170,7 @@ class AudioBot():
             self._async_call(func,*args,**kwargs,)
 
     def _async_call(self,fun,*args,**kwargs):
-        asyncio.ensure_future(asyncwrapper(fun)(*args,**kwargs),loop=self._loop)
+        asyncio.ensure_future(vasyncio.asyncwrapper(fun)(*args,**kwargs),loop=self._loop)
 
 
     def __process_command(self, dmkMsg: DanmakuMessage, *args, **kwargs):

@@ -34,7 +34,6 @@ class MPVGUI():
 
     def initialize(self):
         MPVGUI.instance = self
-
         self.mpv_player = MPVPlayer(self.mpv_window_id)
         self.mpv_player.registerPropertyHandler("mpvgui.syncprogress",
                                                 MPVProperty.PERCENT_POS,
