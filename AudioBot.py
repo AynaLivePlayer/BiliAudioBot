@@ -9,14 +9,16 @@ from gui import MainWindow
 from backend import aioserver
 import asyncio
 import nest_asyncio
+
 nest_asyncio.apply()
 
 
 async def mainloop(loop):
     a = MainWindow()
 
-    await asyncio.create_task(a.start(),
-                              run_backend())
+    await asyncio.gather(a.start(),
+                         run_backend())
+
 
 def run_backend():
     backend = aioserver.app

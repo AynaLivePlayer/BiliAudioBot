@@ -7,7 +7,7 @@ ENV = "development"
 app = web.Application()
 routes = web.RouteTableDef()
 aiohttp_jinja2.setup(app,
-    loader=jinja2.FileSystemLoader('./frontend_dist'))
+    loader=jinja2.FileSystemLoader('./frontend/dist'))
 
 @routes.get("/")
 @routes.get("/{path:.*}")
