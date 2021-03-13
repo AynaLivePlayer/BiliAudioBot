@@ -139,7 +139,6 @@ class PlaylistGUI():
                                                                 artist=item.source.getArtist(),
                                                                 user=item.username))
         self.main_window.threading_update(self.__loadCover,item.source.getCover())
-        # self.main_window.threading_update(self.__loadCover,item.source.getCover())
 
 
 
