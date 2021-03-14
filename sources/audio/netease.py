@@ -7,7 +7,7 @@ from sources.audio import AudioSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource
 from pyncm.apis import track,cloudsearch,playlist
 
-from utils import file
+from utils import vfile
 
 class NeteaseMusicSource(AudioSource,
                          SearchableSource,
@@ -64,7 +64,7 @@ class NeteaseMusicSource(AudioSource,
 
     def getCover(self) -> PictureSource:
         if self.cover_url != "":
-            suffix = file.getSuffixByUrl(self.cover_url)
+            suffix = vfile.getSuffixByUrl(self.cover_url)
             return PictureSource(self.cover_url, {}, ".".join([self.title, suffix]), "")
         return None
 
@@ -80,7 +80,7 @@ class NeteaseMusicSource(AudioSource,
             return None
         return MediaSource(data["data"][0]["url"],
                            self.addXRealIP(Config.commonHeaders),
-                           "{}.{}".format(self._getParsedTitle(),file.getSuffixByUrl(url)))
+                           "{}.{}".format(self._getParsedTitle(), vfile.getSuffixByUrl(url)))
 
     def isValid(self):
         return self.sid != "" and self.title != ""

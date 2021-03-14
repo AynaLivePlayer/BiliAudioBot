@@ -5,7 +5,7 @@ import aiohttp
 from plugins import blivedm
 from plugins.blivedm import DanmakuMessage
 from sources.base import MediaSource
-from utils import file, vasyncio
+from utils import vfile, vasyncio
 
 
 class LiveRoom(blivedm.BLiveClient):
@@ -29,7 +29,7 @@ class LiveRoom(blivedm.BLiveClient):
     @property
     def cover(self):
         # todo media source
-        suffix = file.getSuffixByUrl(self._cover)
+        suffix = vfile.getSuffixByUrl(self._cover)
         return MediaSource(self._cover,
                            {},
                            "cover.{}".format(suffix))

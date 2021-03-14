@@ -1,4 +1,3 @@
-import asyncio
 from enum import Enum
 
 from plugins import mpv_lib

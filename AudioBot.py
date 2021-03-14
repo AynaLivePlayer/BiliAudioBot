@@ -1,5 +1,4 @@
 import os
-from threading import Thread
 
 from aiohttp import web
 

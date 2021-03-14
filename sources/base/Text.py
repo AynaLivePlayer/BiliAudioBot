@@ -1,5 +1,5 @@
 from sources.base.interface import DownloadableSource
-from utils import file
+from utils import vfile
 
 from sources.base import BaseSource
 
