@@ -5,7 +5,7 @@ from sources.audio import AudioSource
 from sources.base import SearchResults, CommonSourceWrapper, MediaSource, SearchResult, PictureSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource
 from apis import kuwo as kuwoApi
-from utils import file
+from utils import vfile
 
 
 class KuwoMusicSource(AudioSource,
@@ -57,7 +57,7 @@ class KuwoMusicSource(AudioSource,
                            kuwoApi.API.file_headers,
                            "{} - {}.{}".format(self.title,
                                                self.artist,
-                                               file.getSuffixByUrl(url)))
+                                               vfile.getSuffixByUrl(url)))
 
     def getTitle(self):
         return self.title

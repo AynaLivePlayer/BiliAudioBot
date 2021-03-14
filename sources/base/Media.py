@@ -1,7 +1,7 @@
 
 from sources.base import BaseSource
 from sources.base.interface import WatchableSource
-from utils import formats,file
+from utils import formats,vfile
 import os
 
 class MediaSource(BaseSource,WatchableSource):

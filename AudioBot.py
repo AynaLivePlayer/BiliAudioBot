@@ -1,5 +1,4 @@
 import os
-from threading import Thread
 
 os.environ["PATH"] = os.getcwd() + os.pathsep + os.environ["PATH"]
 

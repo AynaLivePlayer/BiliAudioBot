@@ -1,6 +1,4 @@
 import asyncio
-import time
-from functools import wraps
 from threading import Thread
 
 from mttkinter import mtTkinter as tk
@@ -12,7 +10,7 @@ from gui.PlaylistGUI import PlaylistGUI
 from gui.MPVGUI import MPVGUI
 from gui.RoomGUI import RoomGUI
 from gui.SearchGUI import SearchGUI
-from utils import vasyncio, file
+from utils import vasyncio, vfile
 
 
 class MainWindow():
@@ -27,7 +25,7 @@ class MainWindow():
         self._initialize()
 
     def _initialize(self):
-        self.window.iconphoto(True,PhotoImage(file=file.getResourcePath('resource/favicon.png')))
+        self.window.iconphoto(True, PhotoImage(file=vfile.getResourcePath('resource/favicon.png')))
         self.window.resizable(False, False)
         self.window.geometry("720x480")
         self.tab_controller.pack(expand=1, fill="both")
