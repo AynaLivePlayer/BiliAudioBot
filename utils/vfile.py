@@ -2,6 +2,8 @@ import os
 import re
 import sys
 
+from utils import content_types
+
 
 def parseFilename(filename):
     pattern = r'[\\/:*?"<>|\r\n]+'
@@ -27,6 +29,12 @@ def getSuffixByUrl(url):
 
 def getFileNameByUrl(url):
     return removeUrlPara(url).split("/")[-1]
+
+def getFileContentType(path):
+    suffix = ".{}".format(getSuffixByUrl(path))
+    if content_types.CONTENT_TYPES.get(suffix) == None:
+        return "text/html"
+    return content_types.CONTENT_TYPES.get(suffix)
 
 
 def getResourcePath(relative_path):
