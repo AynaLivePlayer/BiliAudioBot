@@ -3,6 +3,8 @@ from audiobot.AudioBot import Global_Audio_Bot
 import tkinter as tk
 import gui
 from audiobot.Playlist import PlaylistItem
+from audiobot.event import AudioBotPlayEvent
+from audiobot.event.playlist import PlaylistUpdateEvent
 from sources.base import PictureSource
 from utils import vhttp, vwrappers
 from PIL import Image, ImageTk
@@ -21,10 +23,12 @@ class PlaylistGUI():
         self.empty_image = ImageTk.PhotoImage(Image.new("RGB",(100,100),(255,255,255)))
 
     def initialize(self):
-        self.audio_bot.user_playlist.registerHandler("playlist.update",
+        self.audio_bot.user_playlist.registerHandler("playlist_update",
+                                                     "playlist.update",
                                                      self.__updateTree)
 
-        self.audio_bot.registerEventHanlder("play", "playinginfo.update",
+        self.audio_bot.registerEventHanlder("audiobot_play",
+                                            "playinginfo.update",
                                             self.__updatePlayingInfo)
 
     def createWidgets(self):
@@ -131,7 +135,8 @@ class PlaylistGUI():
         self.playing_cover.configure(image=img)
         self.playing_cover.image = img
 
-    def __updatePlayingInfo(self, item: PlaylistItem):
+    def __updatePlayingInfo(self, event: AudioBotPlayEvent):
+        item = event.item
         self.playing_source.set("Source: {}".format(item.source.getSourceName()))
         self.playing_title.set(("{title:.24} - - - " +
                                 "{artist:.16} - - - " +
@@ -162,7 +167,8 @@ class PlaylistGUI():
     def __move(self,index,target_index):
         self.audio_bot.user_playlist.move(index, target_index)
 
-    def __updateTree(self, user_playlist):
+    def __updateTree(self, event:PlaylistUpdateEvent):
+        user_playlist = event.playlist
         self.playlist_tree.delete(*self.playlist_tree.get_children())
         for index, item in enumerate(user_playlist.playlist):
             source = item.source
