@@ -66,6 +66,8 @@ bilibili `点b歌 关键字/au2159832`
 
 # change log
 
+2021-03-11-demo0.6.5: rewrite event handling
+
 2021-03-11-demo0.6.0: asynchronous loading
 
 2021-03-11-demo0.5.5: build executable
