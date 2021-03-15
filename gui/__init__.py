@@ -11,7 +11,7 @@ from gui.MPVGUI import MPVGUI
 from gui.RoomGUI import RoomGUI
 from gui.SearchGUI import SearchGUI
 from utils import vasyncio, vfile
-
+import sys
 
 class MainWindow():
     def __init__(self, loop=None, interval=1 / 20):

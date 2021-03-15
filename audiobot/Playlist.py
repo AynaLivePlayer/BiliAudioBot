@@ -56,7 +56,6 @@ class Playlist():
     def size(self):
         return len(self.playlist)
 
-
     def append(self, cm, username="system", keyword=""):
         self.appendItem(PlaylistItem(cm, username, keyword))
 

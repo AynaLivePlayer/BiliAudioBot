@@ -4,6 +4,4 @@
   </div>
 </template>
 <script>
-  import App from "../App";
-
 </script>

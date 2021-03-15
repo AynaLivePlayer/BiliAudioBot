@@ -60,11 +60,13 @@ bilibili `点b歌 关键字/au2159832`
 
 # build
 
-`pyi-makespec --onefile --windowed --icon=resource/favicon.ico --add-data "resource;resource" --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+`pyi-makespec --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
 
-`pyinstaller --onefile --windowed --icon=resource/favicon.ico --add-data "resource;resource" --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+`pyinstaller --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
 
 # change log
+
+2021-03-11-demo0.7.0: frontend&backend demo finish
 
 2021-03-11-demo0.6.5: rewrite event handling
 

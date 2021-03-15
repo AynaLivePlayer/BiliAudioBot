@@ -17,6 +17,8 @@ class ConfigFile:
                     "bilibili":[]}
     }
 
+    web_port = 5000
+
     config_path = "config.json"
 
     cookie_path = "cookies.json"

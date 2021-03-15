@@ -36,7 +36,7 @@ class NeteaseMusicSource(AudioSource,
         results = []
         for song in data["result"]["songs"]:
             ns = cls(song["id"])
-            ns.cover_url = song["id"]
+            ns.cover_url = song["al"]["picUrl"]
             ns.artists = [ar["name"] for ar in song["ar"]]
             ns.vip = bool(song["fee"])
             ns.title = song["name"]
