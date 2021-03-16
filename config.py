@@ -1,9 +1,14 @@
 import json
+from typing import Dict
 
 from utils import vwrappers
 
 
 class ConfigFile:
+    gui_title = "重生之我是欧菲手"
+
+    environment = "production"
+
     commonHeaders = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0"
     }
@@ -14,10 +19,16 @@ class ConfigFile:
         "playlist":{"netease":[],
                     "bilibili":[]},
         "song":{"netease":[],
-                    "bilibili":[]}
+                    "bilibili":[]},
+        "random":True
     }
 
-    web_port = 5000
+    output_channel = {
+        "web":{"enable":True,
+               "port":5000}
+    }
+
+    default_room = ""
 
     config_path = "config.json"
 
@@ -68,7 +79,10 @@ class ConfigFile:
             data = json.loads(f.read())
             for key,val in data.items():
                 if hasattr(self,key):
-                    self.__setattr__(key,val)
+                    if isinstance(self.__getattribute__(key),Dict):
+                        self.__getattribute__(key).update(val)
+                    else:
+                        self.__setattr__(key,val)
 
     def saveConfig(self,path="config.json"):
         with open(path, "r", encoding="utf-8") as f:

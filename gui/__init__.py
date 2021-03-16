@@ -6,6 +6,7 @@ from tkinter import ttk, PhotoImage
 from tkinter import Menu
 from tkinter.ttk import Notebook
 
+from config import Config
 from gui.PlaylistGUI import PlaylistGUI
 from gui.MPVGUI import MPVGUI
 from gui.RoomGUI import RoomGUI
@@ -17,7 +18,7 @@ class MainWindow():
     def __init__(self, loop=None, interval=1 / 20):
         self.window = tk.Tk()
         self.interval = interval
-        self.window.title("重生之我是欧菲手")
+        self.window.title(Config.gui_title)
         self.tab_controller: Notebook = ttk.Notebook(self.window)
         self.menu_controller = Menu(self.window)
         self._loop = asyncio.get_event_loop() if loop == None else loop

@@ -2,6 +2,7 @@ from tkinter import ttk, scrolledtext
 from audiobot.AudioBot import Global_Audio_Bot
 import tkinter as tk
 import gui
+from config import Config
 from liveroom.RoomManager import Global_Room_Manager
 
 
@@ -13,7 +14,7 @@ class RoomGUI():
         self.output_label = tk.StringVar()
 
     def initialize(self):
-        pass
+        self.room_id.set(Config.default_room)
 
     def createWidgets(self):
         self.main_window.getTabController().add(self.widget, text="AudioBot")

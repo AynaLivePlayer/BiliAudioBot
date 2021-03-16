@@ -27,11 +27,23 @@ async def mainloop(loop):
     except:
         pass
 
+async def mainloop_gui_only(loop):
+    a = MainWindow(loop=loop)
+    task = [loop.create_task(a.start())]
+    await asyncio.wait(task, return_when=asyncio.FIRST_COMPLETED)
+    try:
+        asyncio.get_event_loop().stop()
+    except:
+        pass
+
 
 async def run_backend(app):
-    web.run_app(app, host='127.0.0.1', port=Config.web_port)
+    web.run_app(app, host='127.0.0.1', port=Config.output_channel["web"]["port"])
 
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(mainloop(loop))
+    if Config.output_channel["web"]["enable"]:
+        loop.run_until_complete(mainloop(loop))
+    else:
+        loop.run_until_complete(mainloop_gui_only(loop))

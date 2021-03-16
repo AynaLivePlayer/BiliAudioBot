@@ -43,8 +43,9 @@ class PlaylistItem():
 
 
 class Playlist():
-    def __init__(self, audio_bot, random_next=False):
+    def __init__(self, audio_bot, name,random_next=False):
         self.audio_bot = audio_bot
+        self.name = name
         self.playlist: List[PlaylistItem] = []
         self.current_index = 0
         self._event_handlers = {}

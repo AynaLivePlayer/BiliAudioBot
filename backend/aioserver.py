@@ -3,9 +3,10 @@ from aiohttp import web
 import os
 
 from backend import audiobot_socket
+from config import Config
 from utils import vfile
 
-ENV = "development1"
+ENV = Config.environment
 DIST_DIR = vfile.getResourcePath("./frontend/dist")
 
 app = web.Application()

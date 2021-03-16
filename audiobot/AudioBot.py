@@ -32,8 +32,8 @@ class AudioBot():
                               KuwoMusicSource)
 
     def __init__(self, loop=None):
-        self.user_playlist = Playlist(self)
-        self.system_playlist = Playlist(self, random_next=True)
+        self.user_playlist = Playlist(self,"user_playlist")
+        self.system_playlist = Playlist(self,"system_playlist", random_next=True)
         self.current: PlaylistItem = None
         self.mpv_player: MPVPlayer = None
         self.live_room: LiveRoom = None
@@ -60,6 +60,7 @@ class AudioBot():
     def _loadSystemPlaylist(self, config):
         playlists = config["playlist"]
         songs = config["song"]
+        self.system_playlist.random_next = config["random"]
         for key, vals in playlists.items():
             if key == "bilibili":
                 source_class = BiliAudioListSource

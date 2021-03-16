@@ -64,6 +64,29 @@ bilibili `点b歌 关键字/au2159832`
 
 `pyinstaller --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
 
+# todo list
+
+- ~~config添加默认房间~~
+
+- 黑名单
+
+- 时间自定义
+
+- tooltips
+
+- 自动过滤翻唱
+
+- 使用系统代理
+
+- 点歌历史记录
+
+- 修改点歌格式
+
+- 本地文本输出
+
+- 本地曲库
+
+
 # change log
 
 2021-03-11-demo0.7.0: frontend&backend demo finish.
