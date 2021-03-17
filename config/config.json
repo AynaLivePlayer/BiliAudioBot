@@ -1,12 +1,20 @@
 {
-  "gui_title": "重生之我是欧菲手",
+  "gui_title": "\u91cd\u751f\u4e4b\u6211\u662f\u6b27\u83f2\u624b",
   "commonHeaders": {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0"
   },
-  "output_channel" : {
-        "web":{"enable":true,
-               "port":5000}
+  "output_channel": {
+    "web": {
+      "enable": true,
+      "port": 5000
     },
+    "file": {
+      "enable": true,
+      "template": "config/audiobot_template.txt",
+      "path": "audiobot_info.txt"
+    }
+  },
+  "player_volume": 0.4096,
   "commonCookies": {},
   "default_room": "",
   "system_playlist": {

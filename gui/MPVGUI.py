@@ -3,6 +3,7 @@ from tkinter import ttk
 import tkinter as tk
 
 from audiobot.AudioBot import Global_Audio_Bot
+from config import Config
 from player.mpv import MPVPlayer, MPVProperty
 import gui
 
@@ -39,7 +40,9 @@ class MPVGUI():
                                                 MPVProperty.PERCENT_POS,
                                                 self._syncProgress)
         Global_Audio_Bot.setPlayer(self.mpv_player)
-        self.volume.set(32)
+        if Config.player_volume > 1 :
+            Config.player_volume = 1
+        self.volume.set(Config.player_volume*self.MAX_VOLUME)
         self._setScaleVolume()
         self._pause()
 
@@ -130,6 +133,7 @@ class MPVGUI():
         self.mpv_player.stop()
 
     def _setScaleVolume(self,*args):
+        Config.player_volume = self.volumePercent
         self.mpv_player.setVolumePercent(self.volumePercent)
 
     def _setVolume(self,volume):

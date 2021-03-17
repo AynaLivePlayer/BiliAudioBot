@@ -60,13 +60,13 @@ bilibili `点b歌 关键字/au2159832`
 
 # build
 
-`pyi-makespec --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+`pyi-makespec --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
 
-`pyinstaller --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+`pyinstaller --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
 
 `try not use onefile if you want start faster`
 
-`pyinstaller --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config.json;." --add-data "cookies.json;." --add-binary "mpv-1.dll;." AudioBot.py`
+`pyinstaller --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
 
 # todo list
 
@@ -86,9 +86,15 @@ bilibili `点b歌 关键字/au2159832`
 
 - 修改点歌格式
 
-- 本地文本输出
+- ~~本地文本输出~~
 
 - 本地曲库
+
+- ~~音量写入配置文件~~
+
+- ui不显示滚动条?
+
+- 歌词->文本 网页
 
 
 # change log

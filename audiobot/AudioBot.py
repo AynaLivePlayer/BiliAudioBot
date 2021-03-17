@@ -2,8 +2,9 @@ import asyncio
 from enum import Enum
 from typing import List, Type, Union
 
-from audiobot.Command import DiangeCommand, QiegeCommand
 from audiobot.Playlist import Playlist, PlaylistItem
+from audiobot.commands.diange import DiangeCommand
+from audiobot.commands.qiege import QiegeCommand
 from audiobot.event.audiobot import AudioBotPlayEvent
 from audiobot.event.base import BaseAudioBotEvent
 from config import Config
@@ -180,5 +181,5 @@ class AudioBot():
 print("Initialize global audio bot")
 Global_Audio_Bot = AudioBot()
 Global_Audio_Bot._loadSystemPlaylist(Config.system_playlist)
-Global_Audio_Bot.registerCommandExecutor(DiangeCommand)
 Global_Audio_Bot.registerCommandExecutor(QiegeCommand)
+Global_Audio_Bot.registerCommandExecutor(DiangeCommand)

@@ -8,14 +8,6 @@ from audiobot.event.playlist import PlaylistUpdateEvent
 loop = asyncio.get_event_loop()
 websockets = []
 
-
-# msg_queue = queues.Queue()
-#
-# async def get_next_msg():
-#     while True:
-#         data = await msg_queue.get()
-#         yield data
-
 def sendJsonData(data):
     for ws in websockets:
         asyncio.ensure_future(ws.send_json(data), loop=loop)

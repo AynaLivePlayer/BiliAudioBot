@@ -1,7 +1,7 @@
 import json
 from typing import Dict
 
-from utils import vwrappers
+from utils import vwrappers, vfile
 
 
 class ConfigFile:
@@ -25,14 +25,19 @@ class ConfigFile:
 
     output_channel = {
         "web":{"enable":True,
-               "port":5000}
+               "port":5000},
+        "file":{"enable":True,
+                "template":"config/audiobot_template.txt",
+                "path":"audiobot_info.txt"}
     }
+
+    player_volume = 0.32
 
     default_room = ""
 
-    config_path = "config.json"
+    config_path = "config/config.json"
 
-    cookie_path = "cookies.json"
+    cookie_path = "config/cookies.json"
 
     def __init__(self):
         print("Loading config")
@@ -42,20 +47,22 @@ class ConfigFile:
         self.cookies = {}
         self.loadCookie()
 
-    def loadCookie(self,path="cookies.json"):
-        with open(path,"r") as f:
+    @vwrappers.TryExceptRetNone
+    def loadCookie(self):
+        with open(self.cookie_path,"r") as f:
             jdata = json.loads(f.read().replace(" ", ""))
             for key,val in jdata.items():
                 for id, content in val.items():
                     cookie = self.getCookie(key,id)
                     cookie.update(dict(x.split("=") for x in content.split(";") if x != ""))
 
-    def saveCookie(self,path="cookies.json"):
+    @vwrappers.TryExceptRetNone
+    def saveCookie(self):
         tmp = self.cookies.copy()
         for host, val in self.cookies.items():
             for id,content in val.items():
                 tmp[host][id] = ";".join("{}={}".format(key,val) for key,val in self.cookies[host][id].items())
-        with open(path,"w",encoding="utf-8") as f:
+        with open(self.cookie_path,"w",encoding="utf-8") as f:
             f.write(json.dump(tmp,indent=2))
 
     def getCookiesByHost(self, host):
@@ -74,8 +81,8 @@ class ConfigFile:
         return cookies[identifier]
 
     @vwrappers.TryExceptRetNone
-    def _loadConfig(self,path="config.json"):
-        with open(path, "r", encoding="utf-8") as f:
+    def _loadConfig(self):
+        with open(self.config_path, "r", encoding="utf-8") as f:
             data = json.loads(f.read())
             for key,val in data.items():
                 if hasattr(self,key):
@@ -84,10 +91,10 @@ class ConfigFile:
                     else:
                         self.__setattr__(key,val)
 
-    def saveConfig(self,path="config.json"):
-        with open(path, "r", encoding="utf-8") as f:
+    def saveConfig(self):
+        with open(self.config_path, "r", encoding="utf-8") as f:
             data = json.loads(f.read())
-        with open(path, "w", encoding="utf-8") as f:
+        with open(self.config_path, "w", encoding="utf-8") as f:
             for key,val in data.items():
                 if hasattr(self,key):
                     data[key] = self.__getattribute__(key)

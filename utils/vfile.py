@@ -11,6 +11,7 @@ def parseFilename(filename):
 
 
 def writeToFile(content,route,name,binary=False):
+    route = os.getcwd() if route == "" else route
     path = os.path.join(route, parseFilename(name))
     if not os.path.exists(route):
         os.mkdir(route)
@@ -45,3 +46,12 @@ def getResourcePath(relative_path):
     except Exception:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
+
+
+def registerEnvironmentPath():
+    os.environ["PATH"] = os.getcwd() + os.pathsep + os.environ["PATH"]
+    try:
+        os.environ["PATH"] = sys._MEIPASS + os.pathsep + os.environ["PATH"]
+        print(os.environ["PATH"])
+    except Exception:
+        pass
