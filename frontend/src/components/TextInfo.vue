@@ -54,6 +54,9 @@
 </script>
 
 <style scoped>
+  body {
+    overflow:hidden;
+  }
   img {
     width: 100px;
     height: 100px;

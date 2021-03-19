@@ -1,4 +1,3 @@
-import os
 from utils import vfile
 
 vfile.registerEnvironmentPath()
@@ -48,7 +47,6 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(mainloop(loop))
     try:
-        print("123")
         Config.saveConfig()
     except:
         pass

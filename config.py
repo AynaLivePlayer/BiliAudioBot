@@ -86,7 +86,7 @@ class ConfigFile:
             data = json.loads(f.read())
             for key,val in data.items():
                 if hasattr(self,key):
-                    if isinstance(self.__getattribute__(key),Dict):
+                    if isinstance(self.__getattribute__(key),dict):
                         self.__getattribute__(key).update(val)
                     else:
                         self.__setattr__(key,val)
