@@ -57,5 +57,6 @@ class RoomGUI():
     def _startRoom(self):
         Global_Room_Manager.stopAll()
         lr = Global_Room_Manager.addLiveRoom(self.room_id.get())
+        Config.default_room = self.room_id.get()
         Global_Room_Manager.startRoom(self.room_id.get())
         Global_Audio_Bot.setLiveRoom(lr)

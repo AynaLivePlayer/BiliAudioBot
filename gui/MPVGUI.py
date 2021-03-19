@@ -42,7 +42,7 @@ class MPVGUI():
         Global_Audio_Bot.setPlayer(self.mpv_player)
         if Config.player_volume > 1 :
             Config.player_volume = 1
-        self.volume.set(Config.player_volume*self.MAX_VOLUME)
+        self.volume.set(Config.player_volume*100)
         self._setScaleVolume()
         self._pause()
 
