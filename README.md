@@ -103,6 +103,8 @@ bilibili `点b歌 关键字/au2159832`
 
 # change log
 
+2021-03-11-demo0.7.4: translation update
+
 2021-03-11-demo0.7.0: frontend&backend demo finish.
 
 2021-03-11-demo0.6.5: rewrite event handling

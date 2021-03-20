@@ -102,7 +102,7 @@ class ConfigFile:
             for key,val in data.items():
                 if hasattr(self,key):
                     data[key] = self.__getattribute__(key)
-            f.write(json.dumps(data,indent=2))
+            f.write(json.dumps(data,indent=2,ensure_ascii=False))
 
 
 Config = ConfigFile()
