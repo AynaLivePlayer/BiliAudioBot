@@ -19,7 +19,7 @@ def writeToFile(content,route,name,binary=False):
         with open(path, "wb+") as f:
             f.write(content)
     else:
-        with open(path, "w+",encoding="utf-8") as f:
+        with open(path, "w",encoding="utf-8") as f:
             f.write(content)
 
 def removeUrlPara(url):

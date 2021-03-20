@@ -5,9 +5,10 @@ from audiobot.AudioBot import Global_Audio_Bot
 import tkinter as tk
 import gui
 from audiobot.Playlist import PlaylistItem
+from gui.factory.ToolTip import ToolTip
 from sources.base import CommonSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource
-
+from utils.vtranslation import getTranslatedText as _
 
 class SearchGUI():
     def __init__(self, main_window):
@@ -23,7 +24,7 @@ class SearchGUI():
         pass
 
     def createWidgets(self):
-        self.main_window.getTabController().add(self.widget, text="Search")
+        self.main_window.getTabController().add(self.widget, text=_("Search"))
 
         frame_main = ttk.LabelFrame(self.widget, text="Search test")
         frame_main.pack(fill="both", expand="yes", padx=8, pady=4)
@@ -48,11 +49,11 @@ class SearchGUI():
                              padx=8, pady=4)
 
         # Adding a Button
-        action = ttk.Button(frame_basic, width=8, text="Search",command = self.__search)
+        action = ttk.Button(frame_basic, width=8, text=_("Search"),command = self.__search)
         action.grid(column=1, row=1)
 
         # Adding a Button
-        action = ttk.Button(frame_basic, width=8, text="Add", command=self.__add)
+        action = ttk.Button(frame_basic, width=8, text=_("Add"), command=self.__add)
         action.grid(column=2, row=1)
 
         # ========== search result frame ================
@@ -71,9 +72,9 @@ class SearchGUI():
         self.search_result_tree.column("source", width=128, minwidth=128)
 
         self.search_result_tree.heading("#0", text="index", anchor=tk.W)
-        self.search_result_tree.heading("title", text="title", anchor=tk.W)
-        self.search_result_tree.heading("artist", text="artist", anchor=tk.W)
-        self.search_result_tree.heading("source", text="source", anchor=tk.W)
+        self.search_result_tree.heading("title", text=_("title"), anchor=tk.W)
+        self.search_result_tree.heading("artist", text=_("artist"), anchor=tk.W)
+        self.search_result_tree.heading("source", text=_("source"), anchor=tk.W)
         self.search_result_tree.grid(column=0, row=0)
 
         self.search_result_tree.bind('<Button-1>', self.__disableTreeSeperator)
@@ -83,9 +84,13 @@ class SearchGUI():
                                               command = self.__addCurrent)
         search_result_add_button.grid(column=0, row=0, pady=2)
 
+        ToolTip(search_result_add_button, _("add to the playlist"))
+
         search_result_play_button = ttk.Button(frame_tool, width=3, text="▶",
                                                command  =self.__playCurrent)
         search_result_play_button.grid(column=0, row=1, pady=2)
+
+        ToolTip(search_result_play_button, _("play selected"))
 
 
 

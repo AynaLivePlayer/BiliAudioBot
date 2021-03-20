@@ -2,12 +2,13 @@ from tkinter import ttk
 from audiobot.AudioBot import Global_Audio_Bot
 import tkinter as tk
 import gui
-from audiobot.Playlist import PlaylistItem
 from audiobot.event import AudioBotPlayEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
+from gui.factory.ToolTip import ToolTip
 from sources.base import PictureSource
 from utils import vhttp, vwrappers
 from PIL import Image, ImageTk
+from utils.vtranslation import getTranslatedText as _
 import io
 
 
@@ -32,7 +33,7 @@ class PlaylistGUI():
                                             self.__updatePlayingInfo)
 
     def createWidgets(self):
-        self.main_window.getTabController().add(self.widget, text="Playlist")
+        self.main_window.getTabController().add(self.widget, text=_("Playlist"))
 
         frame_main = ttk.LabelFrame(self.widget, text="Playlist demo")
         frame_main.pack(fill="both", expand="yes", padx=8, pady=4)
@@ -58,10 +59,10 @@ class PlaylistGUI():
         self.playlist_tree.column("user", width=64+32, minwidth=64+32)
 
         self.playlist_tree.heading("#0", text="#", anchor=tk.W)
-        self.playlist_tree.heading("title", text="title", anchor=tk.W)
-        self.playlist_tree.heading("artist", text="artist", anchor=tk.W)
-        self.playlist_tree.heading("source", text="source", anchor=tk.W)
-        self.playlist_tree.heading("user", text="user", anchor=tk.W)
+        self.playlist_tree.heading("title", text=_("title"), anchor=tk.W)
+        self.playlist_tree.heading("artist", text=_("artist"), anchor=tk.W)
+        self.playlist_tree.heading("source", text=_("source"), anchor=tk.W)
+        self.playlist_tree.heading("user", text=_("user"), anchor=tk.W)
 
         self.playlist_tree.grid(column=0, row=0)
         self.playlist_tree.bind('<Button-1>', self.__disableTreeSeperator)
@@ -72,25 +73,37 @@ class PlaylistGUI():
                                              command = lambda :self.__move(self.__getTreeviewFocusIndex(),0))
         playlist_superup_button.grid(column=0, row=0, pady=2)
 
+        ToolTip(playlist_superup_button, _("move to top"))
+
         playlist_up_button = ttk.Button(frame_move, width=3, text="⏶",
                                         command = lambda :self.__move(self.__getTreeviewFocusIndex(),self.__getTreeviewFocusIndex()-1))
         playlist_up_button.grid(column=0, row=1, pady=2)
+
+        ToolTip(playlist_up_button, _("move up"))
 
         playlist_down_button = ttk.Button(frame_move, width=3, text="⏷",
                                   command = lambda :self.__move(self.__getTreeviewFocusIndex(),self.__getTreeviewFocusIndex()+1))
         playlist_down_button.grid(column=0, row=2, pady=2)
 
+        ToolTip(playlist_down_button, _("move down"))
+
         playlist_superdown_button = ttk.Button(frame_move, width=3, text="⭣",
                                        command = lambda :self.__move(self.__getTreeviewFocusIndex(),99999))
         playlist_superdown_button.grid(column=0, row=3, pady=2)
+
+        ToolTip(playlist_superdown_button, _("move to bottom"))
 
         playlist_delete_button = ttk.Button(frame_move, width=3, text="X",
                                     command = lambda :self.audio_bot.user_playlist.remove(self.__getTreeviewFocusIndex()))
         playlist_delete_button.grid(column=0, row=4, pady=2)
 
+        ToolTip(playlist_delete_button, _("delete song from list"))
+
         playlist_play_button = ttk.Button(frame_move, width=3, text="▶",
                                           command = lambda :self.audio_bot.playByIndex(self.__getTreeviewFocusIndex()))
         playlist_play_button.grid(column=0, row=5, pady=2)
+
+        ToolTip(playlist_play_button, _("play selected"))
 
         # ========== Playing frame ================
         frame_cover = ttk.Frame(frame_playing)
@@ -117,12 +130,18 @@ class PlaylistGUI():
                                              command=lambda: self.audio_bot.mpv_player.goto(0))
         playing_previous_button.grid(column=0, row=0, pady=2, padx=2)
 
+        ToolTip(playing_previous_button,_("replay"))
+
         playing_pause_button = ttk.Button(frame_playinfo_2, width=3, text="⏯",
                                           command=lambda: self.audio_bot.mpv_player.toggle())
         playing_pause_button.grid(column=1, row=0, pady=2, padx=2)
 
+        ToolTip(playing_pause_button, _("play/pause"))
+
         playing_next_button = ttk.Button(frame_playinfo_2, width=3, text="⏭", command=self.audio_bot.playNext)
         playing_next_button.grid(column=2, row=0, pady=2, padx=2)
+
+        ToolTip(playing_next_button, _("play next"))
 
     @vwrappers.TryExceptRetNone
     def __loadCover(self, ps: PictureSource):
@@ -137,7 +156,7 @@ class PlaylistGUI():
 
     def __updatePlayingInfo(self, event: AudioBotPlayEvent):
         item = event.item
-        self.playing_source.set("Source: {}".format(item.source.getSourceName()))
+        self.playing_source.set(_("Source: {}").format(item.source.getSourceName()))
         self.playing_title.set(("{title:.24} - - - " +
                                 "{artist:.16} - - - " +
                                 "({user:.16})").format(title=item.source.getTitle(),

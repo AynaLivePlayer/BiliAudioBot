@@ -1,0 +1,23 @@
+{
+    "AudioBot": "点歌机",
+    "connect": "连接",
+    "enter room id:": "输入房间号:",
+    "Playlist": "点歌列表",
+    "title": "标题",
+    "artist": "歌手",
+    "source": "来源",
+    "user": "用户",
+    "Search": "搜索",
+    "Add": "添加",
+    "Source: {}": "来源: {}",
+    "replay": "重放",
+    "play/pause": "播放/暂停",
+    "play next": "下一首",
+    "move to top": "置顶",
+    "move up": "上移",
+    "move down": "下移",
+    "move to bottom": "置末",
+    "delete song from list": "删除选中的歌曲",
+    "play selected": "播放选中的歌曲",
+    "add to the playlist": "添加到播放列表"
+}

@@ -39,6 +39,10 @@ class ConfigFile:
 
     cookie_path = "config/cookies.json"
 
+    translation = {"enable":True,
+                   "path":"resource/translation.json"}
+
+
     def __init__(self):
         print("Loading config")
         self._loadConfig()

@@ -4,7 +4,7 @@ import tkinter as tk
 import gui
 from config import Config
 from liveroom.RoomManager import Global_Room_Manager
-
+from utils.vtranslation import getTranslatedText as _
 
 class RoomGUI():
     def __init__(self,main_window):
@@ -17,7 +17,7 @@ class RoomGUI():
         self.room_id.set(Config.default_room)
 
     def createWidgets(self):
-        self.main_window.getTabController().add(self.widget, text="AudioBot")
+        self.main_window.getTabController().add(self.widget, text=_("AudioBot"))
 
         frame_main = ttk.LabelFrame(self.widget, text="AudioBot Test")
         frame_main.grid(column=0, row=0, padx=8, pady=4)
@@ -28,7 +28,7 @@ class RoomGUI():
         frame_input.grid(column=0, row=0, padx=8, pady=4,sticky=tk.W)
 
         # Creating check box for commands
-        ttk.Label(frame_input, text="enter room id:") \
+        ttk.Label(frame_input, text=_("enter room id:")) \
             .grid(column=0, row=0, sticky=tk.W, padx=8, pady=4)
 
         room_id_input = ttk.Entry(frame_input,
@@ -36,7 +36,7 @@ class RoomGUI():
                                      textvariable=self.room_id)
         room_id_input.grid(column=1, row=0, padx=8, pady=4)
 
-        play_button = ttk.Button(frame_input, width=8, text="connect", command=self.__confirmroom)
+        play_button = ttk.Button(frame_input, width=8, text=_("connect"), command=self.__confirmroom)
         play_button.grid(column=2, row=0)
 
         # ========== output frame ================
