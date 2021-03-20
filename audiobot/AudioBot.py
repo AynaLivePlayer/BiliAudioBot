@@ -101,20 +101,24 @@ class AudioBot():
         if len(self.user_playlist) == 0 and len(self.system_playlist) == 0:
             return
         if len(self.user_playlist) != 0:
-            self.__play(self.user_playlist.popFirst())
+            self.__thread_play(self.user_playlist.popFirst())
             return
         if len(self.system_playlist) != 0:
             next_item = self.system_playlist.getNext()
             next_item.source.load()
-            self.__play(next_item)
+            self.__thread_play(next_item)
 
     def playByIndex(self, index):
         if index < 0 or index >= len(self.user_playlist):
             return
-        self.__play(self.user_playlist.remove(index))
+        self.__thread_play(self.user_playlist.remove(index))
 
     def play(self, item: PlaylistItem):
-        self.__play(item)
+        self.__thread_play(item)
+
+
+    def __thread_play(self, item: PlaylistItem):
+        self._thread_call(self.__play,item)
 
     def __play(self, item: PlaylistItem):
         item.source.load()
@@ -165,6 +169,9 @@ class AudioBot():
 
     def _async_call(self, fun, *args, **kwargs):
         asyncio.ensure_future(vasyncio.asyncwrapper(fun)(*args, **kwargs), loop=self._loop)
+
+    def _thread_call(self,fun, *args, **kwargs):
+        self._loop.run_in_executor(None,lambda :fun(*args, **kwargs))
 
     def __process_command(self, dmkMsg: DanmakuMessage, *args, **kwargs):
         command: str = dmkMsg.msg.split(" ")[0]
