@@ -13,7 +13,6 @@ import nest_asyncio
 
 nest_asyncio.apply()
 
-
 async def mainloop(loop):
     a = MainWindow(loop=loop)
     task = [loop.create_task(a.start())]
