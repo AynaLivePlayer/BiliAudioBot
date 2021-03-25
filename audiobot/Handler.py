@@ -18,7 +18,8 @@ class AudioBotHandlers():
             return func
         return add
 
-    def unregister(self,event_name,id):
+    def unregister(self,event:Union[str,Type[BaseAudioBotEvent]],id):
+        event_name = event if isinstance(event, str) else event.__event_name__
         try:
             self._event_handlers.get(event_name).pop(id)
         except:

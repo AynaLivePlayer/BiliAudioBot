@@ -29,5 +29,20 @@
       "bilibili": []
     },
     "random": true
+  },
+  "commands": {
+    "diange": {
+      "cooldown": 10,
+      "limit": 128,
+      "visitor": true,
+      "guard": true,
+      "admin": true,
+      "fan": null
+    },
+    "qiege": {
+      "self": true,
+      "guard": false,
+      "admin": false
+    }
   }
 }

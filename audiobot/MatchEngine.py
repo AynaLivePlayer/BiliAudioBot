@@ -1,6 +1,8 @@
 from typing import List, Type
 
+from audiobot.Handler import AudioBotHandlers
 from audiobot.Playlist import PlaylistItem
+from audiobot.event.audiobot import FindSearchResultEvent
 from sources.audio import BiliAudioSource, NeteaseMusicSource
 from sources.audio.kuwo import KuwoMusicSource
 from sources.base import CommonSource
@@ -8,6 +10,8 @@ from sources.base.interface import SearchableSource
 
 SEARCH_ENGINE_LIST:List[SearchableSource.__class__] = [BiliAudioSource,KuwoMusicSource,NeteaseMusicSource]
 DEFAULT_SEARCH_ENGINE = NeteaseMusicSource
+
+HANDLERS = AudioBotHandlers()
 
 def check(item:PlaylistItem):
     source = item.source
@@ -35,6 +39,12 @@ def searchFirst(url, engine:SearchableSource.__class__=None):
     search_results = engine.search(url)
     if search_results == None or search_results.isEmpty():
         return None
+    for result in search_results.results:
+        event = FindSearchResultEvent(result)
+        HANDLERS.call(event)
+        if event.isCancelled():
+            continue
+        return result.source
     return search_results.results[0].source
 
 def matchNetease(netease:NeteaseMusicSource,keyword=""):

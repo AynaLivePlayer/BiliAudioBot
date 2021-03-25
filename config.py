@@ -29,6 +29,22 @@ class ConfigFile:
                 "path":"audiobot_info.txt"}
     }
 
+    commands = {
+        "diange": {
+            "cooldown":0,
+            "limit":128,
+            "visitor":True,
+            "guard":True,
+            "admin":False,
+            "fan":None
+        },
+        "qiege": {
+            "self":True,
+            "guard":False,
+            "admin":False
+        },
+    }
+
     player_volume = 0.32
 
     default_room = ""
