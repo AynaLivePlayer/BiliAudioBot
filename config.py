@@ -35,7 +35,7 @@ class ConfigFile:
             "limit":128,
             "visitor":True,
             "guard":True,
-            "admin":False,
+            "admin":True,
             "fan":None
         },
         "qiege": {

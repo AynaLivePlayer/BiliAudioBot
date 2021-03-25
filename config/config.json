@@ -32,7 +32,7 @@
   },
   "commands": {
     "diange": {
-      "cooldown": 10,
+      "cooldown": 0,
       "limit": 128,
       "visitor": true,
       "guard": true,
