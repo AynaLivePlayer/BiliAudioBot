@@ -1,10 +1,12 @@
 const PlaylistUpdateEvent = 'playlist_update'
 const AudiobotPlayEvent = 'audiobot_play'
+const LyricUpdateEvent = 'lyric_update'
 
 export default class AudioBotWs {
   constructor () {
     this.onPlaylistUpdate = null
     this.onAudiobotPlay = null
+    this.onLyricUpdate = null
 
     this.websocket = null
     this.retryCount = 0
@@ -62,6 +64,12 @@ export default class AudioBotWs {
         case AudiobotPlayEvent: {
           if (this.onAudiobotPlay) {
             this.onAudiobotPlay(jsonData[eventName])
+          }
+          break
+        }
+        case LyricUpdateEvent: {
+          if (this.onLyricUpdate) {
+            this.onLyricUpdate(jsonData[eventName])
           }
           break
         }

@@ -52,6 +52,9 @@ class MPVPlayer:
     def getVolume(self):
         return self.mpv_core._get_property("volume")
 
+    def getVolumePercent(self):
+        return self.mpv_core._get_property("volume") / self.MAX_VOLUME
+
     def setVolume(self,volume):
         self.mpv_core._set_property("volume", volume)
 

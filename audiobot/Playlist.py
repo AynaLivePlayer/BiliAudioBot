@@ -1,5 +1,6 @@
 from typing import List, Type, Union
 
+from audiobot.Handler import AudioBotHandlers
 from audiobot.event.base import BaseAudioBotEvent
 from audiobot.event.playlist import PlaylistUpdateEvent, PlaylistAppendEvent
 from sources.base import CommonSource
@@ -9,14 +10,13 @@ from sources.base.interface import AudioBotInfoSource
 import random
 
 
-def executeHandler(func):
-    @wraps(func)
-    def wrapper(self, *args, **kwargs):
-        retval = func(self, *args, **kwargs)
-        self._callHandlers()
-        return retval
-
-    return wrapper
+# def executeHandler(func):
+#     @wraps(func)
+#     def wrapper(self, *args, **kwargs):
+#         retval = func(self, *args, **kwargs)
+#         self._callHandlers()
+#         return retval
+#     return wrapper
 
 
 def triggerEventHandler(func):
@@ -29,7 +29,7 @@ def triggerEventHandler(func):
             retval, event = None, ret
         else:
             retval, event = ret[0], ret[1]
-        self._callHandlers(event)
+        self.handlers.call(event)
         return retval
 
     return executeHandler
@@ -48,7 +48,7 @@ class Playlist():
         self.name = name
         self.playlist: List[PlaylistItem] = []
         self.current_index = 0
-        self._event_handlers = {}
+        self.handlers = AudioBotHandlers()
         self.random_next = random_next
 
     def __len__(self):
@@ -63,7 +63,7 @@ class Playlist():
     @triggerEventHandler
     def appendItem(self, item: PlaylistItem):
         event = PlaylistAppendEvent(self, item)
-        self._callHandlers(event)
+        self.handlers.call(event)
         if event.isCancelled():
             return
         self.playlist.append(item)
@@ -108,21 +108,3 @@ class Playlist():
             self.current_index = 0
         self.current_index += 1
         return self.playlist[self.current_index - 1], PlaylistUpdateEvent(self)
-
-    def _callHandlers(self, event: BaseAudioBotEvent):
-        event_name: str = event.__event_name__
-        if self._event_handlers.get(event_name) is None:
-            return
-        for func in self._event_handlers.get(event_name).values():
-            func(event)
-
-    def registerHandler(self, event_name, id, func):
-        if self._event_handlers.get(event_name) is None:
-            self._event_handlers[event_name] = {}
-        self._event_handlers[event_name][id] = func
-
-    def unregisterEventHanlder(self, event_name, id):
-        try:
-            self._event_handlers.get(event_name).pop(id)
-        except:
-            pass

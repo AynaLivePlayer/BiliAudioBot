@@ -7,6 +7,7 @@ import jinja2
 from audiobot.AudioBot import Global_Audio_Bot
 from audiobot.Playlist import PlaylistItem
 from audiobot.event import AudioBotPlayEvent
+from audiobot.event.lyric import LyricUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
 from config import Config
 from utils import vfile
@@ -17,22 +18,13 @@ DEFAULT_TEMPLATE = "\n".join(["{{current_title[:16:]}} - {{current_artist[:16:]}
 TEMPLATE_PLACEHOLDER = {"current_title": str,
                         "current_artist": str,
                         "current_username": str,
+                        "current_lyric":str,
                         "playlist_count": int,
                         "playlist": [{
                             "index": int,
                             "title": str,
                             "artist": str,
                             "username": str}]}
-
-
-# TEMPLATE_PLACEHOLDER = {"=current_title=": "current_title",
-#                         "=current_artist=": "current_artist",
-#                         "=current_username=": "current_artist",
-#                         "=playlist_count=": "playlist_count",
-#                         "%playlist_title%": "playlist_title",
-#                         "%playlist_artist%": "playlist_artist",
-#                         "%playlist_username%": "playlist_username"
-#                         }
 
 
 class LocalFileWriterServer():
@@ -59,6 +51,7 @@ class LocalFileWriterServer():
         try:
             return self.template.render(**self.content)
         except:
+            traceback.print_exc()
             return jinja2.Template(DEFAULT_TEMPLATE).render(**self.content)
 
     async def writeToFile(self):
@@ -78,13 +71,17 @@ class LocalFileWriterServer():
                 self.template = jinja2.Template(f.read())
         except:
             self.template = jinja2.Template(DEFAULT_TEMPLATE)
-        Global_Audio_Bot.registerEventHanlder(AudioBotPlayEvent.__event_name__,
+        Global_Audio_Bot.handlers._register(AudioBotPlayEvent.__event_name__,
                                               "localfileserver.updateplaying",
                                               self.__listenAudioBotPlay)
 
-        Global_Audio_Bot.user_playlist.registerHandler(PlaylistUpdateEvent.__event_name__,
+        Global_Audio_Bot.user_playlist.handlers._register(PlaylistUpdateEvent.__event_name__,
                                                        "localfileserver.updateplaylist",
                                                        self.__listenPlaylistUpdate)
+
+        Global_Audio_Bot.lyrics.handlers._register(LyricUpdateEvent,
+                                       "localfileserver.updatelyric",
+                                       self.__listenLyricUpdate)
 
         return self.__main_loop()
 
@@ -111,4 +108,8 @@ class LocalFileWriterServer():
                                   "artist": item.source.getArtist(),
                                   "username": item.username})
         self.content["playlist"] =  playlist_data
+        asyncio.ensure_future(self.writeToFile(), loop=self._loop)
+
+    def __listenLyricUpdate(self,event: LyricUpdateEvent):
+        self.content.update({"current_lyric": event.lyric.lyric})
         asyncio.ensure_future(self.writeToFile(), loop=self._loop)

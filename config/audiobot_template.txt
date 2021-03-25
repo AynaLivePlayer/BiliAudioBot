@@ -1,5 +1,5 @@
 {{current_title[:16:]}} - {{current_artist[:16:]}} - {{current_username[:16:]}}
-
+Lyric: {{current_lyric}}
 {% for item in playlist -%}
 #{{item.index}} - {{item.title[:16:]}} - {{item.artist[:16:]}} - {{item.username[:16:]}}
 {% endfor -%}

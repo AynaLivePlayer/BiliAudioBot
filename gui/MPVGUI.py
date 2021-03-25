@@ -3,6 +3,7 @@ import tkinter as tk
 
 from audiobot.AudioBot import Global_Audio_Bot
 from config import Config
+from gui.factory.PlayerProgressBar import PlayerProgressBar
 from player.mpv import MPVPlayer, MPVProperty
 import gui
 
@@ -19,7 +20,7 @@ class MPVGUI():
         self.main_window: gui.MainWindow = main_window
         self.widget = ttk.Frame(self.main_window.getTabController())
 
-        self.volume = tk.DoubleVar()
+        # self.volume = tk.DoubleVar()
         self.progress = tk.IntVar()
         self.mpv_player: MPVPlayer = None
         self.mpv_window_id = ""
@@ -39,10 +40,10 @@ class MPVGUI():
                                                 MPVProperty.PERCENT_POS,
                                                 self._syncProgress)
         Global_Audio_Bot.setPlayer(self.mpv_player)
-        if Config.player_volume > 1 :
-            Config.player_volume = 1
-        self.volume.set(Config.player_volume*100)
-        self._setScaleVolume()
+        # if Config.player_volume > 1 :
+        #     Config.player_volume = 1
+        # self.volume.set(Config.player_volume*100)
+        # self._setScaleVolume()
         self._pause()
 
 
@@ -72,8 +73,8 @@ class MPVGUI():
         # frame_main.grid_columnconfigure(2, weight=1)
         frame_row_2.grid(column=1, row=1, padx=8, pady=4)
 
-        # add volume scale
-        progress_scale = ttk.Scale(frame_row_2,
+        # add progress scale
+        progress_scale = PlayerProgressBar(frame_row_2,
                                  orient=tk.HORIZONTAL,
                                  variable=self.progress,
                                  from_=0,
@@ -101,16 +102,16 @@ class MPVGUI():
         stop_button = ttk.Button(frame_row_3, width=8, text="stop", command=self._stop)
         stop_button.grid(column=0, row=0)
 
-        # add volume scale
-        ttk.Label(frame_row_3, text="Volume: ") \
-            .grid(column=3, row=0, sticky=tk.W)
-        volume_scale = ttk.Scale(frame_row_3,
-                                 orient=tk.HORIZONTAL,
-                                 variable=self.volume,
-                                 from_=0,
-                                 to=100,
-                                 command=self._setScaleVolume)
-        volume_scale.grid(column=4, row=0)
+        # # add volume scale
+        # ttk.Label(frame_row_3, text="Volume: ") \
+        #     .grid(column=3, row=0, sticky=tk.W)
+        # volume_scale = PlayerProgressBar(frame_row_3,
+        #                          orient=tk.HORIZONTAL,
+        #                          variable=self.volume,
+        #                          from_=0,
+        #                          to=100,
+        #                          command=self._setScaleVolume)
+        # volume_scale.grid(column=4, row=0)
 
     def _parseHeader(self,header):
         headerlist = []
@@ -131,12 +132,12 @@ class MPVGUI():
     def _stop(self):
         self.mpv_player.stop()
 
-    def _setScaleVolume(self,*args):
-        Config.player_volume = self.volumePercent
-        self.mpv_player.setVolumePercent(self.volumePercent)
-
-    def _setVolume(self,volume):
-        self.mpv_player.setVolume(volume)
+    # def _setScaleVolume(self,*args):
+    #     Config.player_volume = self.volumePercent
+    #     self.mpv_player.setVolumePercent(self.volumePercent)
+    #
+    # def _setVolume(self,volume):
+    #     self.mpv_player.setVolume(volume)
 
     def _syncProgress(self,*args):
         if self.mpv_player.getProperty(MPVProperty.PERCENT_POS) == None:

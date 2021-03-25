@@ -7,6 +7,7 @@ from tkinter import Menu
 from tkinter.ttk import Notebook
 
 from config import Config
+from gui.WaitingListGUI import WaitingListGUI
 from gui.PlaylistGUI import PlaylistGUI
 from gui.MPVGUI import MPVGUI
 from gui.RoomGUI import RoomGUI
@@ -59,12 +60,16 @@ class MainWindow():
         room = RoomGUI(self)
         playlist = PlaylistGUI(self)
         search = SearchGUI(self)
+        # waitinglist = WaitingListGUI(self)
         room.createWidgets()
         playlist.createWidgets()
         search.createWidgets()
         mpv.createWidgets()
+        # waitinglist.createWidgets()
+
 
         mpv.initialize()
         room.initialize()
         playlist.initialize()
+        # waitinglist.initialize()
         search.initialize()

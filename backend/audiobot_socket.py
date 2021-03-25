@@ -3,16 +3,20 @@ import asyncio
 from audiobot.AudioBot import Global_Audio_Bot
 from audiobot.Playlist import PlaylistItem
 from audiobot.event import AudioBotPlayEvent
+from audiobot.event.lyric import LyricUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
 
 loop = asyncio.get_event_loop()
 websockets = []
+
 
 def sendJsonData(data):
     for ws in websockets:
         asyncio.ensure_future(ws.send_json(data), loop=loop)
 
 
+@Global_Audio_Bot.user_playlist.handlers.register(PlaylistUpdateEvent.__event_name__,
+                                                  "websocket.updateplaylist")
 def listenPlaylistUpdate(event: PlaylistUpdateEvent):
     sendJsonData({event.__event_name__: parsePlaylistUpdate(event.playlist.playlist)})
 
@@ -29,6 +33,8 @@ def parsePlaylistUpdate(playlist):
     return playlist_data
 
 
+@Global_Audio_Bot.handlers.register(AudioBotPlayEvent.__event_name__,
+                                    "websocket.updateplaying")
 def listenAudioBotPlay(event: AudioBotPlayEvent):
     item: PlaylistItem = event.item
     sendJsonData({event.__event_name__: parseAudioBotPlayData(item)})
@@ -46,18 +52,14 @@ def parseAudioBotPlayData(item: PlaylistItem):
             "cover": cover_url,
             "username": item.username}
 
+@Global_Audio_Bot.handlers.register(LyricUpdateEvent,
+                                       "websocket.updatelyric")
+def listenLyricUpdate(event: LyricUpdateEvent):
+    sendJsonData({event.__event_name__: {"lyric":event.lyric.lyric}})
+
 
 async def sendInitialData(ws):
     await ws.send_json({PlaylistUpdateEvent.__event_name__:
-                                            parsePlaylistUpdate(Global_Audio_Bot.user_playlist.playlist)})
+                            parsePlaylistUpdate(Global_Audio_Bot.user_playlist.playlist)})
     await ws.send_json({AudioBotPlayEvent.__event_name__:
-                                            parseAudioBotPlayData(Global_Audio_Bot.current)})
-
-
-Global_Audio_Bot.registerEventHanlder(AudioBotPlayEvent.__event_name__,
-                                      "websocket.updateplaying",
-                                      listenAudioBotPlay)
-
-Global_Audio_Bot.user_playlist.registerHandler(PlaylistUpdateEvent.__event_name__,
-                                               "websocket.updateplaylist",
-                                               listenPlaylistUpdate)
+                            parseAudioBotPlayData(Global_Audio_Bot.current)})

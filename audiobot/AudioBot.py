@@ -1,12 +1,11 @@
 import asyncio
-from enum import Enum
-from typing import List, Type, Union
+from typing import List, Type, Union, Dict
 
+from audiobot.Handler import AudioBotHandlers
+from audiobot.Lyric import Lyrics
 from audiobot.Playlist import Playlist, PlaylistItem
-from audiobot.commands.diange import DiangeCommand
-from audiobot.commands.qiege import QiegeCommand
 from audiobot.event.audiobot import AudioBotPlayEvent
-from audiobot.event.base import BaseAudioBotEvent
+from audiobot.event.lyric import LyricUpdateEvent
 from config import Config
 from liveroom.LiveRoom import LiveRoom
 from player.mpv import MPVPlayer, MPVProperty
@@ -35,18 +34,22 @@ class AudioBot():
     def __init__(self, loop=None):
         self.user_playlist = Playlist(self,"user_playlist")
         self.system_playlist = Playlist(self,"system_playlist", random_next=True)
+        self.lyrics = Lyrics(self)
         self.current: PlaylistItem = None
         self.mpv_player: MPVPlayer = None
         self.live_room: LiveRoom = None
         self._loop = asyncio.get_event_loop() if loop == None else loop
-        self._command_executors: List[Command.CommandExecutor] = []
-        self._event_handlers = {}
+        self._command_executors: Dict[str,Command.CommandExecutor] = {}
+        self.handlers = AudioBotHandlers()
 
     def setPlayer(self, mpv_player: MPVPlayer):
         self.mpv_player = mpv_player
         self.mpv_player.registerPropertyHandler("audiobot.idleplaynext",
                                                 MPVProperty.IDLE,
                                                 self.__idle_play_next)
+        self.mpv_player.registerPropertyHandler("audiobot.updatelyric",
+                                                MPVProperty.TIME_POS,
+                                                self.lyrics._raiseEvent)
 
     def setLiveRoom(self, live_room: LiveRoom):
         if self.live_room != None:
@@ -55,8 +58,12 @@ class AudioBot():
         self.live_room.registerMsgHandler("audiobot.msg",
                                           self.__process_command)
 
-    def registerCommandExecutor(self, cmd: Type[Command.CommandExecutor.__class__]):
-        self._command_executors.append(cmd(self))
+    def registerCommandExecutor(self, id, cmd: Type[Command.CommandExecutor.__class__]):
+        self._command_executors[id] = cmd(self)
+
+    def registerCommandExecutors(self, cmdlist:Dict):
+        for id,val in cmdlist.items():
+            self.registerCommandExecutor(id,val)
 
     def _loadSystemPlaylist(self, config):
         playlists = config["playlist"]
@@ -116,7 +123,6 @@ class AudioBot():
     def play(self, item: PlaylistItem):
         self.__thread_play(item)
 
-
     def __thread_play(self, item: PlaylistItem):
         self._thread_call(self.__play,item)
 
@@ -131,8 +137,10 @@ class AudioBot():
                 self.playNext()
             return
         self.current = item
-        self.__call_handlers(AudioBotPlayEvent(self,item))
+        self.handlers.call(AudioBotPlayEvent(self,item))
+        self.lyrics.load(item)
         self.mpv_player.playByUrl(bs.url, headers=bs.headers)
+
 
     def addAudioByUrl(self, url, username="system", source_class: CommonSource.__class__ = None):
         source_class: CommonSource.__class__ = source_class if source_class else self.selector.select(url)
@@ -148,25 +156,6 @@ class AudioBot():
         if self.current.username == "system":
             self.playNext()
 
-    def registerEventHanlder(self, event_name: str, id: str, func):
-        if self._event_handlers.get(event_name) == None:
-            self._event_handlers[event_name] = {}
-        self._event_handlers[event_name][id] = func
-
-    def unregisterEventHanlder(self, event_name, id):
-        try:
-            self._event_handlers.get(event_name).pop(id)
-        except:
-            pass
-
-    def __call_handlers(self, event: BaseAudioBotEvent, *args, **kwargs):
-        event_name: str = event.__event_name__
-        if self._event_handlers.get(event_name) == None:
-            return
-        for func in self._event_handlers.get(event_name).values():
-            func(event, *args, **kwargs)
-            # self._async_call(func, event, *args, **kwargs, )
-
     def _async_call(self, fun, *args, **kwargs):
         asyncio.ensure_future(vasyncio.asyncwrapper(fun)(*args, **kwargs), loop=self._loop)
 
@@ -175,7 +164,7 @@ class AudioBot():
 
     def __process_command(self, dmkMsg: DanmakuMessage, *args, **kwargs):
         command: str = dmkMsg.msg.split(" ")[0]
-        for cmd in self._command_executors:
+        for cmd in self._command_executors.values():
             if cmd.applicable(command):
                 cmd.process(command, dmkMsg)
 
@@ -188,5 +177,6 @@ class AudioBot():
 print("Initialize global audio bot")
 Global_Audio_Bot = AudioBot()
 Global_Audio_Bot._loadSystemPlaylist(Config.system_playlist)
-Global_Audio_Bot.registerCommandExecutor(QiegeCommand)
-Global_Audio_Bot.registerCommandExecutor(DiangeCommand)
+
+from audiobot.Command import Global_Command_Manager
+Global_Audio_Bot.registerCommandExecutors(Global_Command_Manager.commands)

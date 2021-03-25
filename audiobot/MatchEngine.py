@@ -45,14 +45,18 @@ def matchNetease(netease:NeteaseMusicSource,keyword=""):
             if keyword != "":
                 result = searchFirst(keyword, engine=engine)
                 if result != None:
-                    result.getTitle = netease.getTitle
-                    result.getArtist = netease.getArtist
-                    result.getCover = netease.getCover
-                    return result
+                    netease.getBaseSources = result.getBaseSources
+                    netease.getSourceName = result.getSourceName
+                    # result.getTitle = netease.getTitle
+                    # result.getArtist = netease.getArtist
+                    # result.getCover = netease.getCover
+                    return netease
             result = searchFirst(" ".join([netease.title] + netease.artists), engine=engine)
             if result != None:
-                result.getTitle = netease.getTitle
-                result.getArtist = netease.getArtist
-                result.getCover = netease.getCover
-                return result
+                netease.getBaseSources = result.getBaseSources
+                netease.getSourceName = result.getSourceName
+                # result.getTitle = netease.getTitle
+                # result.getArtist = netease.getArtist
+                # result.getCover = netease.getCover
+                return netease
     return netease

@@ -1,8 +1,8 @@
-from audiobot.Command import CommandExecutor
+from audiobot.Command import CommandExecutor, Global_Command_Manager
 from sources.audio import BiliAudioSource, NeteaseMusicSource
 from sources.audio.kuwo import KuwoMusicSource
 
-
+@Global_Command_Manager.register("diange")
 class DiangeCommand(CommandExecutor):
     def __init__(self,audiobot):
         super().__init__(audiobot,["点歌","点b歌","点w歌","点k歌"])

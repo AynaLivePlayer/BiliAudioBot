@@ -26,7 +26,7 @@ def httpPost(url, maxReconn=5,**kwargs):
 
 
 class HttpClient:
-    def __init__(self,maxTrial = 5):
+    def __init__(self,maxTrial = 1):
         self.maxTrial = maxTrial
 
     def get(self,url,**kwargs):

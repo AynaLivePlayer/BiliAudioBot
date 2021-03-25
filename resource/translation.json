@@ -19,5 +19,7 @@
     "move to bottom": "置末",
     "delete song from list": "删除选中的歌曲",
     "play selected": "播放选中的歌曲",
-    "add to the playlist": "添加到播放列表"
+    "add to the playlist": "添加到播放列表",
+    "System Playlist": "System Playlist",
+    "Volume: ": "音量: "
 }

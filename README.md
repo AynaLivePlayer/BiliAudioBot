@@ -60,6 +60,14 @@ bilibili `点b歌 关键字/au2159832`
 
 # build
 
+first build frontend
+
+`cd fronend`
+
+`npm run build`
+
+second run python package
+
 `pyi-makespec --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
 
 `pyinstaller --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
@@ -72,11 +80,23 @@ bilibili `点b歌 关键字/au2159832`
 
 - ~~config添加默认房间~~
 
+- ~~tooltips~~
+
+- ~~本地文本输出~~
+
+- ~~本地文本输出自定义格式~~
+
+- ~~音量写入配置文件~~
+
+- ~~ui不显示滚动条?~~
+
+- ~~翻译~~
+
+- ~~歌词->文本 网页~~
+
 - 黑名单
 
 - 时间自定义
-
-- ~~tooltips~~
 
 - 自动过滤翻唱
 
@@ -86,21 +106,9 @@ bilibili `点b歌 关键字/au2159832`
 
 - 修改点歌格式
 
-- ~~本地文本输出~~
-
-- ~~本地文本输出自定义格式~~
-
 - 本地曲库
 
-- ~~音量写入配置文件~~
-
-- ~~ui不显示滚动条?~~
-
-- ~~翻译~~
-
-- 歌词->文本 网页
-
-- 具体时间
+- 具体时间->文本 网页
 
 # 已知问题
 
