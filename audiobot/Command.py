@@ -32,4 +32,4 @@ class CommandManager():
         return add
 
 Global_Command_Manager = CommandManager()
-
+from audiobot.commands import diange,qiege
