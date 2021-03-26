@@ -15,7 +15,7 @@ class LyricItem():
     def convertToSec(raw):
         raw = raw[1:-1:].split(":")
         minutes = raw[0]
-        seconds = raw[1].split(".")
+        seconds = raw[1]
         return float(minutes) * 60 + float(seconds)
 
     def __init__(self, time, lyric):
