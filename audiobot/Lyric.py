@@ -15,8 +15,8 @@ class LyricItem():
     def convertToSec(raw):
         raw = raw[1:-1:].split(":")
         minutes = raw[0]
-        seconds = raw[1].split(".")[0]
-        return int(minutes) * 60 + int(seconds)
+        seconds = raw[1].split(".")
+        return float(minutes) * 60 + float(seconds)
 
     def __init__(self, time, lyric):
         self.time = time
@@ -75,13 +75,16 @@ class Lyrics():
             else:
                 continue
 
+
     def clear(self):
+        self.handlers.call(LyricUpdateEvent(self,
+                                            LyricItem(0,"")))
         self.lyrics.clear()
 
     def _raiseEvent(self,property,val,*args):
         if val is None:
             return
-        lrc = self.findLyricByTime(int(val))
+        lrc = self.findLyricByTime(float(val))
         if lrc is None:
             return
         if self.previous and lrc.lyric == self.previous.lyric:
