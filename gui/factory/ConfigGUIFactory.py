@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from tkinter import ttk
 
 
 def ConvertWithDefault(func, default):
@@ -8,7 +8,6 @@ def ConvertWithDefault(func, default):
             return func(n)
         except:
             return default
-
     return inner
 
 
@@ -27,11 +26,30 @@ def getInput(master, config, key, func_c, func_v,
                                                  variable,
                                                  func_c,
                                                  func_v))
-    check_button = tk.Entry(master,
-                            textvariable=variable,
-                            **kwargs)
+    input_entry = tk.Entry(master,
+                           textvariable=variable,
+                           **kwargs)
     variable.set(func_v(config[key]))
-    return check_button
+    return input_entry
+
+
+def getInputWithButton(master, config, key, func_c, func_v,
+                       input_kwargs=None, button_kwargs=None):
+    input_kwargs = input_kwargs or {}
+    button_kwargs = button_kwargs or {}
+    variable = tk.StringVar()
+    input_entry = tk.Entry(master,
+                           textvariable=variable,
+                           **input_kwargs)
+    update_button = ttk.Button(master,
+                               command=getConfigWriter(config,
+                                                       key,
+                                                       variable,
+                                                       func_c,
+                                                       func_v),
+                               **button_kwargs)
+    variable.set(func_v(config[key]))
+    return input_entry, update_button
 
 
 def getCheckButton(master, text, config, key, func_c, func_v,

@@ -1,10 +1,10 @@
 import aiohttp
 from aiohttp import web
 import os
-
+from urllib.parse import urlparse
 from backend import audiobot_socket
 from config import Config
-from utils import vfile
+from utils import vfile, formats
 
 ENV = Config.environment
 DIST_DIR = vfile.getResourcePath("./frontend/dist")
@@ -13,8 +13,21 @@ app = web.Application()
 routes = web.RouteTableDef()
 
 
+@routes.get("/autoredirect")
+async def websocket_handler(request: web.Request):
+    target = request.query.get("url")
+    if target is None or not formats.isValidUrl(target):
+        return web.HTTPNotFound()
+    hostname = urlparse(target).hostname
+    async with aiohttp.ClientSession() as session:
+        async with session.get(target,headers = {"referer":hostname,
+                                                 "origin":hostname,
+                                                 "host":hostname}) as resp:
+            return web.Response(body=await resp.read(),
+                                content_type=resp.content_type)
+
 @routes.get("/ws/audiobot")
-async def websocket_handler(request):
+async def websocket_handler(request: web.Request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
     audiobot_socket.websockets.append(

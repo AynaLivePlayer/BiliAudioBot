@@ -5,9 +5,15 @@ from audiobot.Playlist import PlaylistItem
 from audiobot.event import AudioBotPlayEvent
 from audiobot.event.lyric import LyricUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
+from config import Config
 
 loop = asyncio.get_event_loop()
 websockets = []
+
+
+def getImgRedirectedUrl(url):
+    return "http://127.0.0.1:{port}/autoredirect?url={url}".format(port=Config.output_channel["web"]["port"],
+                                                                   url=url)
 
 
 def sendJsonData(data):
@@ -28,7 +34,7 @@ def parsePlaylistUpdate(playlist):
         cover_url = item.source.getCover().url if item.source.getCover() != None else None
         playlist_data.append({"title": item.source.getTitle(),
                               "artist": item.source.getArtist(),
-                              "cover": cover_url,
+                              "cover": getImgRedirectedUrl(cover_url),
                               "username": item.username})
     return playlist_data
 
@@ -49,13 +55,14 @@ def parseAudioBotPlayData(item: PlaylistItem):
     cover_url = item.source.getCover().url if item.source.getCover() != None else None
     return {"title": item.source.getTitle(),
             "artist": item.source.getArtist(),
-            "cover": cover_url,
+            "cover": getImgRedirectedUrl(cover_url),
             "username": item.username}
 
-@Global_Audio_Bot.handlers.register(LyricUpdateEvent,
-                                       "websocket.updatelyric")
+
+@Global_Audio_Bot.lyrics.handlers.register(LyricUpdateEvent,
+                                    "websocket.updatelyric")
 def listenLyricUpdate(event: LyricUpdateEvent):
-    sendJsonData({event.__event_name__: {"lyric":event.lyric.lyric}})
+    sendJsonData({event.__event_name__: {"lyric": event.lyric.lyric}})
 
 
 async def sendInitialData(ws):

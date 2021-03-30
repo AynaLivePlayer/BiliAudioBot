@@ -25,6 +25,9 @@ class ConfigGUI():
         frame_qiege = ttk.LabelFrame(self.widget, text=_("QG Config"))
         frame_qiege.pack(fill=tk.X, expand="yes", padx=4)
 
+        frame_playlist = ttk.LabelFrame(self.widget, text=_("Playlist Config"))
+        frame_playlist.pack(fill=tk.X, expand="yes", padx=4)
+
         frame_etc = ttk.LabelFrame(self.widget, text=_("Experimental Feature"))
         frame_etc.pack(fill=tk.X, expand="yes", padx=4)
 
@@ -80,6 +83,27 @@ class ConfigGUI():
         ConfigGUIFactory.getCheckButton(frame_qiege_1, _("Admin"),
                                         Config.commands["qiege"], "admin",
                                         bool, int).grid(column=3, row=0, padx=8)
+
+        # ========== frame_playlist ================
+        frame_playlist_1 = ttk.Frame(frame_playlist)
+        frame_playlist_1.pack(fill=tk.X, side=tk.TOP, expand="yes", padx=2, pady=2)
+        frame_playlist_2 = ttk.Frame(frame_playlist)
+        frame_playlist_2.pack(fill=tk.X, side=tk.TOP, expand="yes", padx=2, pady=2)
+
+        ttk.Label(frame_playlist_1, text=_("Enter netease playlist id (separate by ,) (restart after modified )")).grid(column=0, row=0)
+        ttk.Label(frame_playlist_1, text="      ").grid(column=1, row=0)
+        ttk.Label(frame_playlist_1, text=_("Example: 1234565,1234564")).grid(column=2, row=0)
+        input1,button1 = ConfigGUIFactory.getInputWithButton(frame_playlist_2,
+                                                            Config.system_playlist["playlist"],
+                                                            "netease",
+                                                            ConfigGUIFactory.ConvertWithDefault(
+                                                                lambda x:list(map(lambda x:str(int(x)),
+                                                                             x.split(","))),[]),
+                                                            lambda x:",".join(x),
+                                                            input_kwargs={"width":64},
+                                                            button_kwargs={"text":_("Update Playlist")})
+        input1.grid(column=0, row=0, padx=8)
+        button1.grid(column=1, row=0, padx=8)
 
         # ========== frame exp ================
         variable = tk.IntVar()

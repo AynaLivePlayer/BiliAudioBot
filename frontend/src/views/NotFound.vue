@@ -1,7 +1,5 @@
 <template>
   <div>
-    <p>About</p>
+    <p>404 - Not Found</p>
   </div>
 </template>
-<script>
-</script>

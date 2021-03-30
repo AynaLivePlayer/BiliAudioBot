@@ -1,42 +1,48 @@
-import m3u8,glob,os,subprocess
+import m3u8, glob, os, subprocess
 import re
+
+
 def m3u8Extract(url):
     try:
         m3u8obj = m3u8.load(url)
         if len(m3u8obj.playlists) != 0:
-            return m3u8Extract(m3u8obj.playlists[0].base_uri+m3u8obj.playlists[0].uri)
-        return [seg.base_uri+seg.uri for seg in m3u8obj.segments]
+            return m3u8Extract(m3u8obj.playlists[0].base_uri + m3u8obj.playlists[0].uri)
+        return [seg.base_uri + seg.uri for seg in m3u8obj.segments]
     except:
         print("m3u8 extract fail")
         return []
 
+
 def m3u8Combine(route):
     target_file = os.path.join(os.path.dirname(route),
-                               os.path.basename(route)+".ts")
-    with open(target_file,"wb") as tf:
+                               os.path.basename(route) + ".ts")
+    with open(target_file, "wb") as tf:
         for path in glob.glob(os.path.join(route, "*.ts")):
             with open(path, "rb") as f:
                 tf.write(f.read())
 
+
 def m3u8FFmpegCombine(route):
     target_file = os.path.join(os.path.dirname(route),
-                               os.path.basename(route)+".ts")
+                               os.path.basename(route) + ".ts")
     filelist = os.path.join(route, "filelist.txt")
     subprocess.run("ffmpeg -f concat -safe 0 -i {filelist} -c copy {target}"
-                     .format(filelist=filelist, target=target_file))
+                   .format(filelist=filelist, target=target_file))
 
-def htmlGetCharset(bin_content:bytes):
+
+def htmlGetCharset(bin_content: bytes):
     try:
         html_text = bin_content.decode("utf-8", "ignore")
-        return re.search("charset=([^ ;'\">])*[ ;'\"]",html_text).group()[8:-1:]
+        return re.search("charset=([^ ;'\">])*[ ;'\"]", html_text).group()[8:-1:]
     except:
         return None
 
-def htmlAutoDecode(bin_content:bytes):
-    codec = ["utf-8","gbk","gb2312"]
+
+def htmlAutoDecode(bin_content: bytes):
+    codec = ["utf-8", "gbk", "gb2312"]
     c = htmlGetCharset(bin_content)
     if c != None and c in codec:
-        return bin_content.decode(c,"ignore")
+        return bin_content.decode(c, "ignore")
     for c in codec:
         try:
             return bin_content.decode(c)
@@ -44,5 +50,17 @@ def htmlAutoDecode(bin_content:bytes):
             pass
     return None
 
-def htmlStrip(html_text:str):
-    return html_text.replace("\n","").replace("\r","")
+
+def htmlStrip(html_text: str):
+    return html_text.replace("\n", "").replace("\r", "")
+
+URL_REGEXP = re.compile(
+        r'^(?:http|ftp)s?://'  # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+        r'(?::\d+)?'  # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+def isValidUrl(url):
+    return URL_REGEXP.match(url) is not None

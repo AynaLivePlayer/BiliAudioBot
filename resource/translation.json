@@ -33,5 +33,9 @@
     "DG Permission: ": "点歌权限: ",
     "Etc": "Etc",
     "Experimental Feature": "实验性功能，可能会导致不可预料的后果",
-    "filter cover": "过滤翻唱"
+    "filter cover": "过滤翻唱",
+    "Playlist Config": "闲置歌单设置",
+    "Enter netease playlist id (separate by ,) (restart after modified )": "输入网易云歌单id (英文,分开) (更新后重启)",
+    "Example: 1234565,1234564": "例子: 1234565,1234564",
+    "Update Playlist": "更新闲置歌单"
 }

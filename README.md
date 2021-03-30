@@ -119,6 +119,8 @@ second run python package
 
 # change log
 
+2021-03-30-demo0.7.9: Web output update
+
 2021-03-11-demo0.7.4: translation update
 
 2021-03-11-demo0.7.0: frontend&backend demo finish.

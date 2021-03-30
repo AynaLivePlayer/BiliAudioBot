@@ -91,4 +91,4 @@ class Lyrics():
             return
         self.previous = lrc
         self.handlers.call(LyricUpdateEvent(self,
-                                            self.findLyricByTime(int(val))))
+                                            lrc))
