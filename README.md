@@ -64,6 +64,8 @@ first build frontend
 
 `cd fronend`
 
+`npm install`
+
 `npm run build`
 
 second run python package
