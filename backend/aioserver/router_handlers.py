@@ -2,18 +2,13 @@ import aiohttp
 from aiohttp import web
 import os
 from urllib.parse import urlparse
-from backend import audiobot_socket
-from config import Config
+from backend.aioserver import aiosocket_server
 from utils import vfile, formats
 
-ENV = Config.environment
-DIST_DIR = vfile.getResourcePath("./frontend/dist")
-
-app = web.Application()
-routes = web.RouteTableDef()
+from backend.aioserver import routes,ENV,DIST_DIR
 
 
-@routes.get("/autoredirect")
+@routes.get("/autoredirect",name="autoredirect")
 async def websocket_handler(request: web.Request):
     target = request.query.get("url")
     if target is None or not formats.isValidUrl(target):
@@ -30,10 +25,10 @@ async def websocket_handler(request: web.Request):
 async def websocket_handler(request: web.Request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
-    audiobot_socket.websockets.append(
+    aiosocket_server.websockets.append(
         ws
     )
-    await audiobot_socket.sendInitialData(ws)
+    await aiosocket_server.sendInitialData(ws)
     async for msg in ws:
         msg:aiohttp.WSMessage
         if msg.type == aiohttp.WSMsgType.TEXT:
@@ -42,7 +37,7 @@ async def websocket_handler(request: web.Request):
         elif msg.type == aiohttp.WSMsgType.ERROR:
             print('ws connection closed with exception %s' %
                   ws.exception())
-    audiobot_socket.websockets.remove(ws)
+    aiosocket_server.websockets.remove(ws)
     print('websocket connection closed')
     return ws
 
@@ -70,5 +65,3 @@ async def vue_redirecting(request: web.Request):
         with open(os.path.join(DIST_DIR, "index.html"), "r", encoding="utf-8") as f:
             return web.Response(text=f.read(),
                                 content_type=vfile.getFileContentType(path))
-
-app.router.add_routes(routes)

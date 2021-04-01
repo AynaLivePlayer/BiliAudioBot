@@ -60,7 +60,7 @@
   body {
     overflow:hidden;
   }
-  img {
+  .playing-cover {
     width: 100px;
     height: 100px;
   }

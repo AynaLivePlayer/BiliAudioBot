@@ -1,20 +1,22 @@
 import asyncio
+import traceback
 
 from audiobot.AudioBot import Global_Audio_Bot
 from audiobot.Playlist import PlaylistItem
 from audiobot.event import AudioBotPlayEvent
 from audiobot.event.lyric import LyricUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
-from config import Config
-
+from backend.aioserver import app
 loop = asyncio.get_event_loop()
 websockets = []
 
 
 def getImgRedirectedUrl(url):
-    return "http://127.0.0.1:{port}/autoredirect?url={url}".format(port=Config.output_channel["web"]["port"],
-                                                                   url=url)
-
+    try:
+        return str(app.router["autoredirect"].url_for().with_query({"url": url}))
+    except:
+        traceback.print_exc()
+        return ""
 
 def sendJsonData(data):
     for ws in websockets:
