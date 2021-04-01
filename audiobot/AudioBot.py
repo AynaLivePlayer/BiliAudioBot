@@ -6,6 +6,7 @@ from audiobot.Lyric import Lyrics
 from audiobot.Playlist import Playlist, PlaylistItem
 from audiobot.event.audiobot import AudioBotPlayEvent
 from audiobot.event.lyric import LyricUpdateEvent
+from audiobot.event.playlist import PlaylistUpdateEvent
 from config import Config
 from liveroom.LiveRoom import LiveRoom
 from player.mpv import MPVPlayer, MPVProperty
@@ -66,6 +67,12 @@ class AudioBot():
             self.registerCommandExecutor(id,val)
 
     def _loadSystemPlaylist(self, config):
+        try:
+            self._thread_call(self.__loadSystemPlaylist,config)
+        except:
+            pass
+
+    def __loadSystemPlaylist(self, config):
         playlists = config["playlist"]
         songs = config["song"]
         self.system_playlist.random_next = config["random"]
@@ -97,6 +104,8 @@ class AudioBot():
                 if s == None:
                     continue
                 self.system_playlist.append(s)
+        if self.mpv_player is not None and self.mpv_player.getProperty(MPVProperty.IDLE):
+            self.playNext()
 
     def __getPlayableSource(self, sources: dict) -> BaseSource:
         for val in sources.values():

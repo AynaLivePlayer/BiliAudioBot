@@ -1,6 +1,10 @@
 from utils import vfile
-
+# import os
+# #os.environ['no_proxy'] = '*'
 vfile.registerEnvironmentPath()
+import nest_asyncio
+nest_asyncio.apply()
+
 
 from aiohttp import web
 from backend.localfileserver import LocalFileWriterServer
@@ -9,10 +13,6 @@ from config import Config
 from gui import MainWindow
 from backend import aioserver
 import asyncio
-import nest_asyncio
-
-nest_asyncio.apply()
-
 async def mainloop(loop):
     a = MainWindow(loop=loop)
     task = [loop.create_task(a.start())]

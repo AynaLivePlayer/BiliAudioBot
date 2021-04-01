@@ -20,7 +20,6 @@ class DiangeCommand(CommandExecutor):
         val = " ".join(msg[1::])
         if not (self.__hasPermission(dmkMsg) and self.__inCooldown(dmkMsg) and self.__notReachMax()):
             return
-        print(123)
         if (command == "点歌"):
             self.audiobot.addAudioByUrl(val, username=dmkMsg.uname)
         elif command == "点b歌":
