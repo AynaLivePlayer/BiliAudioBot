@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Union
 
 from plugins import mpv_lib
 
@@ -15,6 +16,9 @@ class MPVProperty(Enum):
     TIME_POS = "time-pos"
     PERCENT_POS = "percent-pos"
     DURATION = "duration"
+
+    AUDIO_DEVICE = "audio-device"
+    AUDIO_DEVICE_LIST = "audio-device-list"
 
 class MPVPlayer:
     MAX_VOLUME = 120
@@ -82,11 +86,13 @@ class MPVPlayer:
             headerlist.append("{}:{}".format(key,val))
         return headerlist
 
-    def setProperty(self,property:MPVProperty,val):
-        self.mpv_core._set_property(property.value,val)
+    def setProperty(self,property:Union[MPVProperty,str],val):
+        p = property if isinstance(property,str) else property.value
+        self.mpv_core._set_property(p,val)
 
-    def getProperty(self,property:MPVProperty):
-        return self.mpv_core._get_property(property.value)
+    def getProperty(self,property:Union[MPVProperty,str]):
+        p = property if isinstance(property, str) else property.value
+        return self.mpv_core._get_property(p)
 
     def registerPropertyHandler(self,id,property:MPVProperty,func):
         self.unregisterPropertyHandler(id)
