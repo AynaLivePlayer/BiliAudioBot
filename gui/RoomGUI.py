@@ -14,10 +14,11 @@ class RoomGUI():
         self.output_label = tk.StringVar()
 
     def initialize(self):
+        self.main_window.getTabController().add(self.widget, text=_("AudioBot"))
+
         self.room_id.set(Config.default_room)
 
     def createWidgets(self):
-        self.main_window.getTabController().add(self.widget, text=_("AudioBot"))
 
         frame_main = ttk.LabelFrame(self.widget, text="AudioBot Test")
         frame_main.grid(column=0, row=0, padx=8, pady=4)

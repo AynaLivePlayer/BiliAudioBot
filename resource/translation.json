@@ -37,5 +37,9 @@
     "Playlist Config": "闲置歌单设置",
     "Enter netease playlist id (separate by ,) (restart after modified )": "输入网易云歌单id (英文,分开) (更新后重启)",
     "Example: 1234565,1234564": "例子: 1234565,1234564",
-    "Update Playlist": "更新闲置歌单"
+    "Update Playlist": "更新闲置歌单",
+    "Audio Device": "音频输出设备",
+    "Random System Playlist": "随机播放闲置歌单",
+    "Skip when user add a song": "用户点歌跳过闲置歌单",
+    "Select audio device: ": "选择输出设备: "
 }

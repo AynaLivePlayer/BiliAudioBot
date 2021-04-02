@@ -24,22 +24,21 @@ class MPVGUI():
         self.mpv_player: MPVPlayer = None
         self.mpv_window_id = ""
 
+        MPVGUI.instance = self
+
     @property
     def progressPercent(self):
         return self.progress.get() / 100
 
     def initialize(self):
-        MPVGUI.instance = self
-        self.mpv_player = MPVPlayer(self.mpv_window_id)
+        self.main_window.getTabController().add(self.widget, text="MPV")
         self.mpv_player.registerPropertyHandler("mpvgui.syncprogress",
                                                 MPVProperty.PERCENT_POS,
                                                 self._syncProgress)
-        Global_Audio_Bot.setPlayer(self.mpv_player)
         self._pause()
 
 
     def createWidgets(self):
-        self.main_window.getTabController().add(self.widget, text="MPV")
 
         frame_main = ttk.LabelFrame(self.widget,
                                     text="MPV Player")
@@ -57,6 +56,8 @@ class MPVGUI():
         frame_player.grid(column=0, row=0, sticky="news")
 
         self.mpv_window_id = str(int(frame_player.winfo_id()))
+        self.mpv_player = MPVPlayer(self.mpv_window_id)
+        Global_Audio_Bot.setPlayer(self.mpv_player)
 
         # ==== Row 2 ====
         frame_row_2 = ttk.Frame(frame_main)

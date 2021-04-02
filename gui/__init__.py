@@ -6,6 +6,7 @@ from tkinter import ttk, PhotoImage
 from tkinter import Menu
 from tkinter.ttk import Notebook
 
+from audiobot.AudioBot import Global_Audio_Bot
 from config import Config
 from gui.ConfigGUI import ConfigGUI
 from gui.WaitingListGUI import WaitingListGUI
@@ -62,18 +63,17 @@ class MainWindow():
         playlist = PlaylistGUI(self)
         search = SearchGUI(self)
         configgui = ConfigGUI(self)
-        # waitinglist = WaitingListGUI(self)
+
+        mpv.createWidgets()
         room.createWidgets()
         playlist.createWidgets()
-        search.createWidgets()
         configgui.createWidgets()
-        mpv.createWidgets()
-        # waitinglist.createWidgets()
+        search.createWidgets()
 
-
-        mpv.initialize()
         room.initialize()
         playlist.initialize()
-        # waitinglist.initialize()
-        configgui.initialize()
         search.initialize()
+        configgui.initialize()
+        mpv.initialize()
+
+        Global_Audio_Bot.start()

@@ -28,7 +28,8 @@
       "netease": [],
       "bilibili": []
     },
-    "random": true
+    "random": true,
+    "autoskip": true
   },
   "commands": {
     "diange": {
@@ -44,5 +45,8 @@
       "guard": false,
       "admin": false
     }
+  },
+  "audio_device": {
+    "id": "auto"
   }
 }

@@ -33,6 +33,8 @@ class PlaylistGUI():
         self.volume = tk.DoubleVar()
 
     def initialize(self):
+        self.main_window.getTabController().add(self.widget, text=_("Playlist"))
+
         self.audio_bot.user_playlist.handlers._register("playlist_update",
                                                      "playlist.update",
                                                      self.__updateTree)
@@ -64,7 +66,6 @@ class PlaylistGUI():
 
 
     def createWidgets(self):
-        self.main_window.getTabController().add(self.widget, text=_("Playlist"))
 
         frame_main = ttk.LabelFrame(self.widget, text="Playlist demo")
         frame_main.pack(fill="both", expand="yes", padx=8, pady=4)

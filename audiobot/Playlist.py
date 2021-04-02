@@ -103,7 +103,8 @@ class Playlist():
         if len(self.playlist) == 0:
             return
         if self.random_next:
-            return self.playlist[random.randint(0, len(self.playlist) - 1)], PlaylistUpdateEvent(self)
+            self.current_index = random.randint(0, len(self.playlist) - 1)
+            return self.playlist[self.current_index], PlaylistUpdateEvent(self)
         if self.current_index >= len(self.playlist):
             self.current_index = 0
         self.current_index += 1

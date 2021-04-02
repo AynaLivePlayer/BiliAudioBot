@@ -18,7 +18,8 @@ class ConfigFile:
                     "bilibili":[]},
         "song":{"netease":[],
                     "bilibili":[]},
-        "random":True
+        "random":True,
+        "autoskip":True
     }
 
     output_channel = {
@@ -44,6 +45,8 @@ class ConfigFile:
             "admin":False
         },
     }
+
+    audio_device = {"id":"auto"}
 
     player_volume = 0.32
 

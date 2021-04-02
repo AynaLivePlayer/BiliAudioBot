@@ -1,4 +1,5 @@
 import tkinter as tk
+import traceback
 from tkinter import ttk
 
 
@@ -7,6 +8,7 @@ def ConvertWithDefault(func, default):
         try:
             return func(n)
         except:
+            traceback.print_exc()
             return default
     return inner
 
@@ -66,3 +68,19 @@ def getCheckButton(master, text, config, key, func_c, func_v,
                                   **kwargs)
     variable.set(func_v(config[key]))
     return check_button
+
+
+def getBoxSelector(master, config, key, values, func_c, func_v,
+                   **kwargs):
+    variable = tk.StringVar()
+    variable.trace_variable("w", getConfigWriter(config,
+                                                 key,
+                                                 variable,
+                                                 func_c,
+                                                 func_v))
+    box_selector = ttk.Combobox(master,
+                                textvariable=variable,
+                                **kwargs)
+    box_selector['values'] = tuple(values)
+    variable.set(func_v(config[key]))
+    return box_selector

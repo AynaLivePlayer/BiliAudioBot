@@ -21,10 +21,9 @@ class SearchGUI():
         self.current_results = []
 
     def initialize(self):
-        pass
+        self.main_window.getTabController().add(self.widget, text=_("Search"))
 
     def createWidgets(self):
-        self.main_window.getTabController().add(self.widget, text=_("Search"))
 
         frame_main = ttk.LabelFrame(self.widget, text="Search test")
         frame_main.pack(fill="both", expand="yes", padx=8, pady=4)

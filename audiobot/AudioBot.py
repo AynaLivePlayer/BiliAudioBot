@@ -5,8 +5,6 @@ from audiobot.Handler import AudioBotHandlers
 from audiobot.Lyric import Lyrics
 from audiobot.Playlist import Playlist, PlaylistItem
 from audiobot.event.audiobot import AudioBotPlayEvent
-from audiobot.event.lyric import LyricUpdateEvent
-from audiobot.event.playlist import PlaylistUpdateEvent
 from config import Config
 from liveroom.LiveRoom import LiveRoom
 from player.mpv import MPVPlayer, MPVProperty
@@ -43,14 +41,17 @@ class AudioBot():
         self._command_executors: Dict[str,Command.CommandExecutor] = {}
         self.handlers = AudioBotHandlers()
 
-    def setPlayer(self, mpv_player: MPVPlayer):
-        self.mpv_player = mpv_player
+    def start(self):
         self.mpv_player.registerPropertyHandler("audiobot.idleplaynext",
                                                 MPVProperty.IDLE,
                                                 self.__idle_play_next)
         self.mpv_player.registerPropertyHandler("audiobot.updatelyric",
                                                 MPVProperty.TIME_POS,
                                                 self.lyrics._raiseEvent)
+        self.__idle_play_next("idle",self.mpv_player.getProperty(MPVProperty.IDLE))
+
+    def setPlayer(self, mpv_player: MPVPlayer):
+        self.mpv_player = mpv_player
 
     def setLiveRoom(self, live_room: LiveRoom):
         if self.live_room != None:
@@ -104,8 +105,6 @@ class AudioBot():
                 if s == None:
                     continue
                 self.system_playlist.append(s)
-        if self.mpv_player is not None and self.mpv_player.getProperty(MPVProperty.IDLE):
-            self.playNext()
 
     def __getPlayableSource(self, sources: dict) -> BaseSource:
         for val in sources.values():
@@ -162,7 +161,7 @@ class AudioBot():
         if self.current == None or self.mpv_player.getProperty(MPVProperty.IDLE):
             self.playNext()
             return
-        if self.current.username == "system":
+        if Config.system_playlist['autoskip'] and self.current.username == "system":
             self.playNext()
 
     def _async_call(self, fun, *args, **kwargs):
