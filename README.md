@@ -100,6 +100,8 @@ second run python package
 
 - 黑名单
 
+- 输出声卡选择
+
 - 时间自定义
 
 - 使用系统代理
