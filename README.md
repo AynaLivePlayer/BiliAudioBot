@@ -70,12 +70,6 @@ first build frontend
 
 second run python package
 
-`pyi-makespec --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
-
-`pyinstaller --onefile --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
-
-`try not use onefile if you want start faster`
-
 `pyinstaller --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
 
 # todo list
