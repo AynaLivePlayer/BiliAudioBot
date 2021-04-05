@@ -4,7 +4,7 @@ from typing import List, Type, Union, Dict
 from audiobot.Handler import AudioBotHandlers
 from audiobot.Lyric import Lyrics
 from audiobot.Playlist import Playlist, PlaylistItem
-from audiobot.event.audiobot import AudioBotPlayEvent
+from audiobot.event.audiobot import AudioBotPlayEvent, AudioBotStartEvent
 from config import Config
 from liveroom.LiveRoom import LiveRoom
 from player.mpv import MPVPlayer, MPVProperty
@@ -31,6 +31,7 @@ class AudioBot():
                               KuwoMusicSource)
 
     def __init__(self, loop=None):
+        self.running = False
         self.user_playlist = Playlist(self,"user_playlist")
         self.system_playlist = Playlist(self,"system_playlist", random_next=True)
         self.lyrics = Lyrics(self)
@@ -42,16 +43,18 @@ class AudioBot():
         self.handlers = AudioBotHandlers()
 
     def start(self):
+        self.running = True
+        self.handlers.call(AudioBotStartEvent(self))
+        self.__idle_play_next("idle", self.mpv_player.getProperty(MPVProperty.IDLE))
+
+    def setPlayer(self, mpv_player: MPVPlayer):
+        self.mpv_player = mpv_player
         self.mpv_player.registerPropertyHandler("audiobot.idleplaynext",
                                                 MPVProperty.IDLE,
                                                 self.__idle_play_next)
         self.mpv_player.registerPropertyHandler("audiobot.updatelyric",
                                                 MPVProperty.TIME_POS,
                                                 self.lyrics._raiseEvent)
-        self.__idle_play_next("idle",self.mpv_player.getProperty(MPVProperty.IDLE))
-
-    def setPlayer(self, mpv_player: MPVPlayer):
-        self.mpv_player = mpv_player
 
     def setLiveRoom(self, live_room: LiveRoom):
         if self.live_room != None:
@@ -105,6 +108,10 @@ class AudioBot():
                 if s == None:
                     continue
                 self.system_playlist.append(s)
+
+        if self.running and self.current is None:
+            self.playNext()
+
 
     def __getPlayableSource(self, sources: dict) -> BaseSource:
         for val in sources.values():

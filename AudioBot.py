@@ -5,8 +5,8 @@ vfile.registerEnvironmentPath()
 import nest_asyncio
 nest_asyncio.apply()
 
-from utils.etc import pyncmpatchedSesion
-pyncmpatchedSesion.dopatch()
+from utils.etc import patchPyncm
+patchPyncm()
 
 from aiohttp import web
 from backend.localfileserver import LocalFileWriterServer

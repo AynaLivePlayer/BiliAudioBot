@@ -98,14 +98,13 @@ class Playlist():
         self.playlist[target_index] = tmp
         return PlaylistUpdateEvent(self)
 
-    @triggerEventHandler
     def getNext(self):
         if len(self.playlist) == 0:
             return
         if self.random_next:
             self.current_index = random.randint(0, len(self.playlist) - 1)
-            return self.playlist[self.current_index], PlaylistUpdateEvent(self)
+            return self.playlist[self.current_index]
         if self.current_index >= len(self.playlist):
             self.current_index = 0
         self.current_index += 1
-        return self.playlist[self.current_index - 1], PlaylistUpdateEvent(self)
+        return self.playlist[self.current_index - 1]

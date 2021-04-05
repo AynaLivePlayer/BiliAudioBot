@@ -123,6 +123,8 @@ second run python package
 
 # change log
 
+2021-03-30-demo0.8.0: Public Test Version Release
+
 2021-03-30-demo0.7.9: Web output update
 
 2021-03-11-demo0.7.4: translation update

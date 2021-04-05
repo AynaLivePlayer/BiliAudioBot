@@ -41,5 +41,16 @@
     "Audio Device": "音频输出设备",
     "Random System Playlist": "随机播放闲置歌单",
     "Skip when user add a song": "用户点歌跳过闲置歌单",
-    "Select audio device: ": "选择输出设备: "
+    "Select audio device: ": "选择输出设备: ",
+    "OBS output": "obs浏览器输出",
+    "Application Information": "软件信息",
+    "Current Song Info:": "当前播放歌曲:",
+    "CSS:": "CSS:",
+    "Current Song Lyric:": "当前歌曲歌词:",
+    "Current Song Cover:": "当前歌曲封面:",
+    "TextInfo:": "点歌信息:",
+    "Author:": "作者:",
+    "Thanks to:": "感谢:",
+    "EtcInfo": "其他信息",
+    "Version:": "当前版本:"
 }
