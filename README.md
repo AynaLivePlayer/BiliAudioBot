@@ -70,7 +70,7 @@ first build frontend
 
 second run python package
 
-`pyinstaller --windowed --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
+`pyinstaller --windowed --clean --noconfirm --icon=resource/favicon.ico --add-data "frontend/dist;frontend/dist" --add-data "resource;resource" --add-data "config;config" --add-binary "mpv-1.dll;." AudioBot.py`
 
 # todo list
 
