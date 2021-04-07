@@ -195,3 +195,6 @@ Global_Audio_Bot._loadSystemPlaylist(Config.system_playlist)
 
 from audiobot.Command import Global_Command_Manager
 Global_Audio_Bot.registerCommandExecutors(Global_Command_Manager.commands)
+
+# register hooks
+from audiobot.hooks import *
