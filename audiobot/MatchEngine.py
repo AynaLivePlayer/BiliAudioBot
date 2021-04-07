@@ -24,7 +24,7 @@ def check(item:PlaylistItem):
 
 def search(url, source_class:CommonSource.__class__):
     if source_class == None:
-        return searchFirst(url), ""
+        source_class = DEFAULT_SEARCH_ENGINE
     source = source_class.initFromUrl(url)
     if source == None:
         if issubclass(source_class,SearchableSource):
