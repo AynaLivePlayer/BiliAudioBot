@@ -6,7 +6,7 @@ class ConfigFile:
     gui_title = "ヽ(°∀°)点歌姬(°∀°)ﾉ"
 
     environment = "production"
-    version = "Demo0.8.0"
+    version = "Demo0.8.1"
 
     commonHeaders = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0"
