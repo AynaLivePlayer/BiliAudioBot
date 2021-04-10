@@ -1,4 +1,4 @@
-# BiliAudioBot
+# BiliAudioBot - 卡西米尔唱片机
 A python gui version of audio bot.
 
 provided by Aynakeya(划水) & Nearl_Official(摸鱼)

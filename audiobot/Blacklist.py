@@ -11,7 +11,6 @@ def _check_song_name(item: PlaylistItem, content, whole):
     else:
         return content in item.source.getTitle()
 
-
 class BlacklistItemType(Enum):
     SONG_NAME = "song_name", _check_song_name
 
@@ -30,7 +29,6 @@ class BlacklistItemType(Enum):
                 return name
         return None
 
-
 class BlackListItem():
     def __init__(self, bantype: BlacklistItemType, content, whole=False):
         self.bantype: BlacklistItemType = bantype
@@ -39,7 +37,6 @@ class BlackListItem():
 
     def applicable(self, item: PlaylistItem):
         self.bantype.value[1](item, self.content, self.whole)
-
 
 class Blacklist():
     def __init__(self, audio_bot):
