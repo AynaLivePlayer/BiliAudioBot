@@ -131,11 +131,23 @@ class PlaylistGUI():
 
         ToolTip(playlist_delete_button, _("delete song from list"))
 
+        playlist_clear_button = ttk.Button(frame_move, width=3, text="∅",
+                                           command=self.audio_bot.user_playlist.clear)
+        playlist_clear_button.grid(column=0, row=5, pady=2)
+
+        ToolTip(playlist_clear_button, _("clear the list"))
+
         playlist_play_button = ttk.Button(frame_move, width=3, text="▶",
                                           command = lambda :self.audio_bot.playByIndex(self.__getTreeviewFocusIndex()))
-        playlist_play_button.grid(column=0, row=5, pady=2)
+        playlist_play_button.grid(column=0, row=6, pady=2)
 
         ToolTip(playlist_play_button, _("play selected"))
+
+        playlist_bl_button = ttk.Button(frame_move, width=3, text="⛒",
+                                          command=lambda: self.audio_bot.addBlacklistByIndex(self.__getTreeviewFocusIndex()))
+        playlist_bl_button.grid(column=0, row=7, pady=2)
+
+        ToolTip(playlist_bl_button, _("add to blacklist"))
 
         # ========== Playing frame ================
         frame_cover = ttk.Frame(frame_playing)

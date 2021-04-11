@@ -90,6 +90,10 @@ class BiliAudioSource(AudioSource, SearchableSource,AudioBotInfoSource):
                 "Uploader":self.uploader,
                 "Available Qualities":qs}
 
+
+    def getUniqueId(self):
+        return "au{}".format(self.sid)
+
     def getTitle(self):
         return self.title
 

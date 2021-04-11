@@ -55,6 +55,9 @@ class NeteaseMusicSource(AudioSource,
         self.vip = False
         self.available = False
 
+    def getUniqueId(self):
+        return "wy{}".format(self.sid)
+
     def getTitle(self):
         return self.title
 

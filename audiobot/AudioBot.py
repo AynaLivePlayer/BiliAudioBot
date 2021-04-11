@@ -1,9 +1,11 @@
 import asyncio
 from typing import List, Type, Union, Dict
 
+from audiobot.Blacklist import Blacklist
 from audiobot.Handler import AudioBotHandlers
 from audiobot.Lyric import Lyrics
 from audiobot.Playlist import Playlist, PlaylistItem
+from audiobot.event import PlaylistAppendEvent
 from audiobot.event.audiobot import AudioBotPlayEvent, AudioBotStartEvent
 from config import Config
 from liveroom.LiveRoom import LiveRoom
@@ -34,6 +36,8 @@ class AudioBot():
         self.running = False
         self.user_playlist = Playlist(self,"user_playlist")
         self.system_playlist = Playlist(self,"system_playlist", random_next=True)
+        self.history_playlist = Playlist(self, "history_playlist")
+        self.blacklist = Blacklist(self)
         self.lyrics = Lyrics(self)
         self.current: PlaylistItem = None
         self.mpv_player: MPVPlayer = None
@@ -135,6 +139,11 @@ class AudioBot():
             return
         self.__thread_play(self.user_playlist.remove(index))
 
+    def addBlacklistByIndex(self, index):
+        if index < 0 or index >= len(self.user_playlist):
+            return
+        self.blacklist.appendPlaylistItem(self.user_playlist.remove(index))
+
     def play(self, item: PlaylistItem):
         self.__thread_play(item)
 
@@ -152,10 +161,10 @@ class AudioBot():
                 self.playNext()
             return
         self.current = item
+        self.history_playlist.appendItem(item)
         self.handlers.call(AudioBotPlayEvent(self,item))
         self.lyrics.load(item)
         self.mpv_player.playByUrl(bs.url, headers=bs.headers)
-
 
     def addAudioByUrl(self, url, username="system", source_class: CommonSource.__class__ = None):
         source_class: CommonSource.__class__ = source_class if source_class else self.selector.select(url)
@@ -164,12 +173,14 @@ class AudioBot():
             return
         source.load()
         if source.isValid():
-            self.user_playlist.append(source, username=username, keyword=keyword)
-        if self.current == None or self.mpv_player.getProperty(MPVProperty.IDLE):
-            self.playNext()
-            return
-        if Config.system_playlist['autoskip'] and self.current.username == "system":
-            self.playNext()
+            event:PlaylistAppendEvent = self.user_playlist.append(source, username=username, keyword=keyword)
+            if event.isCancelled():
+                return
+            if self.current == None or self.mpv_player.getProperty(MPVProperty.IDLE):
+                self.playNext()
+                return
+            if Config.system_playlist['autoskip'] and self.current.username == "system":
+                self.playNext()
 
     def _async_call(self, fun, *args, **kwargs):
         asyncio.ensure_future(vasyncio.asyncwrapper(fun)(*args, **kwargs), loop=self._loop)

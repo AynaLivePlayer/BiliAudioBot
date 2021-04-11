@@ -59,6 +59,9 @@ class KuwoMusicSource(AudioSource,
                                                self.artist,
                                                vfile.getSuffixByUrl(url)))
 
+    def getUniqueId(self):
+        return "kuwo{}".format(self.id)
+
     def getTitle(self):
         return self.title
 

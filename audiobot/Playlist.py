@@ -58,16 +58,25 @@ class Playlist():
         return len(self.playlist)
 
     def append(self, cm, username="system", keyword=""):
-        self.appendItem(PlaylistItem(cm, username, keyword))
+        return self.appendItem(PlaylistItem(cm, username, keyword))
 
-    @triggerEventHandler
     def appendItem(self, item: PlaylistItem):
         event = PlaylistAppendEvent(self, item)
         self.handlers.call(event)
         if event.isCancelled():
-            return
+            return event
         self.playlist.append(item)
-        return PlaylistUpdateEvent(self)
+        self.handlers.call(PlaylistUpdateEvent(self))
+        return event
+
+    def get(self, index):
+        if index >= len(self.playlist) or index < 0:
+            return
+        return self.playlist[index]
+
+    def clear(self):
+        self.playlist.clear()
+        self.handlers.call(PlaylistUpdateEvent(self))
 
     @triggerEventHandler
     def popFirst(self):

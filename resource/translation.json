@@ -52,5 +52,15 @@
     "Author:": "作者:",
     "Thanks to:": "感谢:",
     "EtcInfo": "其他信息",
-    "Version:": "当前版本:"
+    "Version:": "当前版本:",
+    "ban type": "黑名单类型",
+    "ban content": "黑名单内容",
+    "use whole word": "全字匹配",
+    "delete this blacklist item": "删除选中黑名单项",
+    "add to blacklist": "添加至黑名单",
+    "Choose ban type": "选择黑名单类型",
+    "Specify ban content": "输入黑名单内容",
+    "Blacklist": "黑名单",
+    "clear the list": "清空列表",
+    "Play History": "播放历史"
 }

@@ -91,6 +91,12 @@ class SearchGUI():
 
         ToolTip(search_result_play_button, _("play selected"))
 
+        search_bl_button = ttk.Button(frame_tool, width=3, text="⛒",
+                                        command=self.__addCurrentToBlacklist)
+        search_bl_button.grid(column=0, row=2, pady=2)
+
+        ToolTip(search_bl_button, _("add to blacklist"))
+
 
 
     def __disableTreeSeperator(self, event):
@@ -133,6 +139,12 @@ class SearchGUI():
         if index == -1:
             return
         self.audio_bot.user_playlist.appendItem(self.current_results[index])
+
+    def __addCurrentToBlacklist(self):
+        index = self.__getTreeviewFocusIndex()
+        if index == -1:
+            return
+        self.audio_bot.blacklist.appendPlaylistItem(self.current_results[index])
 
     def __updateTree(self):
         self.search_result_tree.delete(*self.search_result_tree.get_children())

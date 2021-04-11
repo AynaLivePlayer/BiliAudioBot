@@ -8,9 +8,10 @@ from tkinter.ttk import Notebook
 
 from audiobot.AudioBot import Global_Audio_Bot
 from config import Config
+from gui.BlacklistGUI import BlacklistGUI
 from gui.ConfigGUI import ConfigGUI
+from gui.HistoryPlaylistGUI import HistoryPlaylistGUI
 from gui.InfoGUI import InfoGUI
-from gui.WaitingListGUI import WaitingListGUI
 from gui.PlaylistGUI import PlaylistGUI
 from gui.MPVGUI import MPVGUI
 from gui.RoomGUI import RoomGUI
@@ -65,6 +66,8 @@ class MainWindow():
         search = SearchGUI(self)
         configgui = ConfigGUI(self)
         infogui = InfoGUI(self)
+        blacklistgui = BlacklistGUI(self)
+        hitorylistgui = HistoryPlaylistGUI(self)
 
         mpv.createWidgets()
         room.createWidgets()
@@ -72,11 +75,15 @@ class MainWindow():
         configgui.createWidgets()
         search.createWidgets()
         infogui.createWidgets()
+        blacklistgui.createWidgets()
+        hitorylistgui.createWidgets()
 
         room.initialize()
         playlist.initialize()
         search.initialize()
+        hitorylistgui.initialize()
         configgui.initialize()
+        blacklistgui.initialize()
         infogui.initialize()
         mpv.initialize()
 

@@ -31,6 +31,10 @@ class WatchableSource(BaseInterface):
 
 class AudioBotInfoSource():
     @abstractmethod
+    def getUniqueId(self):
+        return None
+
+    @abstractmethod
     def getTitle(self):
         return None
 

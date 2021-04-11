@@ -6,7 +6,7 @@ class ConfigFile:
     gui_title = "ヽ(°∀°)点歌姬(°∀°)ﾉ"
 
     environment = "production"
-    version = "Demo0.8.1"
+    version = "Demo0.8.2"
 
     commonHeaders = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0"
@@ -57,6 +57,8 @@ class ConfigFile:
 
     cookie_path = "config/cookies.json"
 
+    blacklist_path = "config/blacklist.json"
+
     translation = {"enable":True,
                    "path":"resource/translation.json"}
 
@@ -68,6 +70,8 @@ class ConfigFile:
         # structure: {"site":{"identifier":{"cookie1":"value1"}}}
         self.cookies = {}
         self.loadCookie()
+        self.blacklist = {}
+        self._loadBlacklist()
 
     @vwrappers.TryExceptRetNone
     def loadCookie(self):
@@ -121,6 +125,18 @@ class ConfigFile:
                 if hasattr(self,key):
                     data[key] = self.__getattribute__(key)
             f.write(json.dumps(data,indent=2,ensure_ascii=False))
+
+        self._saveBlacklist()
+
+    @vwrappers.TryExceptRetNone
+    def _loadBlacklist(self):
+        with open(self.blacklist_path, "r", encoding="utf-8") as f:
+            self.blacklist = json.loads(f.read())
+
+
+    def _saveBlacklist(self):
+        with open(self.blacklist_path, "w", encoding="utf-8") as f:
+            f.write(json.dumps(self.blacklist, indent=2, ensure_ascii=False))
 
 
 Config = ConfigFile()

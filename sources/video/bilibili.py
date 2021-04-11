@@ -112,6 +112,9 @@ class BiliVideoSource(VideoSource,
                 "Page List": ["P%s - %s" % (x["page"], x["pagename"]) for x in self.pages]
                 }
 
+    def getUniqueId(self):
+        return self.bid
+
     def getTitle(self):
         return self.title
 
