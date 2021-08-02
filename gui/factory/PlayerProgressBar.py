@@ -10,7 +10,7 @@ from utils import vfile
 class PlayerProgressBar(ttk.Scale):
     style = None
     def __init__(self, master=None, **kw):
-        self.slider_img = ImageTk.PhotoImage(Image.open(vfile.getResourcePath('resource/favicon.png')).resize((16, 16), Image.ANTIALIAS))
+        self.slider_img = ImageTk.PhotoImage(Image.open(vfile.getResourcePath('resource/favicon.ico')).resize((16, 16), Image.ANTIALIAS))
         self.style or self.__createStyle(master)
         self.variable = kw.pop('variable', tk.DoubleVar(master))
         ttk.Scale.__init__(self, master, variable=self.variable, **kw)

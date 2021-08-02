@@ -2,6 +2,7 @@ import asyncio
 from threading import Thread
 
 from mttkinter import mtTkinter as tk
+from PIL import Image,ImageTk
 from tkinter import ttk, PhotoImage
 from tkinter import Menu
 from tkinter.ttk import Notebook
@@ -16,6 +17,7 @@ from gui.PlaylistGUI import PlaylistGUI
 from gui.MPVGUI import MPVGUI
 from gui.RoomGUI import RoomGUI
 from gui.SearchGUI import SearchGUI
+from gui.WYLoginGUI import WYLoginGUI
 from utils import vasyncio, vfile
 import sys
 
@@ -31,7 +33,8 @@ class MainWindow():
         self._initialize()
 
     def _initialize(self):
-        self.window.iconphoto(True, PhotoImage(file=vfile.getResourcePath('resource/favicon.png')))
+        self.window.iconphoto(True,
+                              ImageTk.PhotoImage(Image.open(vfile.getResourcePath('resource/favicon.ico'))))
         self.window.resizable(False, False)
         self.window.geometry("720x480")
         self.tab_controller.pack(expand=1, fill="both")
@@ -68,6 +71,7 @@ class MainWindow():
         infogui = InfoGUI(self)
         blacklistgui = BlacklistGUI(self)
         hitorylistgui = HistoryPlaylistGUI(self)
+        wylogingui = WYLoginGUI(self)
 
         mpv.createWidgets()
         room.createWidgets()
@@ -77,6 +81,7 @@ class MainWindow():
         infogui.createWidgets()
         blacklistgui.createWidgets()
         hitorylistgui.createWidgets()
+        wylogingui.createWidgets()
 
         room.initialize()
         playlist.initialize()
@@ -86,5 +91,6 @@ class MainWindow():
         blacklistgui.initialize()
         infogui.initialize()
         mpv.initialize()
+        wylogingui.initialize()
 
         Global_Audio_Bot.start()

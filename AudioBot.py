@@ -1,3 +1,5 @@
+import sys
+
 from utils import vfile
 # import os
 # #os.environ['no_proxy'] = '*'
@@ -15,6 +17,7 @@ from config import Config
 from gui import MainWindow
 from backend.aioserver import app as aioserver_app
 import asyncio
+
 async def mainloop(loop):
     a = MainWindow(loop=loop)
     task = [loop.create_task(a.start())]
@@ -49,5 +52,7 @@ if __name__ == "__main__":
     loop.run_until_complete(mainloop(loop))
     try:
         Config.saveConfig()
+        Config.saveCookie()
     except:
         pass
+    sys.exit()

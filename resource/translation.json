@@ -62,5 +62,10 @@
     "Specify ban content": "输入黑名单内容",
     "Blacklist": "黑名单",
     "clear the list": "清空列表",
-    "Play History": "播放历史"
+    "Play History": "播放历史",
+    "Netease Login": "网易云登录",
+    "Get QR": "获取二维码",
+    "Finish QR Scan": "扫描完成后按我",
+    "Logout": "登出",
+    "Login As ": "登录为 "
 }

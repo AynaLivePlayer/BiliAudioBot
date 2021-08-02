@@ -6,7 +6,8 @@ class ConfigFile:
     gui_title = "ヽ(°∀°)点歌姬(°∀°)ﾉ"
 
     environment = "production"
-    version = "Demo0.8.2"
+    # environment = "development"
+    version = "Demo0.8.3"
 
     commonHeaders = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0"
@@ -89,7 +90,7 @@ class ConfigFile:
             for id,content in val.items():
                 tmp[host][id] = ";".join("{}={}".format(key,val) for key,val in self.cookies[host][id].items())
         with open(self.cookie_path,"w",encoding="utf-8") as f:
-            f.write(json.dump(tmp,indent=2))
+            f.write(json.dumps(tmp,indent=2,ensure_ascii=False))
 
     def getCookiesByHost(self, host):
         if host == "":

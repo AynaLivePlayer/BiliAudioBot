@@ -1,5 +1,8 @@
 {
   "bilibili": {
-    "default": "rua=rua;SESSDATA="
+    "default": ""
+  },
+  "netease": {
+    "pyncm": ""
   }
 }

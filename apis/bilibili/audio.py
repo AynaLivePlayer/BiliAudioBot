@@ -84,6 +84,8 @@ def getSearchResult(keyword,page:int = 1,pagesize:int = 5):
             API.search_api(keyword,page,pagesize)
             )
 
+# print(getSearchResult("向轮椅奔去").decode())
+
 # from apis import JsonResponseContainer
 # container = JsonResponseContainer(getAudioFile("18439063333333",quality=2),
 #                                           cdns = "data.cdns")

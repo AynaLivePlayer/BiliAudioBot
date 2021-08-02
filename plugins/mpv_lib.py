@@ -29,7 +29,8 @@ import re
 import traceback
 
 if os.name == 'nt':
-    os.add_dll_directory(os.getcwd())
+    if sys.version_info[:2] >= (3, 8):
+        os.add_dll_directory(os.getcwd())
     dll = ctypes.util.find_library('mpv-1.dll')
     if dll is None:
         raise OSError('Cannot find mpv-1.dll in your system %PATH%. One way to deal with this is to ship mpv-1.dll '
