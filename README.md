@@ -115,6 +115,16 @@ second run python package
 解决方式: 可以先开启本软件再打开加速器。
 
 
+win7 中打开可能会出现问题，建议使用win7 version
+
+如果出现faild to execute script pyi_rth_multiprocessing
+
+建议升级win7系统 或者 下载KB2533623。
+
+（或许你可以自己用python3.6重写打包，但是我懒了
+
+
+
 # change log
 
 2021-03-30-demo0.8.0: Public Test Version Release
