@@ -143,3 +143,5 @@ win7 中打开可能会出现问题，建议使用win7 version
 2021-03-11-demo0.5.5: build executable
 
 2021-03-10-demo0.5.0: finish demo version
+
+2021-08-08-demo0.8.3: Netease login
