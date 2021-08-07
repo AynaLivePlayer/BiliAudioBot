@@ -3,6 +3,7 @@ A python gui version of audio bot.
 
 provided by Aynakeya(划水) & Nearl_Official(摸鱼)
 
+QQ group: 621035845
 
 # how to start (demo version)
 
