@@ -12,6 +12,7 @@ from sources.base import PictureSource
 from utils import vhttp, vwrappers
 from PIL import Image, ImageTk
 from utils.vtranslation import getTranslatedText as _
+from utils.etc import filterTclSpecialCharacter
 import io
 
 
@@ -238,7 +239,7 @@ class PlaylistGUI():
         self.playing_source.set(_("Source: {}").format(item.source.getSourceName()))
         self.playing_title.set(("{title:.24} - - - " +
                                 "{artist:.16} - - - " +
-                                "({user:.16})").format(title=item.source.getTitle(),
+                                "({user:.16})").format(title=filterTclSpecialCharacter(item.source.getTitle()),
                                                                 artist=item.source.getArtist(),
                                                                 user=item.username))
         self.main_window.threading_update(self.__loadCover,item.source.getCover())
@@ -270,7 +271,8 @@ class PlaylistGUI():
         self.playlist_tree.delete(*self.playlist_tree.get_children())
         for index, item in enumerate(user_playlist.playlist):
             source = item.source
-            self.playlist_tree.insert("", index, text=index, values=(source.getTitle(),
+            title = filterTclSpecialCharacter(source.getTitle())
+            self.playlist_tree.insert("", index, text=index, values=(title,
                                                                      source.getArtist(),
                                                                      source.getSourceName(),
                                                                      item.username))
