@@ -6,6 +6,7 @@ from audiobot.Blacklist import BlacklistItemType, BlacklistItem
 from audiobot.event.blacklist import BlacklistUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
 from gui.factory.ToolTip import ToolTip
+from utils.etc import filterTclSpecialCharacter
 from utils.vtranslation import getTranslatedText as _
 
 
@@ -120,5 +121,5 @@ class BlacklistGUI():
         for index, item in enumerate(blacklist.blacklist_items):
             item:BlacklistItem
             self.blacklist_tree.insert("", index, text=index, values=(item.bantype.identifier,
-                                                                      item.content,
+                                                                      filterTclSpecialCharacter(item.content),
                                                                       str(item.whole)))

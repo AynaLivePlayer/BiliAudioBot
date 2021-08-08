@@ -4,6 +4,7 @@ import tkinter as tk
 import gui
 from audiobot.event.playlist import PlaylistUpdateEvent
 from gui.factory.ToolTip import ToolTip
+from utils.etc import filterTclSpecialCharacter
 from utils.vtranslation import getTranslatedText as _
 
 
@@ -124,7 +125,7 @@ class HistoryPlaylistGUI():
         self.playlist_tree.delete(*self.playlist_tree.get_children())
         for index, item in enumerate(playlist.playlist):
             source = item.source
-            self.playlist_tree.insert("", index, text=index, values=(source.getTitle(),
+            self.playlist_tree.insert("", index, text=index, values=(filterTclSpecialCharacter(source.getTitle()),
                                                                      source.getArtist(),
                                                                      source.getSourceName(),
                                                                      item.username))
