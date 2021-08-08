@@ -16,8 +16,7 @@ async def websocket_handler(request: web.Request):
     hostname = urlparse(target).hostname
     async with aiohttp.ClientSession() as session:
         async with session.get(target,headers = {"referer":hostname,
-                                                 "origin":hostname,
-                                                 "host":hostname}) as resp:
+                                                 "origin":hostname}) as resp:
             return web.Response(body=await resp.read(),
                                 content_type=resp.content_type)
 
