@@ -57,11 +57,18 @@ class Playlist():
     def size(self):
         return len(self.playlist)
 
+    def insert(self, cm, index, username="system", keyword=""):
+        event = self.append(cm, username=username, keyword=keyword)
+        if event.isCancelled():
+            return event
+        self.move(event.index,index)
+        return event
+
     def append(self, cm, username="system", keyword=""):
         return self.appendItem(PlaylistItem(cm, username, keyword))
 
     def appendItem(self, item: PlaylistItem):
-        event = PlaylistAppendEvent(self, item)
+        event = PlaylistAppendEvent(self, item,self.size())
         self.handlers.call(event)
         if event.isCancelled():
             return event

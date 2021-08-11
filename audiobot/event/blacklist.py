@@ -7,7 +7,6 @@ class BlacklistUpdateEvent(BaseAudioBotEvent):
         self.blacklist = blacklist
 
 
-
 class BlacklistLoadedEvent(BaseAudioBotEvent):
     __event_name__ = "blacklist_loaded"
 

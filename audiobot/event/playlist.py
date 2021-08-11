@@ -5,9 +5,10 @@ class PlaylistAppendEvent(BaseAudioBotEvent,
                           CancellableEvent):
     __event_name__ = "playlist_append"
 
-    def __init__(self, playlist, item):
+    def __init__(self, playlist, item,index):
         self.playlist = playlist
         self.item = item
+        self.index = index
         self.cancel = False
 
     def isCancelled(self):

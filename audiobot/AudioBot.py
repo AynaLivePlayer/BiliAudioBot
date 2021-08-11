@@ -166,14 +166,17 @@ class AudioBot():
         self.lyrics.load(item)
         self.mpv_player.playByUrl(bs.url, headers=bs.headers)
 
-    def addAudioByUrl(self, url, username="system", source_class: CommonSource.__class__ = None):
+    def addAudioByUrl(self, url, username="system", index=-1,source_class: CommonSource.__class__ = None):
         source_class: CommonSource.__class__ = source_class if source_class else self.selector.select(url)
         source, keyword = MatchEngine.search(url, source_class)
         if source == None:
             return
         source.load()
         if source.isValid():
-            event:PlaylistAppendEvent = self.user_playlist.append(source, username=username, keyword=keyword)
+            if index == -1:
+                event:PlaylistAppendEvent = self.user_playlist.append(source, username=username, keyword=keyword)
+            else:
+                event: PlaylistAppendEvent = self.user_playlist.insert(source, index,username=username, keyword=keyword)
             if event.isCancelled():
                 return
             if self.current == None or self.mpv_player.getProperty(MPVProperty.IDLE):
@@ -181,6 +184,18 @@ class AudioBot():
                 return
             if Config.system_playlist['autoskip'] and self.current.username == "system":
                 self.playNext()
+
+    def playAudioByUrl(self, url, username="system",source_class: CommonSource.__class__ = None):
+        source_class: CommonSource.__class__ = source_class if source_class else self.selector.select(url)
+        source, keyword = MatchEngine.search(url, source_class)
+        if source == None:
+            return
+        source.load()
+        if source.isValid():
+            event: PlaylistAppendEvent = self.user_playlist.insert(source, 0,username=username, keyword=keyword)
+            if event.isCancelled():
+                return
+            self.playNext()
 
     def _async_call(self, fun, *args, **kwargs):
         asyncio.ensure_future(vasyncio.asyncwrapper(fun)(*args, **kwargs), loop=self._loop)
