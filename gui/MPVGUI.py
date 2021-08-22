@@ -1,7 +1,7 @@
 from tkinter import ttk
 import tkinter as tk
 
-from audiobot.AudioBot import Global_Audio_Bot
+from audiobot import Global_Audio_Bot
 from gui.factory.PlayerProgressBar import PlayerProgressBar
 from player.mpv import MPVPlayer, MPVProperty
 import gui

@@ -1,7 +1,7 @@
 from typing import List, Type
 
-from audiobot.Handler import AudioBotHandlers
-from audiobot.Playlist import PlaylistItem
+from audiobot.handler import AudioBotHandlers
+from audiobot.playlist import PlaylistItem
 from audiobot.event.audiobot import FindSearchResultEvent
 from sources.audio import BiliAudioSource, NeteaseMusicSource
 from sources.audio.kuwo import KuwoMusicSource

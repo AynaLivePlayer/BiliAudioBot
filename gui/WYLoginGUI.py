@@ -5,7 +5,7 @@ import tkinter as tk
 import qrcode
 from PIL import Image, ImageTk
 
-from audiobot.AudioBot import Global_Audio_Bot
+from audiobot import Global_Audio_Bot
 from config import Config
 from gui.factory.PlayerProgressBar import PlayerProgressBar
 from utils import vwrappers

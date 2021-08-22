@@ -1,9 +1,9 @@
 from tkinter import ttk
 import tkinter as tk
 import gui
-from audiobot.AudioBot import Global_Audio_Bot
+from audiobot import Global_Audio_Bot
 from audiobot.event.audiobot import FindSearchResultEvent
-from audiobot.hooks import SkipCover
+from audiobot.handlers import SkipCover
 from config import Config
 from audiobot import MatchEngine
 from gui.MPVGUI import MPVGUI

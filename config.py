@@ -61,6 +61,7 @@ class ConfigFile:
     blacklist_path = "config/blacklist.json"
 
     addon_cmd_path = "addons/cmd"
+    addon_handler_path = "addons/handler"
 
     translation = {"enable":True,
                    "path":"resource/translation.json"}

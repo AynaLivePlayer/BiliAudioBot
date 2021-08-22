@@ -1,5 +1,4 @@
 import asyncio
-from threading import Thread
 
 from mttkinter import mtTkinter as tk
 from PIL import Image,ImageTk
@@ -7,7 +6,7 @@ from tkinter import ttk, PhotoImage
 from tkinter import Menu
 from tkinter.ttk import Notebook
 
-from audiobot.AudioBot import Global_Audio_Bot
+from audiobot import Global_Audio_Bot
 from config import Config
 from gui.BlacklistGUI import BlacklistGUI
 from gui.ConfigGUI import ConfigGUI
@@ -19,7 +18,6 @@ from gui.RoomGUI import RoomGUI
 from gui.SearchGUI import SearchGUI
 from gui.WYLoginGUI import WYLoginGUI
 from utils import vasyncio, vfile
-import sys
 
 class MainWindow():
     def __init__(self, loop=None, interval=1 / 20):
@@ -42,12 +40,12 @@ class MainWindow():
     def getTabController(self) -> Notebook:
         return self.tab_controller
 
-    def async_update(self, func, *args, **kwargs):
-        asyncio.ensure_future(vasyncio.asyncwrapper(func)(*args, **kwargs), loop=self._loop)
+    # def async_update(self, func, *args, **kwargs):
+    #     asyncio.ensure_future(vasyncio.asyncwrapper(func)(*args, **kwargs), loop=self._loop)
 
     def threading_update(self, func, *args, **kwargs):
-        thread = Thread(target=func,args=args,kwargs=kwargs)
-        thread.start()
+        self._loop.run_in_executor(None,
+                                   lambda :func(*args, **kwargs))
 
     async def _async_update(self):
         while self._running:

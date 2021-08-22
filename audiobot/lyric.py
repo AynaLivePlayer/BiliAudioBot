@@ -4,8 +4,8 @@ import traceback
 import aiohttp
 from typing import List
 
-from audiobot.Handler import AudioBotHandlers
-from audiobot.Playlist import PlaylistItem
+from audiobot.handler import AudioBotHandlers
+from audiobot.playlist import PlaylistItem
 from audiobot.event.lyric import LyricUpdateEvent
 from sources.audio import AudioSource
 
@@ -54,7 +54,7 @@ class Lyrics():
         if lrc_source.filecontent != "":
             self.loadContent(lrc_source.filecontent)
         else:
-            asyncio.ensure_future(self._async_load(lrc_source), loop=self.audiobot._loop)
+            asyncio.ensure_future(self._async_load(lrc_source), loop=self.audiobot.loop)
 
     async def _async_load(self,lrc_source):
         async with aiohttp.ClientSession() as session:

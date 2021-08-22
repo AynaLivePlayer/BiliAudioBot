@@ -1,5 +1,5 @@
 from tkinter import ttk
-from audiobot.AudioBot import Global_Audio_Bot
+from audiobot import Global_Audio_Bot
 import tkinter as tk
 import gui
 from audiobot.event import AudioBotPlayEvent

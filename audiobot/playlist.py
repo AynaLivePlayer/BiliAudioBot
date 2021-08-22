@@ -1,6 +1,6 @@
 from typing import List, Type, Union
 
-from audiobot.Handler import AudioBotHandlers
+from audiobot.handler import AudioBotHandlers
 from audiobot.event.base import BaseAudioBotEvent
 from audiobot.event.playlist import PlaylistUpdateEvent, PlaylistAppendEvent
 from sources.base import CommonSource

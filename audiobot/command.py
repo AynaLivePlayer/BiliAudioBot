@@ -30,7 +30,3 @@ class CommandManager():
             self._register(id,fun)
             return fun
         return add
-
-Global_Command_Manager = CommandManager()
-
-from audiobot.commands import *

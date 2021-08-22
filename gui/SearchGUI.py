@@ -1,10 +1,10 @@
 from tkinter import ttk
 from typing import Type
 
-from audiobot.AudioBot import Global_Audio_Bot
+from audiobot import Global_Audio_Bot
 import tkinter as tk
 import gui
-from audiobot.Playlist import PlaylistItem
+from audiobot.playlist import PlaylistItem
 from gui.factory.ToolTip import ToolTip
 from sources.base import CommonSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource

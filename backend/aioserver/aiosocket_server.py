@@ -1,8 +1,8 @@
 import asyncio
 import traceback
 
-from audiobot.AudioBot import Global_Audio_Bot
-from audiobot.Playlist import PlaylistItem
+from audiobot import Global_Audio_Bot
+from audiobot.playlist import PlaylistItem
 from audiobot.event import AudioBotPlayEvent
 from audiobot.event.lyric import LyricUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
@@ -33,7 +33,7 @@ def parsePlaylistUpdate(playlist):
     playlist_data = []
     for item in playlist:
         item: PlaylistItem
-        cover_url = item.source.getCover().url if item.source.getCover() != None else None
+        cover_url = item.source.getCover().url if item.source.getCover() != None else ""
         playlist_data.append({"title": item.source.getTitle(),
                               "artist": item.source.getArtist(),
                               "cover": getImgRedirectedUrl(cover_url),
@@ -54,7 +54,7 @@ def parseAudioBotPlayData(item: PlaylistItem):
                 "artist": "",
                 "cover": "",
                 "username": ""}
-    cover_url = item.source.getCover().url if item.source.getCover() != None else None
+    cover_url = item.source.getCover().url if item.source.getCover() != None else ""
     return {"title": item.source.getTitle(),
             "artist": item.source.getArtist(),
             "cover": getImgRedirectedUrl(cover_url),

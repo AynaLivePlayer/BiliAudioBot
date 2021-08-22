@@ -1,8 +1,8 @@
 from enum import Enum
 from typing import List, Union
 
-from audiobot.Handler import AudioBotHandlers
-from audiobot.Playlist import PlaylistItem
+from audiobot.handler import AudioBotHandlers
+from audiobot.playlist import PlaylistItem
 from audiobot.event import PlaylistAppendEvent
 from audiobot.event.blacklist import BlacklistUpdateEvent, BlacklistLoadedEvent
 from config import Config

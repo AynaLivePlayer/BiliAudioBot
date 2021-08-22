@@ -1,8 +1,8 @@
 import sys
 
 from utils import vfile
-# import os
-# #os.environ['no_proxy'] = '*'
+import os
+# os.environ['no_proxy'] = '*'
 vfile.registerEnvironmentPath()
 import nest_asyncio
 nest_asyncio.apply()

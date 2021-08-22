@@ -1,4 +1,5 @@
-from audiobot.Command import CommandExecutor, Global_Command_Manager
+from audiobot.command import CommandExecutor
+from audiobot import Global_Command_Manager
 from config import Config
 from plugins.blivedm import DanmakuMessage
 

@@ -1,8 +1,8 @@
 from tkinter import ttk
-from audiobot.AudioBot import Global_Audio_Bot
+from audiobot import Global_Audio_Bot
 import tkinter as tk
 import gui
-from audiobot.Blacklist import BlacklistItemType, BlacklistItem
+from audiobot.blacklist import BlacklistItemType, BlacklistItem
 from audiobot.event.blacklist import BlacklistUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
 from gui.factory.ToolTip import ToolTip

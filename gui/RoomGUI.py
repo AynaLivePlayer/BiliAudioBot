@@ -1,9 +1,9 @@
 from tkinter import ttk, scrolledtext
-from audiobot.AudioBot import Global_Audio_Bot
+from audiobot import Global_Audio_Bot
+from liveroom import Global_Room_Manager
 import tkinter as tk
 import gui
 from config import Config
-from liveroom.RoomManager import Global_Room_Manager
 from utils.vtranslation import getTranslatedText as _
 
 class RoomGUI():
@@ -56,8 +56,8 @@ class RoomGUI():
         self._startRoom()
 
     def _startRoom(self):
-        Global_Room_Manager.stopAll()
-        lr = Global_Room_Manager.addLiveRoom(self.room_id.get())
+        Global_Room_Manager.stop_all()
+        lr = Global_Room_Manager.add_live_room(self.room_id.get())
         Config.default_room = self.room_id.get()
-        Global_Room_Manager.startRoom(self.room_id.get())
+        Global_Room_Manager.start_room(self.room_id.get())
         Global_Audio_Bot.setLiveRoom(lr)

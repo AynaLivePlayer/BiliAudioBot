@@ -4,8 +4,8 @@ import traceback
 
 import jinja2
 
-from audiobot.AudioBot import Global_Audio_Bot
-from audiobot.Playlist import PlaylistItem
+from audiobot import Global_Audio_Bot
+from audiobot.playlist import PlaylistItem
 from audiobot.event import AudioBotPlayEvent
 from audiobot.event.lyric import LyricUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
