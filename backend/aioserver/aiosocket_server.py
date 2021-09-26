@@ -2,7 +2,7 @@ import asyncio
 import traceback
 
 from audiobot import Global_Audio_Bot
-from audiobot.playlist import PlaylistItem
+from audiobot.audio import AudioItem
 from audiobot.event import AudioBotPlayEvent
 from audiobot.event.lyric import LyricUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
@@ -32,7 +32,7 @@ def listenPlaylistUpdate(event: PlaylistUpdateEvent):
 def parsePlaylistUpdate(playlist):
     playlist_data = []
     for item in playlist:
-        item: PlaylistItem
+        item: AudioItem
         cover_url = item.source.getCover().url if item.source.getCover() != None else ""
         playlist_data.append({"title": item.source.getTitle(),
                               "artist": item.source.getArtist(),
@@ -44,11 +44,11 @@ def parsePlaylistUpdate(playlist):
 @Global_Audio_Bot.handlers.register(AudioBotPlayEvent.__event_name__,
                                     "websocket.updateplaying")
 def listenAudioBotPlay(event: AudioBotPlayEvent):
-    item: PlaylistItem = event.item
+    item: AudioItem = event.item
     sendJsonData({event.__event_name__: parseAudioBotPlayData(item)})
 
 
-def parseAudioBotPlayData(item: PlaylistItem):
+def parseAudioBotPlayData(item: AudioItem):
     if item == None:
         return {"title": "",
                 "artist": "",

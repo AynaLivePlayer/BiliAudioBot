@@ -2,23 +2,23 @@ from enum import Enum
 from typing import List, Union
 
 from audiobot.handler import AudioBotHandlers
-from audiobot.playlist import PlaylistItem
+from audiobot.audio import AudioItem
 from audiobot.event import PlaylistAppendEvent
 from audiobot.event.blacklist import BlacklistUpdateEvent, BlacklistLoadedEvent
 from config import Config
 
 
-def _check_song_name(item: PlaylistItem, content, whole):
+def _check_song_name(item: AudioItem, content, whole):
     content,title = content.lower(),item.source.getTitle().lower()
     if whole:
         return content == title
     else:
         return content in title
 
-def _check_song_id(item: PlaylistItem, content, whole):
+def _check_song_id(item: AudioItem, content, whole):
     return item.source.getUniqueId() == content
 
-def _check_username(item: PlaylistItem, content, whole):
+def _check_username(item: AudioItem, content, whole):
     un,content = item.username.lower(),content.lower()
     if whole:
         return un == content
@@ -53,7 +53,7 @@ class BlacklistItem():
         self.content = content
         self.whole: bool = bantype.whole_default if whole is None else whole
 
-    def applicable(self, item: PlaylistItem):
+    def applicable(self, item: AudioItem):
         return self.bantype.check(item, self.content, self.whole)
 
 class Blacklist():
@@ -82,7 +82,7 @@ class Blacklist():
         self.blacklist_items.append(item)
         self.handlers.call(BlacklistUpdateEvent(self))
 
-    def appendPlaylistItem(self, item: PlaylistItem):
+    def appendPlaylistItem(self, item: AudioItem):
         self.append(BlacklistItemType.SONG_NAME,item.source.getTitle())
         self.append(BlacklistItemType.SONG_ID,item.source.getUniqueId())
 

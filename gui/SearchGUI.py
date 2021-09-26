@@ -4,7 +4,8 @@ from typing import Type
 from audiobot import Global_Audio_Bot
 import tkinter as tk
 import gui
-from audiobot.playlist import PlaylistItem
+from audiobot.audio import AudioItem
+from audiobot.user import SystemUser, DefaultUser
 from gui.factory.ToolTip import ToolTip
 from sources.base import CommonSource
 from sources.base.interface import SearchableSource, AudioBotInfoSource
@@ -152,7 +153,7 @@ class SearchGUI():
             return
         keyword = self.keyword.get()
         search_results = self.__getSearchResults(keyword)
-        self.current_results = [PlaylistItem(item.source,"system-add","") for item in search_results]
+        self.current_results = [AudioItem(item.source, DefaultUser, "") for item in search_results]
         for index, item in enumerate(search_results):
             source:Type[AudioBotInfoSource,CommonSource] = item.source
             self.search_result_tree.insert("", index, text=index, values=(source.getTitle(),

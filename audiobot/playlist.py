@@ -1,14 +1,12 @@
-from typing import List, Type, Union
+from typing import List
 
+from audiobot.audio import AudioItem
 from audiobot.handler import AudioBotHandlers
 from audiobot.event.base import BaseAudioBotEvent
 from audiobot.event.playlist import PlaylistUpdateEvent, PlaylistAppendEvent
-from sources.base import CommonSource
 from functools import wraps
 
-from sources.base.interface import AudioBotInfoSource
 import random
-
 
 # def executeHandler(func):
 #     @wraps(func)
@@ -17,6 +15,7 @@ import random
 #         self._callHandlers()
 #         return retval
 #     return wrapper
+from audiobot.user import User, PlaylistUser
 
 
 def triggerEventHandler(func):
@@ -25,7 +24,7 @@ def triggerEventHandler(func):
         ret = func(self, *args, **kwargs)
         if ret is None:
             return
-        if isinstance(ret,BaseAudioBotEvent):
+        if isinstance(ret, BaseAudioBotEvent):
             retval, event = None, ret
         else:
             retval, event = ret[0], ret[1]
@@ -35,18 +34,11 @@ def triggerEventHandler(func):
     return executeHandler
 
 
-class PlaylistItem():
-    def __init__(self, source: Union[CommonSource, AudioBotInfoSource], username, keyword):
-        self.source = source
-        self.username = username
-        self.keyword = keyword
-
-
 class Playlist():
-    def __init__(self, audio_bot, name,random_next=False):
+    def __init__(self, audio_bot, name, random_next=False):
         self.audio_bot = audio_bot
         self.name = name
-        self.playlist: List[PlaylistItem] = []
+        self.playlist: List[AudioItem] = []
         self.current_index = 0
         self.handlers = AudioBotHandlers()
         self.random_next = random_next
@@ -57,18 +49,21 @@ class Playlist():
     def size(self):
         return len(self.playlist)
 
-    def insert(self, cm, index, username="system", keyword=""):
-        event = self.append(cm, username=username, keyword=keyword)
+    def insert(self, cm, index, user: User = None, keyword=""):
+        event = self.append(cm, user=user, keyword=keyword)
         if event.isCancelled():
             return event
-        self.move(event.index,index)
+        self.move(event.index, index)
         return event
 
-    def append(self, cm, username="system", keyword=""):
-        return self.appendItem(PlaylistItem(cm, username, keyword))
+    def append(self, cm, user: User = None, keyword=""):
+        if user is None:
+            return self.appendItem(AudioItem(cm, PlaylistUser, keyword))
+        else:
+            return self.appendItem(AudioItem(cm, user, keyword))
 
-    def appendItem(self, item: PlaylistItem):
-        event = PlaylistAppendEvent(self, item,self.size())
+    def appendItem(self, item: AudioItem):
+        event = PlaylistAppendEvent(self, item, self.size())
         self.handlers.call(event)
         if event.isCancelled():
             return event

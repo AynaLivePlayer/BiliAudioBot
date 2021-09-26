@@ -1,7 +1,7 @@
 from audiobot.command import CommandExecutor
 from audiobot import Global_Command_Manager
 from config import Config
-from plugins.blivedm import DanmakuMessage
+from liveroom.message import DanmakuMessage
 
 
 @Global_Command_Manager.register("qiege")
@@ -12,11 +12,11 @@ class QiegeCommand(CommandExecutor):
     def __hasPermission(self, dmkMsg: DanmakuMessage):
         config = Config.commands["qiege"]
         try:
-            if config["self"] and (dmkMsg.uname == self.audiobot.current.username):
+            if config["self"] and (dmkMsg.user.username == self.audiobot.current.username):
                 return True
-            if config["admin"] and bool(dmkMsg.admin):
+            if config["admin"] and dmkMsg.admin:
                 return True
-            if config["guard"] and int(dmkMsg.privilege_type) > 0:
+            if config["guard"] and dmkMsg.privilege_level > 0:
                 return True
         except:
             return False

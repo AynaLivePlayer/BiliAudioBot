@@ -50,6 +50,7 @@
     "Current Song Cover:": "当前歌曲封面:",
     "TextInfo:": "点歌信息:",
     "Author:": "作者:",
+    "Playlist:": "点歌列表:",
     "Thanks to:": "感谢:",
     "EtcInfo": "其他信息",
     "Version:": "当前版本:",
@@ -67,5 +68,6 @@
     "Get QR": "获取二维码",
     "Finish QR Scan": "扫描完成后按我",
     "Logout": "登出",
-    "Login As ": "登录为 "
+    "Login As ": "登录为 ",
+    "Not Login": "Not Login"
 }

@@ -1,7 +1,7 @@
 from typing import List, Type
 
 from audiobot.handler import AudioBotHandlers
-from audiobot.playlist import PlaylistItem
+from audiobot.audio import AudioItem
 from audiobot.event.audiobot import FindSearchResultEvent
 from sources.audio import BiliAudioSource, NeteaseMusicSource
 from sources.audio.kuwo import KuwoMusicSource
@@ -13,7 +13,7 @@ DEFAULT_SEARCH_ENGINE = NeteaseMusicSource
 
 HANDLERS = AudioBotHandlers()
 
-def check(item:PlaylistItem):
+def check(item:AudioItem):
     source = item.source
     if source == None:
         return item

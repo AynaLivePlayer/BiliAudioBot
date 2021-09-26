@@ -7,6 +7,7 @@ const routerOptions = [
   {path: '/currentplaying', component: 'CurrentPlaying'},
   {path: '/currentcover', component: 'CurrentCover'},
   {path: '/currentlyric', component: 'CurrentLyric'},
+  {path: '/playlist', component: 'PlaylistView'},
   {path: '*', component: 'NotFound'}
 ]
 const routes = routerOptions.map(route => {

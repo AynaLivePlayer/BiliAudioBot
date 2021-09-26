@@ -72,8 +72,18 @@ class InfoGUI():
                                ".playing-cover {}",
                                width=16).pack(side=tk.LEFT, padx=4)
 
-        ttk.Label(frame_obsinfo_4, text=_("TextInfo:")).pack(side=tk.LEFT, padx=4)
+        ttk.Label(frame_obsinfo_4, text=_("Playlist:")).pack(side=tk.LEFT, padx=4)
         TextEntry.getTextEntry(frame_obsinfo_4,
+                               "http://127.0.0.1:{}/playlist"
+                               .format(Config.output_channel["web"]["port"]),
+                               width=32).pack(side=tk.LEFT, padx=4)
+        ttk.Label(frame_obsinfo_4, text=_("CSS:")).pack(side=tk.LEFT, padx=4)
+        TextEntry.getTextEntry(frame_obsinfo_4,
+                               ".playlist-info {}",
+                               width=16).pack(side=tk.LEFT, padx=4)
+
+        ttk.Label(frame_obsinfo_5, text=_("TextInfo:")).pack(side=tk.LEFT, padx=4)
+        TextEntry.getTextEntry(frame_obsinfo_5,
                                "http://127.0.0.1:{}/textinfo"
                                .format(Config.output_channel["web"]["port"]),
                                width=32).pack(side=tk.LEFT, padx=4)

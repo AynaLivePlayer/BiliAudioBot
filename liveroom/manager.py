@@ -1,7 +1,7 @@
 import asyncio
 from typing import Dict
 
-from liveroom.LiveRoom import LiveRoom
+from liveroom.danmaku import LiveRoom
 
 
 def room_starter(liveroom: LiveRoom):
@@ -10,8 +10,7 @@ def room_starter(liveroom: LiveRoom):
         try:
             await future
         finally:
-            await liveroom.close()
-
+            await liveroom.stop()
     return wrapper
 
 
@@ -30,7 +29,7 @@ class RoomManager():
         liveroom = self.live_rooms.get(room_id)
         if liveroom == None:
             return
-        asyncio.ensure_future(room_starter(liveroom)())
+        liveroom.start()
 
     def get_running_room_ids(self):
         running = []
@@ -57,6 +56,6 @@ class RoomManager():
     def add_live_room(self, room_id) -> LiveRoom:
         if str(room_id) in self.live_rooms.keys():
             return self.live_rooms[str(room_id)]
-        liveroom = LiveRoom(room_id, uid=208259, loop=self.loop)
+        liveroom = LiveRoom.create(room_id)
         self.live_rooms[str(room_id)] = liveroom
         return liveroom

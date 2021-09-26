@@ -1,9 +1,10 @@
 import time
+from typing import List
 
 from audiobot.command import CommandExecutor
 from audiobot import Global_Command_Manager
 from config import Config
-from plugins.blivedm import DanmakuMessage
+from liveroom.message import DanmakuMessage
 from sources.audio import BiliAudioSource, NeteaseMusicSource
 from sources.audio.kuwo import KuwoMusicSource
 
@@ -15,40 +16,40 @@ class DiangeCommand(CommandExecutor):
         self.cooldowns = {}
 
     def process(self, command, dmkMsg: DanmakuMessage):
-        msg: str = dmkMsg.msg.split(" ")
+        msg: List[str] = dmkMsg.message.split(" ")
         if len(msg) < 2:
             return
         val = " ".join(msg[1::])
         if not (self.__hasPermission(dmkMsg) and self.__inCooldown(dmkMsg) and self.__notReachMax()):
             return
         if (command == "点歌"):
-            self.audiobot.addAudioByUrl(val, username=dmkMsg.uname)
+            self.audiobot.addAudioByUrl(val, dmkMsg.user)
         elif command == "点b歌":
-            self.audiobot.addAudioByUrl(val, username=dmkMsg.uname, source_class=BiliAudioSource)
+            self.audiobot.addAudioByUrl(val, dmkMsg.user, source_class=BiliAudioSource)
         elif command == "点w歌":
-            self.audiobot.addAudioByUrl(val, username=dmkMsg.uname, source_class=NeteaseMusicSource)
+            self.audiobot.addAudioByUrl(val, dmkMsg.user, source_class=NeteaseMusicSource)
         elif command == "点k歌":
-            self.audiobot.addAudioByUrl(val, username=dmkMsg.uname, source_class=KuwoMusicSource)
+            self.audiobot.addAudioByUrl(val, dmkMsg.user, source_class=KuwoMusicSource)
 
     def __hasPermission(self, dmkMsg: DanmakuMessage):
         config = Config.commands["diange"]
         try:
             if config["visitor"]:
                 return True
-            if config["admin"] and bool(dmkMsg.admin):
+            if config["admin"] and dmkMsg.admin:
                 return True
-            if config["guard"] and int(dmkMsg.privilege_type) > 0:
+            if config["guard"] and dmkMsg.privilege_level > 0:
                 return True
-            if config["fan"] is not None:
-                if (str(config["fan"]["room_id"]) == str(dmkMsg.room_id)
-                        and int(dmkMsg.medal_level) >= int(config["fan"]["level"])):
-                    return True
+            # if config["fan"] is not None:
+            #     if (str(config["fan"]["room_id"]) == str(dmkMsg.room_id)
+            #             and int(dmkMsg.medal_level) >= int(config["fan"]["level"])):
+            #         return True
             return False
         except:
             return False
 
     def __inCooldown(self, dmkMsg: DanmakuMessage):
-        uid = str(dmkMsg.uid)
+        uid = str(dmkMsg.user.identifier)
         if self.cooldowns.get(uid) is None:
             self.cooldowns[uid] = int(time.time())
             return True

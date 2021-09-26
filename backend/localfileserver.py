@@ -5,7 +5,7 @@ import traceback
 import jinja2
 
 from audiobot import Global_Audio_Bot
-from audiobot.playlist import PlaylistItem
+from audiobot.audio import AudioItem
 from audiobot.event import AudioBotPlayEvent
 from audiobot.event.lyric import LyricUpdateEvent
 from audiobot.event.playlist import PlaylistUpdateEvent
@@ -93,7 +93,7 @@ class LocalFileWriterServer():
         return self.__main_loop()
 
     def __listenAudioBotPlay(self, event: AudioBotPlayEvent):
-        item: PlaylistItem = event.item
+        item: AudioItem = event.item
         if item == None:
             self.content.update({"current_title": "",
                                  "current_artist": "",
@@ -109,7 +109,7 @@ class LocalFileWriterServer():
         self.content.update({"playlist_count": str(len(playlist))})
         playlist_data = []
         for index, item in enumerate(playlist):
-            item: PlaylistItem
+            item: AudioItem
             playlist_data.append({"index": index,
                                   "title": item.source.getTitle(),
                                   "artist": item.source.getArtist(),

@@ -5,7 +5,7 @@ import aiohttp
 from typing import List
 
 from audiobot.handler import AudioBotHandlers
-from audiobot.playlist import PlaylistItem
+from audiobot.audio import AudioItem
 from audiobot.event.lyric import LyricUpdateEvent
 from sources.audio import AudioSource
 
@@ -42,7 +42,7 @@ class Lyrics():
         self.previous = None
         self.handlers = AudioBotHandlers()
 
-    def load(self, item: PlaylistItem):
+    def load(self, item: AudioItem):
         self.clear()
         source = item.source
         if not isinstance(source,AudioSource):
