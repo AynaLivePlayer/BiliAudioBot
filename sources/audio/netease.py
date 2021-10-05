@@ -76,7 +76,7 @@ class NeteaseMusicSource(AudioSource,
 
     def getLyric(self):
         data = track.GetTrackLyrics(self.sid)
-        if data.get("lrc") is not None:
+        if data.get("lrc") is not None and data["lrc"]["lyric"] is not None:
             return TextSource("",{},"{}.lrc".format(self._getParsedTitle()),
                               data["lrc"]["lyric"])
         return

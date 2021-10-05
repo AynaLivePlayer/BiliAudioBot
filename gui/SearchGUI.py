@@ -127,7 +127,7 @@ class SearchGUI():
         self.main_window.threading_update(self.__updateTree)
 
     def __add(self):
-        self.audio_bot.addAudioByUrl(self.keyword.get(),username="system-add")
+        self.audio_bot.addAudioByUrl(self.keyword.get(),DefaultUser)
 
     def __playCurrent(self):
         index = self.__getTreeviewFocusIndex()
