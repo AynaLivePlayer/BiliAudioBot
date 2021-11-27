@@ -12,4 +12,3 @@ Global_Command_Manager = CommandManager()
 # register commands
 from audiobot.commands import *
 Global_Audio_Bot.registerCommandExecutors(Global_Command_Manager.commands)
-

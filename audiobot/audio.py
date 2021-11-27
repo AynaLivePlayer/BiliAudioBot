@@ -8,7 +8,7 @@ from sources.base.interface import AudioBotInfoSource
 class AudioItem():
     def __init__(self, source: Union[CommonSource, AudioBotInfoSource], user: User, keyword):
         self.source = source
-        self.user:User =  user
+        self.user: User = user
         self.keyword = keyword
 
     @property

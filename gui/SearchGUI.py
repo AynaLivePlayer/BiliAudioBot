@@ -139,7 +139,7 @@ class SearchGUI():
         index = self.__getTreeviewFocusIndex()
         if index == -1:
             return
-        self.audio_bot.user_playlist.appendItem(self.current_results[index])
+        self.audio_bot.user_playlist.append(self.current_results[index])
 
     def __addCurrentToBlacklist(self):
         index = self.__getTreeviewFocusIndex()

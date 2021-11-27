@@ -94,7 +94,7 @@ class HistoryPlaylistGUI():
         if index == -1:
             return
         item = self.audio_bot.history_playlist.get(index)
-        self.audio_bot.user_playlist.appendItem(item)
+        self.audio_bot.user_playlist.append(item)
 
     def __addCurrentToBlacklist(self):
         index = self.__getTreeviewFocusIndex()

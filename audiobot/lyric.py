@@ -12,7 +12,7 @@ from sources.audio import AudioSource
 
 class LyricItem():
     @staticmethod
-    def convertToSec(raw):
+    def convert_to_sec(raw):
         raw = raw[1:-1:].split(":")
         minutes = raw[0]
         seconds = raw[1]
@@ -23,13 +23,13 @@ class LyricItem():
         self.lyric = lyric
 
     @classmethod
-    def initFromRaw(cls, text):
+    def init_from_text(cls, text):
         time_pattern = re.compile(r"\[[0-9]+:[0-9]+\.[0-9]+\]")
         tt = time_pattern.match(text)
         if tt is None:
             return None
         try:
-            return cls(cls.convertToSec(tt.group()), time_pattern.sub("", text))
+            return cls(cls.convert_to_sec(tt.group()), time_pattern.sub("", text))
         except:
             traceback.print_exc()
             return None
@@ -45,7 +45,7 @@ class Lyrics():
     def load(self, item: AudioItem):
         self.clear()
         source = item.source
-        if not isinstance(source,AudioSource):
+        if not isinstance(source, AudioSource):
             return
         else:
             lrc_source = source.lyric
@@ -56,14 +56,14 @@ class Lyrics():
         else:
             asyncio.ensure_future(self._async_load(lrc_source), loop=self.audiobot.loop)
 
-    async def _async_load(self,lrc_source):
+    async def _async_load(self, lrc_source):
         async with aiohttp.ClientSession() as session:
             async with session.get(lrc_source.url, headers=lrc_source.headers) as response:
                 self.loadContent(await response.text())
 
     def loadContent(self, raw):
         for line in raw.split("\n"):
-            li = LyricItem.initFromRaw(line)
+            li = LyricItem.init_from_text(line)
             if li is not None:
                 self.lyrics.append(li)
         self.lyrics.append(LyricItem(2147483647, ""))
@@ -75,13 +75,12 @@ class Lyrics():
             else:
                 continue
 
-
     def clear(self):
         self.handlers.call(LyricUpdateEvent(self,
-                                            LyricItem(0,"")))
+                                            LyricItem(0, "")))
         self.lyrics.clear()
 
-    def _raiseEvent(self,property,val,*args):
+    def _raiseEvent(self, property, val, *args):
         if val is None:
             return
         lrc = self.findLyricByTime(float(val))

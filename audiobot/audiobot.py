@@ -101,7 +101,7 @@ class AudioBot():
                 if not c_s.isValid():
                     return
                 for s in c_s.audios:
-                    self.system_playlist.append(s)
+                    self.system_playlist.append_raw(s)
         for key, vals in songs.items():
             if key == "bilibili":
                 source_class = BiliAudioSource
@@ -113,7 +113,7 @@ class AudioBot():
                 s = source_class.initFromUrl(val)
                 if s == None:
                     continue
-                self.system_playlist.append(s)
+                self.system_playlist.append_raw(s)
 
         if self.running and self.current is None:
             self.playNext()
@@ -128,10 +128,10 @@ class AudioBot():
         if len(self.user_playlist) == 0 and len(self.system_playlist) == 0:
             return
         if len(self.user_playlist) != 0:
-            self.__thread_play(self.user_playlist.popFirst())
+            self.__thread_play(self.user_playlist.pop_first())
             return
         if len(self.system_playlist) != 0:
-            next_item = self.system_playlist.getNext()
+            next_item = self.system_playlist.get_next()
             next_item.source.load()
             self.__thread_play(next_item)
 
@@ -162,7 +162,7 @@ class AudioBot():
                 self.playNext()
             return
         self.current = item
-        self.history_playlist.appendItem(item)
+        self.history_playlist.append(item)
         self.lyrics.load(item)
         self.mpv_player.playByUrl(bs.url, headers=bs.headers)
         self.handlers.call(AudioBotPlayEvent(self, item))
@@ -175,9 +175,9 @@ class AudioBot():
         source.load()
         if source.isValid():
             if index == -1:
-                event: PlaylistAppendEvent = self.user_playlist.append(source, user=user, keyword=keyword)
+                event: PlaylistAppendEvent = self.user_playlist.append_raw(source, user=user, keyword=keyword)
             else:
-                event: PlaylistAppendEvent = self.user_playlist.insert(source, index, user=user, keyword=keyword)
+                event: PlaylistAppendEvent = self.user_playlist.insert_raw(source, index, user=user, keyword=keyword)
             if event.isCancelled():
                 return
             if self.current == None or self.mpv_player.getProperty(MPVProperty.IDLE):
@@ -193,7 +193,7 @@ class AudioBot():
             return
         source.load()
         if source.isValid():
-            event: PlaylistAppendEvent = self.user_playlist.insert(source, 0, user=user, keyword=keyword)
+            event: PlaylistAppendEvent = self.user_playlist.insert_raw(source, 0, user=user, keyword=keyword)
             if event.isCancelled():
                 return
             self.playNext()

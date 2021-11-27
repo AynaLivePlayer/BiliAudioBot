@@ -7,20 +7,12 @@ from audiobot.event.playlist import PlaylistUpdateEvent, PlaylistAppendEvent
 from functools import wraps
 
 import random
-
-# def executeHandler(func):
-#     @wraps(func)
-#     def wrapper(self, *args, **kwargs):
-#         retval = func(self, *args, **kwargs)
-#         self._callHandlers()
-#         return retval
-#     return wrapper
 from audiobot.user import User, PlaylistUser
 
 
-def triggerEventHandler(func):
+def _trigger_event_handler(func):
     @wraps(func)
-    def executeHandler(self, *args, **kwargs):
+    def execute_handler(self, *args, **kwargs):
         ret = func(self, *args, **kwargs)
         if ret is None:
             return
@@ -30,8 +22,7 @@ def triggerEventHandler(func):
             retval, event = ret[0], ret[1]
         self.handlers.call(event)
         return retval
-
-    return executeHandler
+    return execute_handler
 
 
 class Playlist():
@@ -49,20 +40,27 @@ class Playlist():
     def size(self):
         return len(self.playlist)
 
-    def insert(self, cm, index, user: User = None, keyword=""):
-        event = self.append(cm, user=user, keyword=keyword)
+    def insert_raw(self, cm, index, user: User = None, keyword="") -> PlaylistAppendEvent:
+        event = self.append_raw(cm, user=user, keyword=keyword)
         if event.isCancelled():
             return event
         self.move(event.index, index)
         return event
 
-    def append(self, cm, user: User = None, keyword=""):
+    def append_raw(self, cm, user: User = None, keyword="") -> PlaylistAppendEvent:
         if user is None:
-            return self.appendItem(AudioItem(cm, PlaylistUser, keyword))
+            return self.append(AudioItem(cm, PlaylistUser, keyword))
         else:
-            return self.appendItem(AudioItem(cm, user, keyword))
+            return self.append(AudioItem(cm, user, keyword))
 
-    def appendItem(self, item: AudioItem):
+    def insert(self, index: int, item: AudioItem) -> PlaylistAppendEvent:
+        event = self.append(item)
+        if event.isCancelled():
+            return event
+        self.move(event.index, index)
+        return event
+
+    def append(self, item: AudioItem) -> PlaylistAppendEvent:
         event = PlaylistAppendEvent(self, item, self.size())
         self.handlers.call(event)
         if event.isCancelled():
@@ -80,19 +78,19 @@ class Playlist():
         self.playlist.clear()
         self.handlers.call(PlaylistUpdateEvent(self))
 
-    @triggerEventHandler
-    def popFirst(self):
+    @_trigger_event_handler
+    def pop_first(self):
         if len(self.playlist) == 0:
             return None
         return self.playlist.pop(0), PlaylistUpdateEvent(self)
 
-    @triggerEventHandler
+    @_trigger_event_handler
     def remove(self, index):
         if index >= len(self.playlist) or index < 0:
             return
         return self.playlist.pop(index), PlaylistUpdateEvent(self)
 
-    @triggerEventHandler
+    @_trigger_event_handler
     def move(self, index, target_index):
         if index >= len(self.playlist) or index < 0:
             return
@@ -109,13 +107,22 @@ class Playlist():
         self.playlist[target_index] = tmp
         return PlaylistUpdateEvent(self)
 
-    def getNext(self):
+    def get_next(self) -> AudioItem:
+        '''
+        get next AudioItem, if not exists return None
+
+        :return: AudioItem
+        '''
         if len(self.playlist) == 0:
             return
+        index = 0
         if self.random_next:
-            self.current_index = random.randint(0, len(self.playlist) - 1)
-            return self.playlist[self.current_index]
-        if self.current_index >= len(self.playlist):
-            self.current_index = 0
-        self.current_index += 1
-        return self.playlist[self.current_index - 1]
+            index = random.randint(0, len(self.playlist) - 1)
+            self.current_index = index
+        else:
+            index = self.current_index
+            self.current_index += 1
+            if self.current_index >= self.size():
+                self.current_index = 0
+        self.playlist.sort()
+        return self.playlist[index]
