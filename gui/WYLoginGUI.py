@@ -10,7 +10,7 @@ from config import Config
 from gui.factory.PlayerProgressBar import PlayerProgressBar
 from utils import vwrappers
 from utils.vtranslation import getTranslatedText as _
-from pyncm import GetCurrentSession, logger, SetCurrentSession, LoadSessionFromString, DumpSessionAsString
+from pyncm import GetCurrentSession,  SetCurrentSession, LoadSessionFromString, DumpSessionAsString
 from pyncm.apis import login #GetCurrentLoginStatus, WriteLoginInfo,LoginQrcodeUnikey,LoginQrcodeCheck
 import gui
 

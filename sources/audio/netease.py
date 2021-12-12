@@ -1,3 +1,4 @@
+import json
 import re
 
 from config import Config
@@ -30,10 +31,12 @@ class NeteaseMusicSource(AudioSource,
     @classmethod
     def search(cls, keyword, pagesize=10,*args, **kwargs) -> SearchResults:
         data = cloudsearch.GetSearchResult(keyword,limit=pagesize,offset=0)
-        if data["result"]["songCount"] == 0:
+        if data.get("result") != None:
+            data = data["result"]
+        if data["songCount"] == 0:
             return SearchResults([],0,0)
         results = []
-        for song in data["result"]["songs"]:
+        for song in data["songs"]:
             ns = cls(song["id"])
             ns.cover_url = song["al"]["picUrl"]
             ns.artists = [ar["name"] for ar in song["ar"]]

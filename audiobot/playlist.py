@@ -69,7 +69,7 @@ class Playlist():
         self.handlers.call(PlaylistUpdateEvent(self))
         return event
 
-    def get(self, index):
+    def get(self, index) -> AudioItem:
         if index >= len(self.playlist) or index < 0:
             return
         return self.playlist[index]
@@ -124,5 +124,4 @@ class Playlist():
             self.current_index += 1
             if self.current_index >= self.size():
                 self.current_index = 0
-        self.playlist.sort()
         return self.playlist[index]
