@@ -3,6 +3,6 @@
     "default": ""
   },
   "netease": {
-    "pyncm": ""
+    "pyncm": "session="
   }
 }
