@@ -65,12 +65,7 @@ class WYLoginGUI():
         playing_title_label.grid(column=0, row=0, pady=2, padx=2)
         self.current_status.set("Waiting")
 
-        pyncmcookie = Config.getCookie("netease", "pyncm")
-        if pyncmcookie.get("session") is not None:
-            try:
-                SetCurrentSession(LoadSessionFromString(pyncmcookie.get("session")))
-            except:
-                pass
+
         self.__setLoginInfo()
 
     @vwrappers.TryExceptRetNone
