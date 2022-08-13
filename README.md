@@ -1,4 +1,7 @@
 # BiliAudioBot - 卡西米尔唱片机
+
+!注意，此项目可能不会再有除了bug修复之外的更新了。欢迎各位前往golang的重写版本[AynaLivePlayer](https://github.com/AynaLivePlayer/AynaLivePlayer)
+
 A python gui version of audio bot.
 
 provided by Aynakeya(划水) & Nearl_Official(摸鱼)
