@@ -36,6 +36,7 @@ class ConfigFile:
         "diange": {
             "cooldown":0,
             "limit":128,
+            "limit_per_user":32,
             "visitor":True,
             "guard":True,
             "admin":True,

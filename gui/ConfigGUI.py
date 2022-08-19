@@ -66,6 +66,10 @@ class ConfigGUI():
         ConfigGUIFactory.getInput(frame_diange_2, Config.commands["diange"], "limit",
                                   ConfigGUIFactory.ConvertWithDefault(int, 128),
                                   str).grid(column=3, row=0, padx=8)
+        ttk.Label(frame_diange_2, text=_("DG Max number per user: ")).grid(column=4, row=0)
+        ConfigGUIFactory.getInput(frame_diange_2, Config.commands["diange"], "limit_per_user",
+                                  ConfigGUIFactory.ConvertWithDefault(int, 32),
+                                  str).grid(column=5, row=0, padx=8)
 
         # ========== frame_qiege ================
         frame_qiege_1 = ttk.Frame(frame_qiege)

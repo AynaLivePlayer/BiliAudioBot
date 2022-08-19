@@ -30,6 +30,7 @@
     "Self": "切自己",
     "DG Cooldown (s): ": "点歌冷却 (秒): ",
     "DG Max number: ": "最大点歌数: ",
+    "DG Max number per user: ": "每个用户最大点歌数: ",
     "DG Permission: ": "点歌权限: ",
     "Etc": "Etc",
     "Experimental Feature": "实验性功能，可能会导致不可预料的后果",
