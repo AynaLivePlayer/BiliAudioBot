@@ -36,6 +36,9 @@ class MainWindow():
         self.window.resizable(False, False)
         self.window.geometry("720x480")
         self.tab_controller.pack(expand=1, fill="both")
+        def stop_when_close():
+            self._running = False
+        self.window.protocol("WM_DELETE_WINDOW", stop_when_close)
 
     def getTabController(self) -> Notebook:
         return self.tab_controller
@@ -57,7 +60,7 @@ class MainWindow():
 
     def start(self):
         self.createWidgets()
-        self.window.quit()
+        
         return self._async_update()
 
     def createWidgets(self):

@@ -5,8 +5,10 @@ from audiobot.command import CommandExecutor
 from audiobot import Global_Command_Manager
 from config import Config
 from liveroom.message import DanmakuMessage
+from audiobot.user import DanmakuUser
 from sources.audio import BiliAudioSource, NeteaseMusicSource
 from sources.audio.kuwo import KuwoMusicSource
+from audiobot.audio import AudioItem
 
 
 @Global_Command_Manager.register("diange")
@@ -20,7 +22,7 @@ class DiangeCommand(CommandExecutor):
         if len(msg) < 2:
             return
         val = " ".join(msg[1::])
-        if not (self.__hasPermission(dmkMsg) and self.__inCooldown(dmkMsg) and self.__notReachMax()):
+        if not (self.__hasPermission(dmkMsg) and self.__inCooldown(dmkMsg) and self.__notArriveLimit(dmkMsg.user) and self.__notReachMax()):
             return
         if (command == "点歌"):
             self.audiobot.addAudioByUrl(val, dmkMsg.user)
@@ -55,6 +57,17 @@ class DiangeCommand(CommandExecutor):
             return True
         if int(time.time()) - self.cooldowns[uid] >= Config.commands["diange"]["cooldown"]:
             self.cooldowns[uid] = int(time.time())
+            return True
+        return False
+
+    def __notArriveLimit(self, dmkUser: DanmakuUser):
+        playlist: List[AudioItem] = self.audiobot.user_playlist.playlist
+        count: int = 0
+        for x in playlist:
+            user = x.user
+            if isinstance(user, DanmakuUser) and dmkUser.username == user.username:
+                count = count + 1
+        if count < Config.commands["diange"]["limit_per_user"]:
             return True
         return False
 
